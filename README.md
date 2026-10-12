@@ -1,4 +1,10 @@
 # Fleur de lis
+
+## Project Management & Design
+
+- **Kanban Board:** [Jira Kanban Board](https://cmsc128-fleur-de-lis.atlassian.net/jira/software/projects/KAN/boards/2?filter=&groupBy=none&atlOrigin=eyJpIjoiNzkxOWZkN2ZjZDZhNDE2ZjgzMjBiYTA1MDI0Mjc3ZGIiLCJwIjoiaiJ9)
+- **Figma Wireframe:** [Fleur De Lis Wireframe](https://www.figma.com/site/UrXTPo1xq5lbIfo0QbWf7l/-CMSC-128-LAB--FleurDeLis-Wireframe?node-id=0-1&t=A3jnGZ1qzPZT5xRR-1)
+
 ## App Concept
 
 *Fleur de lis* is a bouquet customization app built for people who want more control over how their flowers look instead of just relying on common shop displays. The primary users are individuals planning for special occasions such as birthdays, anniversaries, or valentines day, who often struggle to articulate their design preferences or imagine how different flowers will look together.  

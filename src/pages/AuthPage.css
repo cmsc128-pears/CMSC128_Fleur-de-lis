@@ -218,3 +218,17 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.form-success {
+  background: #eaf6ec;
+  color: #1e6b32;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.auth-subtitle {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+  text-align: center;
+}

@@ -1,0 +1,93 @@
+/* ---------- profile page ---------- */
+.profile__body {
+  padding: 32px 16px;
+}
+
+/* card with avatar + name + contact */
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--color-field, #efefef);
+}
+.profile-card__avatar {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  font-size: 1.5rem;
+}
+.profile-card__info {
+  min-width: 0;
+}
+.profile-card__name {
+  margin: 0 0 6px;
+  font-family: var(--font-brand, Georgia, serif);
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+.profile-card__line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0;
+  font-size: 0.7rem;
+  overflow-wrap: anywhere;
+}
+
+/* edit profile button */
+.profile__edit {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-field, #efefef);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* tabs */
+.profile__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.profile__tab {
+  padding: 0 4px 6px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font: inherit;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.profile__tab--active {
+  border-bottom-color: #333;
+}
+
+/* design grid */
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.design-grid__item {
+  aspect-ratio: 1;
+  background: var(--color-field, #efefef);
+  overflow: hidden;
+}
+.design-grid__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

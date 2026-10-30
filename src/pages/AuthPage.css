@@ -1,0 +1,220 @@
+.auth {
+  min-height: var(--app-height, 100dvh);
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 48px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Logo placeholder: gray square with an X, like the wireframe */
+.auth-logo {
+  width: 190px;
+  height: 190px;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1px), var(--color-gray-300, #d4d4d1) 50%, transparent calc(50% + 1px)),
+    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--color-gray-300, #d4d4d1) 50%, transparent calc(50% + 1px)),
+    var(--color-gray-100, #ececeb);
+  border: 1px solid var(--color-gray-300, #d4d4d1);
+}
+
+.auth-wordmark {
+  margin: 18px 0 32px;
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2rem;
+  letter-spacing: 0.01em;
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  width: 100%;
+  background: var(--color-gray-100, #ececeb);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.tab {
+  flex: 1;
+  padding: 9px 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text, #1f1f1e);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--color-gray-200, #e2e2df);
+}
+
+/* Form */
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.name-row {
+  display: flex;
+  gap: 16px;
+}
+
+.name-row .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  color: var(--color-gray-700, #4a4a48);
+}
+
+.field input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--color-gray-500, #8a8a87);
+  border-radius: 12px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--color-text, #1f1f1e);
+}
+
+.field input::placeholder {
+  color: var(--color-gray-500, #8a8a87);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--color-gray-700, #4a4a48);
+  outline-offset: 1px;
+}
+
+.field-error {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  color: var(--color-gray-700, #4a4a48);
+}
+
+/* Buttons */
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.btn {
+  height: 46px;
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--color-text, #1f1f1e);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-gray-700, #4a4a48);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-gray-400, #a8a8a8);
+  flex: 1;
+}
+
+.btn-secondary {
+  background: var(--color-gray-100, #ececeb);
+  flex: 1.3;
+}
+
+.btn-full {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.btn:hover {
+  filter: brightness(0.95);
+}
+
+/* Simple person icon for "Log in as Guest" */
+.guest-icon {
+  position: relative;
+  width: 20px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.guest-icon::before,
+.guest-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-gray-500, #8a8a87);
+}
+
+.guest-icon::before {
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.guest-icon::after {
+  bottom: 0;
+  width: 20px;
+  height: 10px;
+  border-radius: 10px 10px 3px 3px;
+}
+
+/* Text links */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--color-text, #1f1f1e);
+  text-decoration: underline;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.switch-text {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text, #1f1f1e);
+}
+
+.switch-text .link-button {
+  font-size: inherit;
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--color-gray-500, #8a8a87);
+  border-radius: 8px;
+  background: var(--color-gray-100, #ececeb);
+  font-size: 0.8rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

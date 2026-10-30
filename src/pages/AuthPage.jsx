@@ -34,6 +34,7 @@ export default function AuthPage ({
 }) {
     const [mode, setMode] = useState("login");
     const [login, setLogin] = useState(emptyLogin);
+    const [signup, setSignup] = useState(emptySignup);
     const [errors, setErrors] = useState({});
     const [formError, setFormError] = useState("");
     const [submitting, setSubmitting] = useState(false);

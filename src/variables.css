@@ -1,0 +1,30 @@
+/* ------------------------------------------------------------------
+    theme.css
+    every color in the app reads from these variables
+------------------------------------------------------------------- */
+
+:root {
+  /* colors (placeholder greys) */
+    --COLOR-BG: #ffffff;
+    --COLOR-TEXT: #1a1a1a;
+    --COLOR-TEXT-MUTED: #4a4a4a;
+    --COLOR-IMAGE-FILL: #ececec;      /* image placeholders */
+    --COLOR-IMAGE-LINE: #d2d2d2;      /* the X inside placeholders */
+    --COLOR-BUTTON-BG: #c6c6c6;
+    --COLOR-BUTTON-LINE: #1a1a1a;
+    --COLOR-DOT: #d9d9d9;
+    --COLOR-DOT-ACTIVE: #6f6f6f;
+    --COLOR-TAPE: rgba(236, 230, 214, 0.92);
+    --COLOR-FOCUS: #1a1a1a;
+
+  /* fonts */
+    --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --FONT-BODY: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* shape + spacing */
+    --RADIUS-BUTTON: 10px;
+    --SPACE-2: 8px;
+    --SPACE-3: 12px;
+    --SPACE-4: 16px;
+    --SPACE-6: 24px;
+}

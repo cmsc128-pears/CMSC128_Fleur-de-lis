@@ -1,0 +1,140 @@
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--color-surface, #e3e1dc);
+}
+.topbar__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-muted, #8c8a85);
+  font-size: 7px;
+}
+.topbar__brand {
+  font-family: var(--font-brand, Georgia, serif);
+  font-style: italic;
+  font-size: 1.25rem;
+}
+
+/* ---------- avatar ---------- */
+.avatar {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-surface, #e3e1dc);
+}
+.avatar--lg {
+  width: 104px;
+  height: 104px;
+  font-size: 1.6rem;
+}
+
+/* ---------- edit profile page ---------- */
+.edit__body {
+  padding: 16px 24px 32px;
+}
+.edit__back {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.edit__avatar {
+  position: relative;
+  width: 104px;
+  margin: 20px auto 28px;
+}
+.edit__avatar-btn {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ---------- form ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form__section {
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.field__label {
+  font-size: 0.75rem;
+}
+.field__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #8a8a8a;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 0.8rem;
+}
+.field__input::placeholder {
+  color: #aaa;
+}
+.field__input:focus {
+  outline: 2px solid var(--color-muted, #8c8a85);
+  outline-offset: 1px;
+}
+.form__link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-field, #efefef);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.form__error {
+  margin: 0;
+  color: #b3261e;
+  font-size: 0.8rem;
+}
+.form__save {
+  margin-top: 32px;
+  width: 100%;
+}
+.form__save:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

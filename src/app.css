@@ -1,0 +1,197 @@
+@import url("./variables.css");
+
+*, *::before, *::after { box-sizing: border-box; }
+html,body, #root { 
+    height: 100%; 
+    margin: 0; 
+}
+
+body {
+    background-color: var(--COLOR-BG);
+    color: var(--COLOR-TEXT);
+    font-family: var(--FONT-BODY);
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--COLOR-FOCUS);
+    outline-offset: 3px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/*  ---------- app frame ----------
+    on a phone: fills the real screen
+    on a laptop: a standard 390 x 844 phone-sized frame
+    note: pages should use var(--app-height) instead of 100dvh
+*/
+:root { --app-height: 100dvh; }
+
+.shell {
+    max-width: 430px;
+    min-height: var(--app-height);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (mind-width: 600px) {
+    :root { --app-height:844px; }
+    .shell {
+        width: 390px;
+        height: var(--app-height);
+        margin: 24px auto;
+        border: 1px solid var(--COLOR-IMAGE-LINE);
+        border-radius: 28px;
+        overflow-y: auto;
+    }
+}
+
+/* ---------- shared pieces ---------- */
+.slot {
+    display: block;
+    background: var(--COLOR-IMAGE-FILL);
+    object-fit: cover;
+}
+
+.slot--empty {
+    background-image:   linear-gradient(to top right, transparent calc(50% - 1px), 
+                        var(--COLOR-IMAGE-LINE) 50%, transparent calc(50% + 1px)),
+                        linear-gradient(to bottom right, transparent calc(50% - 1px),
+                        var(--COLOR-IMAGE-LINE) 50%, transparent calc(50% + 1px));
+    border: 1px solid var(--COLOR-IMAGE-LINE);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--SPACE-2);
+    min-height: 44px;
+    padding: 0 var(--SPACE-4);
+    background: var(--COLOR-BUTTON-BG);
+    color: var(--COLOR-BUTTON-TEXT);
+    border: 0;
+    border-radius: var(--RADIUS-BUTTON);
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.link {
+    min-height: 44px;
+    padding: 0 var(--SPACE-2);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-size: 1rem;
+}
+
+.brand {
+    font-family: var(--FONT-DISPLAY);
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* ---------- landing ---------- */
+.landing {
+    position: relative;
+    min-height: var(--app-height);
+}
+
+.landing__hero {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    height: 100%;
+}
+
+.landing__copy {
+    margin-left: 53%;
+    padding: calc(var(--SPACE-6) + env(safe-area-inset-top)) var(--SPACE-4) 0 0;
+}
+
+.landing__title {
+    margin: 0 0 var(--SPACE-6);
+    font-family: var(--FONT-DISPLAY);
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.1;
+}
+
+.landing__title em { display: block; }
+
+.landing__text {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--COLOR-TEXT-MUTED);
+    max-width: 30ch;
+}
+
+.landing__cta {
+    position: absolute;
+    right: 7%;
+    bottom: calc(7% + env(safe-area-inset-bottom));
+    min-width: 130px;
+}
+
+.landing__photo { 
+    position: absolute;
+    left: 26%;
+    top: 40%;
+    width: 49%;
+    aspect-ratio: 185 / 261;
+    margin: 0;
+}
+
+.landing__photo .slot {
+    width: 100%;
+    height: 100%;
+    opacity: 0.92;
+}
+
+.tape {
+    position: absolute;
+    width: 68px;
+    height: 26px;
+    background: var(--COLOR-TAPE);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.tape--tl {
+    top: -6px;
+    left: -20px;
+    transform: rotate(-40deg);
+}
+
+.tape--tr {
+    top: -6px;
+    right: -20px;
+    transform: rotate(-40deg);
+}
+
+.tape--bl {
+    bottom: -6px;
+    left: -20px;
+    transform: rotate(-40deg);
+}
+
+.tape--br {
+    bottom: -6px;
+    right: -20px;
+    transform: rotate(-40deg);
+}

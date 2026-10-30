@@ -50,6 +50,35 @@
   cursor: pointer;
 }
 
+/* log out icon button, sits on the right side of the profile card */
+.profile__card-wrap {
+  position: relative;
+}
+.profile__card-wrap .profile-card {
+  padding-right: 56px; /* keep text clear of the icon */
+}
+.profile__logout {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.profile__logout:hover,
+.profile__logout:focus-visible {
+  background: rgba(0, 0, 0, 0.08);
+}
+
 /* tabs */
 .profile__tabs {
   display: flex;

@@ -4,13 +4,19 @@ import Onboarding from "./pages/Onboarding";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
-import { logIn, signUp, logInAsGuest } from "./services/Auth";
+import { logIn, signUp, logInAsGuest, logOut } from "./services/Auth";
 import "/src/app.css";
 
 export default function App() {
     // tells which screen we are on
     // can be swapped for React Router later
     const [view, setView] = useState("landing");
+
+    // sign out, then go back to the landing screen
+    const handleLogout = async () => {
+        await logOut();
+        setView("landing");
+    };
 
     return (
         <div className="shell">
@@ -30,7 +36,9 @@ export default function App() {
                 />
             )}
 
-            {view === "profile" && <Profile onEdit={() => setView("editProfile")} />}
+            {view === "profile" && (
+                <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
+            )}
             {view === "editProfile" && <EditProfile onBack={() => setView("profile")} />}
 
             {/* todo: replace with actual feed screen */}

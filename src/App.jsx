@@ -5,6 +5,7 @@ import { useState } from "react";
 import Landing from "./pages/Landing";
 import Onboarding from "./pages/Onboarding";
 import "/src/app.css"
+import { logIn, signUp, logInAsGuest } from "./services/Auth";
 
 export default function App() {
     // tells which screen we are on
@@ -20,8 +21,14 @@ export default function App() {
 
         {/* todo: replace with actual feed and log in / sign up screens */}
         {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
-        {view === "auth" && <AuthPage onAuthSuccess={() => setView("home")} />}
-        </div>
+        {view === "auth" && (
+        <AuthPage
+          onLogin={logIn}
+          onSignup={signUp}
+          onGuest={logInAsGuest}
+          onAuthSuccess={() => setView("feed")} />
+      )}
+    </div>
     );
-    return <AuthPage />;
+
 }

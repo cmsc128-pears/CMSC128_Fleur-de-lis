@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AuthPage.css";
 
-const emptyLogin = { contact: "", password: ""};
+const emptyLogin = { email: "", password: "" };
 const emptySignup = {
     firstName: "",
     lastName: "",
@@ -48,29 +48,28 @@ export default function AuthPage ({
     const updateLogin = (e) => setLogin({ ...login, [e.target.name]: e.target.value });
     const updateSignup = (e) => setSignup({ ...signup, [e.target.name]: e.target.value });
 
-    const validContact = (value) => /^09\d{9}$/.test(value.replace(/[\s-]/g, ""));
+    const validEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim());
 
     const validate = (values, isSignup) => {
-        const next = {};
-        if (isSignup) {
-            if (!values.firstName.trim()) next.firstName = "Enter your first name.";
-            if (!values.lastName.trim()) next.lastName = "Enter your last name.";
-        }
+    const next = {};
+    if (isSignup) {
+        if (!values.firstName.trim()) next.firstName = "Enter your first name.";
+        if (!values.lastName.trim()) next.lastName = "Enter your last name.";
+    }
 
-        if (!values.contact.trim()) next.contact = "Enter your contact number.";
-        else if (!validContact(values.contact))
+    if (!values.email.trim()) next.email = "Enter your email address.";
+    else if (!validEmail(values.email)) next.email = "Enter a valid email address.";
+
+    if (isSignup && values.contact.trim() && !validContact(values.contact))
         next.contact = "Use a valid number, e.g. 0912 345 6789.";
-        
-        if (isSignup && values.email && !/^\S+@\S+\.\S+$/.test(values.email))
-            
-            next.email = "Enter a valid email address.";
-        if (!values.password) next.password = "Enter your password.";
-        else if (isSignup && values.password.length < 8)
-            next.password = "Password must be at least 8 characters.";
-        if (isSignup && values.confirmPassword !== values.password)
-            next.confirmPassword = "Passwords do not match.";
-        return next;
-  };
+
+    if (!values.password) next.password = "Enter your password.";
+    else if (isSignup && values.password.length < 8)
+        next.password = "Password must be at least 8 characters.";
+    if (isSignup && values.confirmPassword !== values.password)
+        next.confirmPassword = "Passwords do not match.";
+    return next;
+    };
 
     const run = async (action) => {
     setFormError("");
@@ -130,17 +129,17 @@ export default function AuthPage ({
       {mode === "login" ? (
         <form className="auth-form" onSubmit={handleLogin} noValidate>
           {formError && <p className="form-error" role="alert">{formError}</p>}
-          <Field mode={mode} label="Contact Number" name="contact" error={errors.contact}>
+          <Field mode={mode} label="Email Address" name="email" error={errors.email}>
             <input
-              id="login-contact"
-              name="contact"
-              type="tel"
-              placeholder="e.g. 0912 345 6789"
-              value={login.contact}
-              onChange={updateLogin}
-              autoComplete="tel"
+                id="login-email"
+                name="email"
+                type="email"
+                placeholder="e.g. myemail@address.com"
+                value={login.email}
+                onChange={updateLogin}
+                autoComplete="email"
             />
-          </Field>
+            </Field>
 
           <Field mode={mode} label="Password" name="password" error={errors.password}>
             <input
@@ -205,19 +204,7 @@ export default function AuthPage ({
             </Field>
           </div>
 
-          <Field mode={mode} label="Contact Number *" name="contact" error={errors.contact}>
-            <input
-              id="signup-contact"
-              name="contact"
-              type="tel"
-              placeholder="e.g. 0912 345 6789"
-              value={signup.contact}
-              onChange={updateSignup}
-              autoComplete="tel"
-            />
-          </Field>
-
-          <Field mode={mode} label="Email Address" name="email" error={errors.email}>
+          <Field mode={mode} label="Email Address *" name="email" error={errors.email}>
             <input
               id="signup-email"
               name="email"
@@ -226,6 +213,18 @@ export default function AuthPage ({
               value={signup.email}
               onChange={updateSignup}
               autoComplete="email"
+            />
+          </Field>
+
+          <Field mode={mode} label="Contact Number (optional)" name="contact" error={errors.contact}>
+            <input
+              id="signup-contact"
+              name="contact"
+              type="tel"
+              placeholder="e.g. 0912 345 6789"
+              value={signup.contact}
+              onChange={updateSignup}
+              autoComplete="tel"
             />
           </Field>
 

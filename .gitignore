@@ -23,5 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables (API keys, Firebase config)
+# Environment variables (keep secrets ignored, allow template)
 .env*
+!.env.example
+
+# Firebase CLI, cache, and service accounts
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+*firebase-adminsdk*.json
+serviceAccountKey.json

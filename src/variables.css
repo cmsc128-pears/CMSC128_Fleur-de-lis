@@ -1,30 +1,116 @@
 /* ------------------------------------------------------------------
-    theme.css
-    every color in the app reads from these variables
+  variables.css — shared for the whole app.
 ------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap");
 
 :root {
-  /* colors (placeholder greys) */
-    --COLOR-BG: #ffffff;
-    --COLOR-TEXT: #1a1a1a;
-    --COLOR-TEXT-MUTED: #4a4a4a;
-    --COLOR-IMAGE-FILL: #ececec;      /* image placeholders */
-    --COLOR-IMAGE-LINE: #d2d2d2;      /* the X inside placeholders */
-    --COLOR-BUTTON-BG: #c6c6c6;
-    --COLOR-BUTTON-LINE: #1a1a1a;
-    --COLOR-DOT: #d9d9d9;
-    --COLOR-DOT-ACTIVE: #6f6f6f;
-    --COLOR-TAPE: rgba(236, 230, 214, 0.92);
-    --COLOR-FOCUS: #1a1a1a;
 
-  /* fonts */
-    --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
-    --FONT-BODY: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ============ COLORS ============ */
 
-  /* shape + spacing */
-    --RADIUS-BUTTON: 10px;
-    --SPACE-2: 8px;
-    --SPACE-3: 12px;
-    --SPACE-4: 16px;
-    --SPACE-6: 24px;
+  /* base */
+  --COLOR-BG: #F8F0DB;                 /* page background (cream) */
+  --COLOR-SURFACE: #E4E1D2;            /* neutral fills: avatar, image placeholders */
+  --COLOR-TEXT: #3E3129;               /* main text (deep brown) */
+  --COLOR-TEXT-MUTED: #705E50;         /* secondary text */
+  --COLOR-TEXT-ON-DARK: #F8F0DB;       /* text and icons on green bars */
+
+  /* brand */
+  --COLOR-GREEN: #5F6A52;              /* header, bottom nav, icons */
+  --COLOR-PINK: #E0949E;               /* primary buttons */
+  --COLOR-PINK-SOFT: #E6BBBC;          /* cards, secondary buttons */
+  --COLOR-TERRACOTTA: #AD6A62;         /* accents, hover, wordmark */
+
+  /* header + bottom nav */
+  --COLOR-HEADER-BG: var(--COLOR-GREEN);
+  --COLOR-HEADER-TEXT: var(--COLOR-TEXT-ON-DARK);
+  --COLOR-NAV-BG: var(--COLOR-GREEN);
+  --COLOR-NAV-ICON: #D9D6BE;           /* inactive nav icon + label */
+  --COLOR-NAV-ICON-ACTIVE: #F8F0DB;    /* active nav icon + label */
+  --COLOR-LOGO-BG: #F8F0DB;            /* the round logo badge */
+
+  /* buttons */
+  --COLOR-BUTTON-BG: var(--COLOR-PINK);
+  --COLOR-BUTTON-TEXT: var(--COLOR-TEXT);
+  --COLOR-BUTTON-SOFT-BG: var(--COLOR-PINK-SOFT);
+
+  /* cards */
+  --COLOR-CARD-BG: var(--COLOR-PINK-SOFT);   /* profile card */
+  --COLOR-AVATAR-BG: var(--COLOR-SURFACE);
+
+  /* lines, tabs, placeholders */
+  --COLOR-BORDER: #DDD3BA;             /* thin dividers, e.g. under tabs */
+  --COLOR-TAB-ACTIVE: var(--COLOR-GREEN);
+  --COLOR-IMAGE-FILL: var(--COLOR-SURFACE);
+  --COLOR-IMAGE-LINE: #CFADA4;
+
+  /* onboarding dots, taped photo */
+  --COLOR-DOT: #CFADA4;
+  --COLOR-DOT-ACTIVE: var(--COLOR-GREEN);
+  --COLOR-TAPE: rgba(165, 139, 116, 0.55);
+
+  /* icons + focus ring */
+  --COLOR-ICON: var(--COLOR-GREEN);
+  --COLOR-FOCUS: var(--COLOR-TEXT);
+
+  /* ============ FONTS ============ */
+  --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --FONT-BODY: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ============ FONT SIZES (mobile scale) ============
+    rem = relative to the phone's text-size setting (1rem = 16px by default),
+    so people who enlarge their phone text still get readable pages. */
+  --FONT-SIZE-XS: 0.75rem;     /* 12px  captions, nav labels, tab labels */
+  --FONT-SIZE-SM: 0.875rem;    /* 14px  secondary text, small buttons */
+  --FONT-SIZE-BASE: 1rem;      /* 16px  body text, inputs (never smaller on inputs) */
+  --FONT-SIZE-MD: 1.125rem;    /* 18px  emphasized body, button labels */
+  --FONT-SIZE-LG: 1.25rem;     /* 20px  small headings, card titles */
+  --FONT-SIZE-XL: 1.5rem;      /* 24px  page headings, profile name */
+  --FONT-SIZE-2XL: 2rem;       /* 32px  landing + onboarding titles */
+  --FONT-SIZE-3XL: 2.5rem;     /* 40px  big display moments */
+
+  /* line heights (spacing between lines) */
+  --LINE-HEIGHT-TIGHT: 1.1;    /* big display titles */
+  --LINE-HEIGHT-SNUG: 1.3;     /* headings */
+  --LINE-HEIGHT-BASE: 1.5;     /* body text */
+
+  /* weights */
+  --FONT-WEIGHT-REGULAR: 400;
+  --FONT-WEIGHT-MEDIUM: 500;
+  --FONT-WEIGHT-SEMIBOLD: 600;
+
+  /* ============ SPACING (4px steps) ============ */
+  --SPACE-1: 4px;
+  --SPACE-2: 8px;
+  --SPACE-3: 12px;
+  --SPACE-4: 16px;
+  --SPACE-5: 20px;
+  --SPACE-6: 24px;
+  --SPACE-8: 32px;
+  --SPACE-10: 40px;
+
+  /* ============ SHAPE ============ */
+  --RADIUS-SM: 8px;
+  --RADIUS-BUTTON: 10px;
+  --RADIUS-CARD: 28px;         /* the big rounded profile card */
+  --RADIUS-FULL: 999px;        /* circles: avatar, logo, dots */
+
+  /* ============ SIZES ============ */
+  --TAP-TARGET: 44px;          /* minimum height for anything tappable */
+  --HEADER-HEIGHT: 56px;
+  --NAV-HEIGHT: 64px;
+
+  /* app frame: on a phone the app fills the real screen,
+    on a laptop it sits in a phone-sized frame (see media query below).
+     pages should use var(--APP-HEIGHT) instead of 100dvh */
+  --FRAME-WIDTH: 390px;
+  --FRAME-HEIGHT: 844px;
+  --APP-HEIGHT: 100vh;         /* fallback for older browsers */
+}
+
+@supports (height: 100dvh) {
+  :root { --APP-HEIGHT: 100dvh; }
+}
+
+@media (min-width: 600px) {
+  :root { --APP-HEIGHT: var(--FRAME-HEIGHT); }
 }

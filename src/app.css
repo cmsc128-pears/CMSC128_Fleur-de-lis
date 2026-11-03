@@ -36,24 +36,22 @@ button {
 /*  ---------- app frame ----------
     on a phone: fills the real screen
     on a laptop: a standard 390 x 844 phone-sized frame
-    note: pages should use var(--app-height) instead of 100dvh
 */
-:root { --app-height: 100dvh; }
 
 .shell {
     max-width: 430px;
-    min-height: var(--app-height);
+    min-height: var(--APP-HEIGHT);
     margin: 0 auto;
     position: relative;
     overflow: hidden;
 }
 
-@media (mind-width: 600px) {
-    :root { --app-height:844px; }
+@media (mid-width: 600px) {
+    :root { --APP-HEIGHT:844px; }
     .shell {
-        width: 390px;
-        height: var(--app-height);
-        margin: 24px auto;
+        width: var(--FRAME-WIDTH);
+        height: var(--APP-HEIGHT);
+        margin: var(--SPACE-6) auto;
         border: 1px solid var(--COLOR-IMAGE-LINE);
         border-radius: 28px;
         overflow-y: auto;
@@ -63,7 +61,7 @@ button {
 /* ---------- shared pieces ---------- */
 .slot {
     display: block;
-    background: var(--COLOR-IMAGE-FILL);
+    background: none;
     object-fit: cover;
 }
 
@@ -80,36 +78,36 @@ button {
     align-items: center;
     justify-content: center;
     gap: var(--SPACE-2);
-    min-height: 44px;
+    min-height: var(--TAP-TARGET);
     padding: 0 var(--SPACE-4);
     background: var(--COLOR-BUTTON-BG);
     color: var(--COLOR-BUTTON-TEXT);
     border: 0;
     border-radius: var(--RADIUS-BUTTON);
-    font-size: 0.9375rem;
-    font-weight: 500;
+    font-size: var(--FONT-SIZE-BASE);
+    font-weight: var(--FONT-WEIGHT-MEDIUM);
 }
 
 .link {
-    min-height: 44px;
+    min-height: var(--TAP-TARGET);
     padding: 0 var(--SPACE-2);
     background: none;
     border: 0;
     text-decoration: underline;
     text-underline-offset: 3px;
-    font-size: 1rem;
+    font-size: var(--FONT-SIZE-BASE);
 }
 
 .brand {
     font-family: var(--FONT-DISPLAY);
     font-style: italic;
-    font-weight: 400;
+    font-weight: var(--FONT-WEIGHT-REGULAR);
 }
 
 /* ---------- landing ---------- */
 .landing {
     position: relative;
-    min-height: var(--app-height);
+    min-height: var(--APP-HEIGHT);
 }
 
 .landing__hero {
@@ -127,17 +125,17 @@ button {
 .landing__title {
     margin: 0 0 var(--SPACE-6);
     font-family: var(--FONT-DISPLAY);
-    font-weight: 400;
-    font-size: 2rem;
-    line-height: 1.1;
+    font-weight: var(--FONT-WEIGHT-REGULAR);
+    font-size: var(--FONT-SIZE-2XL);
+    line-height: var(--LINE-HEIGHT-TIGHT);
 }
 
 .landing__title em { display: block; }
 
 .landing__text {
     margin: 0;
-    font-size: 0.9375rem;
-    line-height: 1.5;
+    font-size: var(--FONT-SIZE-BASE);
+    line-height: var(--LINE-HEIGHT-BASE);
     color: var(--COLOR-TEXT-MUTED);
     max-width: 30ch;
 }
@@ -149,60 +147,22 @@ button {
     min-width: 130px;
 }
 
-.landing__photo { 
-    position: absolute;
-    left: 26%;
-    top: 40%;
-    width: 49%;
-    aspect-ratio: 185 / 261;
-    margin: 0;
-}
-
-.landing__photo .slot {
-    width: 100%;
-    height: 100%;
-    opacity: 0.92;
-}
-
-.tape {
-    position: absolute;
-    width: 68px;
-    height: 26px;
-    background: var(--COLOR-TAPE);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
-}
-
-.tape--tl {
-    top: -6px;
-    left: -20px;
-    transform: rotate(-40deg);
-}
-
-.tape--tr {
-    top: -6px;
-    right: -20px;
-    transform: rotate(40deg);
-}
-
-.tape--bl {
-    bottom: -6px;
-    left: -20px;
-    transform: rotate(40deg);
-}
-
-.tape--br {
-    bottom: -6px;
-    right: -20px;
-    transform: rotate(-40deg);
-}
-
 /* ---------- onboarding ---------- */
 .onboarding {
     display: flex;
     flex-direction: column;
-    min-height: var(--app-height);
+    min-height: var(--APP-HEIGHT);
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+}
+
+.onboarding__name {
+    margin: 0;
+    padding: var(--SPACE-10) var(--SPACE-4) 0;
+    text-align: center;
+    font-size: var(--FONT-SIZE-XL);
+    line-height: var(--LINE-HEIGHT-SNUG);
+    color: var(--COLOR-TEXT);
 }
 
 .onboarding__viewport {
@@ -236,15 +196,15 @@ button {
 
 .slide__title {
     margin: 0 0 var(--SPACE-3);
-    font-size: 2rem;
-    line-height: 1.1;
+    font-size: var(--FONT-SIZE-2XL);
+    line-height: var(--LINE-HEIGHT-TIGHT);
 }
 
 .slide__body {
     margin: 0;
     max-width: 30ch;
-    font-size: 0.93 75rem;
-    line-height: 1.5;
+    font-size: var(--FONT-SIZE-BASE);
+    line-height: var(--LINE-HEIGHT-BASE);
     color: var(--COLOR-TEXT-MUTED);
 }
 
@@ -252,7 +212,7 @@ button {
     display: flex;
     justify-content: center;
     gap: var(--SPACE-3);
-    min-height: 44px;
+    min-height: var(--TAP-TARGET);
     padding: 0 var(--SPACE-4);
     margin-bottom: var(--SPACE-6);
 }
@@ -269,7 +229,7 @@ button {
     height: 8px;
     padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: var(--RADIUS-FULL);
     background: var(--COLOR-DOT);
     position: relative;
 }
@@ -292,5 +252,4 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
     .track { transition: none; }
-    .landing__photo, .tape { animation: none; }
 }

@@ -54,11 +54,15 @@ export async function signUp({ firstName, lastName, contact, email, password }) 
   }
 
   try {
+    const normalizedContact = normalizeContact(contact) || null;
     await setDoc(doc(db, "users", user.uid), {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: normalizeEmail(email),
-      contact: normalizeContact(contact) || null, // optional
+      contact: normalizedContact,
+      contactNumber: normalizedContact,
+      yourDesigns: [],
+      likedDesigns: [],
       createdAt: serverTimestamp(),
     });
     return user;

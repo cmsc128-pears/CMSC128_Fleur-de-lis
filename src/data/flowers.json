@@ -1,0 +1,769 @@
+{
+  "_documentation": {
+    "file": "flowers.json",
+    "purpose": "Main flowers that customers can pick in the bouquet designer, with bundle and per-stem pricing.",
+    "lastUpdated": "2026-11-15",
+    "conventions": [
+      "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
+      "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
+      "`null` means the value is not known yet. It never means zero. Check for null before doing math on a value.",
+      "Enumerated values (type, origin, occasion, mood, etc.) are lowercase, with hyphens instead of spaces where noted.",
+      "`id` values are unique and stable. Gaps in the numbering are fine, and ids should not be reused or renumbered.",
+      "`image` paths are served from the site root, so `/images/flowers/x.png` means the file `public/images/flowers/x.png`. The image files themselves have not been added yet."
+    ],
+    "fields": {
+      "id": "string. Unique id, format `flower-###`.",
+      "image": "string. Image path (see conventions).",
+      "name": "string. Display name, singular.",
+      "family": "string. Groups variants of the same flower so the designer can show one card (for example, `rose`) that opens to its variants. Equals the item's own lowercase name when it has no variants.",
+      "type": "string or null. One of: fresh, dried, paper, money, rubber, fuzzy wire, wood.",
+      "origin": "string or null. `imported` or `local`.",
+      "description": "string. Short two-sentence customer-facing description based on popular flower-language meanings. Empty for Sunlight until that flower is identified.",
+      "stock": "integer or null. 0 means out of stock, null means not counted yet.",
+      "bundleSize": "integer or null. Number of stems in one bundle. Roses and carnation are assumed to be 12 (a dozen) until confirmed.",
+      "bundlePrice": "object {min, max} or null. Regular price of one bundle. If min equals max it is a single price, otherwise a range. Anthurium has two price options (450 and 780), stored as min 450 and max 780.",
+      "seasonalPrices": "object. Season name mapped to a bundle price, for example {\"undas\": 650}. Empty object if there is none.",
+      "price": "number or null. Per-stem price used in the designer. Where bundleSize is known it is bundlePrice.max divided by bundleSize, rounded up to a whole peso. Null if bundleSize is unknown.",
+      "occasion": "array of up to 4 strings: up to 3 main occasions, plus `just-because` where the flower suits casual, everyday affection. Allowed values: anniversary, birthday, graduation, valentines, mothers-day, wedding, undas, funeral, get-well, congratulations, housewarming, just-because.",
+      "mood": "array of up to 3 strings. Allowed values: romantic, loving, sweet, passionate, elegant, graceful, cheerful, happy, playful, hopeful, grateful, peaceful, solemn, respectful, welcoming, joyful, fresh, warm, sentimental.",
+      "color": "array of strings. Colors the shop stocks, lowercase (for example, red, pink, white). Three common colors per item were added as a starting point, not confirmed stock. Replace them with the shop's actual stocked colors. Used by the designer's color search.",
+      "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
+    },
+    "notes": [
+      "Occasion and mood are general florist conventions adapted to the Philippine context, not sales data. Sunlight is left empty because the flower is not yet identified.",
+      "Gimba (Jimba) and Radus are chrysanthemum varieties, and Puto-puto is also a chrysanthemum variety, so they share the chrysanthemum's meanings.",
+      "How many stems a customer puts in a bouquet is chosen in the designer and saved with their design. It is not stored in this file.",
+      "Sunlight is inactive (`active: false`) because it is not yet identified and has no occasion, mood, or description.",
+      "Families: all rose entries share `rose`, the two calla lilies share `calla-lily`, Stargazer and Lily (Local) share `lily`, and the chrysanthemum varieties (Chrysanthemum, Colored Mum, Puto-puto, Ping Pong, Gimba, Radus) share `chrysanthemum`. Edit `family` to change how the designer groups cards."
+    ]
+  },
+  "items": [
+    {
+      "id": "flower-001",
+      "image": "/images/flowers/local-rose.png",
+      "name": "Local Rose",
+      "family": "rose",
+      "type": "fresh",
+      "origin": "local",
+      "description": "Roses are a classic choice for expressing love, beauty, and admiration. Locally grown and affordable, they suit anniversaries, birthdays, and heartfelt surprises.",
+      "stock": null,
+      "bundleSize": 12,
+      "bundlePrice": {
+        "min": 300,
+        "max": 350
+      },
+      "seasonalPrices": {},
+      "price": 30,
+      "occasion": [
+        "valentines",
+        "anniversary",
+        "birthday",
+        "just-because"
+      ],
+      "mood": [
+        "romantic",
+        "loving",
+        "sweet"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-002",
+      "image": "/images/flowers/china-rose.png",
+      "name": "China Rose",
+      "family": "rose",
+      "type": "fresh",
+      "origin": "imported",
+      "description": "China roses are a timeless symbol of deep love, passion, and appreciation. Their elegant blooms make a lasting impression on romantic occasions.",
+      "stock": null,
+      "bundleSize": 12,
+      "bundlePrice": {
+        "min": 1800,
+        "max": 1800
+      },
+      "seasonalPrices": {},
+      "price": 150,
+      "occasion": [
+        "valentines",
+        "anniversary",
+        "birthday"
+      ],
+      "mood": [
+        "romantic",
+        "passionate",
+        "elegant"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-003",
+      "image": "/images/flowers/ecuadorian-rose.png",
+      "name": "Ecuadorian Rose",
+      "family": "rose",
+      "type": "fresh",
+      "origin": "imported",
+      "description": "Ecuadorian roses are prized for their large, long-lasting blooms and stand for devotion, luxury, and deep affection. They are a premium way to show someone they are truly treasured.",
+      "stock": null,
+      "bundleSize": 12,
+      "bundlePrice": {
+        "min": 3500,
+        "max": 3500
+      },
+      "seasonalPrices": {},
+      "price": 292,
+      "occasion": [
+        "anniversary",
+        "valentines",
+        "wedding"
+      ],
+      "mood": [
+        "romantic",
+        "passionate",
+        "elegant"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-004",
+      "image": "/images/flowers/cagayan-rose.png",
+      "name": "Cagayan Rose",
+      "family": "rose",
+      "type": "fresh",
+      "origin": "local",
+      "description": "Cagayan roses are a locally grown rose that carries the classic meaning of love and admiration. Their warm blooms suit sweet gestures as well as quiet remembrance.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": null,
+      "seasonalPrices": {
+        "undas": 450
+      },
+      "price": null,
+      "occasion": [
+        "valentines",
+        "undas",
+        "birthday",
+        "just-because"
+      ],
+      "mood": [
+        "romantic",
+        "sweet",
+        "warm"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-005",
+      "image": "/images/flowers/paper-rose.png",
+      "name": "Paper Rose",
+      "family": "rose",
+      "type": "paper",
+      "origin": null,
+      "description": "Paper roses never wilt, so they stand for love that lasts. They make a keepsake gift that keeps its beauty long after the occasion.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 900,
+        "max": 900
+      },
+      "seasonalPrices": {
+        "undas": 1500
+      },
+      "price": null,
+      "occasion": [
+        "valentines",
+        "anniversary",
+        "birthday"
+      ],
+      "mood": [
+        "romantic",
+        "sentimental",
+        "sweet"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-006",
+      "image": "/images/flowers/calla-lily-imported.png",
+      "name": "Calla Lily (Imported)",
+      "family": "calla-lily",
+      "type": "fresh",
+      "origin": "imported",
+      "description": "Calla lilies are a symbol of purity, elegance, and magnificent beauty. Their smooth, graceful shape makes them a favorite for weddings and anniversaries.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 2500,
+        "max": 2500
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "wedding",
+        "anniversary",
+        "mothers-day"
+      ],
+      "mood": [
+        "elegant",
+        "graceful",
+        "romantic"
+      ],
+      "color": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-007",
+      "image": "/images/flowers/calla-lily-local.png",
+      "name": "Calla Lily (Local)",
+      "family": "calla-lily",
+      "type": "fresh",
+      "origin": "local",
+      "description": "Calla lilies stand for purity, grace, and faithful devotion. Locally grown, they bring a refined touch to weddings, anniversaries, and Mother's Day bouquets.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 350,
+        "max": 350
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "wedding",
+        "anniversary",
+        "mothers-day"
+      ],
+      "mood": [
+        "elegant",
+        "graceful",
+        "romantic"
+      ],
+      "color": [
+        "white",
+        "yellow",
+        "pink"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-008",
+      "image": "/images/flowers/tulip.png",
+      "name": "Tulip",
+      "family": "tulip",
+      "type": "fresh",
+      "origin": null,
+      "description": "Tulips are a symbol of perfect love and cheerful spring renewal. Their clean, simple blooms are a warm choice for birthdays and Mother's Day.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 1500,
+        "max": 1500
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "mothers-day",
+        "birthday",
+        "anniversary",
+        "just-because"
+      ],
+      "mood": [
+        "cheerful",
+        "fresh",
+        "elegant"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "yellow"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-009",
+      "image": "/images/flowers/stargazer.png",
+      "name": "Stargazer",
+      "family": "lily",
+      "type": "fresh",
+      "origin": null,
+      "description": "Stargazer lilies stand for ambition, prosperity, and passionate admiration. Their bold, fragrant blooms make a showy centerpiece for anniversaries and special celebrations.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 2000,
+        "max": 2000
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "anniversary",
+        "birthday",
+        "mothers-day"
+      ],
+      "mood": [
+        "romantic",
+        "elegant",
+        "joyful"
+      ],
+      "color": [
+        "pink",
+        "white",
+        "red"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-010",
+      "image": "/images/flowers/carnation.png",
+      "name": "Carnation",
+      "family": "carnation",
+      "type": "fresh",
+      "origin": null,
+      "description": "Carnations are a flower of gratitude and a mother's love, with deeper shades often meaning admiration. They are a long-time favorite for Mother's Day and are also offered during Undas as a sign of remembrance.",
+      "stock": null,
+      "bundleSize": 12,
+      "bundlePrice": {
+        "min": 700,
+        "max": 700
+      },
+      "seasonalPrices": {
+        "undas": 900
+      },
+      "price": 59,
+      "occasion": [
+        "mothers-day",
+        "undas",
+        "birthday",
+        "just-because"
+      ],
+      "mood": [
+        "grateful",
+        "loving",
+        "solemn"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-011",
+      "image": "/images/flowers/gerbera.png",
+      "name": "Gerbera",
+      "family": "gerbera",
+      "type": "fresh",
+      "origin": null,
+      "description": "Gerberas stand for cheerfulness, innocence, and pure joy. Their bright, daisy-like faces are perfect for birthdays, graduations, and get-well wishes.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 400,
+        "max": 400
+      },
+      "seasonalPrices": {
+        "undas": 500
+      },
+      "price": null,
+      "occasion": [
+        "birthday",
+        "graduation",
+        "get-well",
+        "just-because"
+      ],
+      "mood": [
+        "happy",
+        "cheerful",
+        "playful"
+      ],
+      "color": [
+        "orange",
+        "pink",
+        "yellow"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-012",
+      "image": "/images/flowers/sunflower.png",
+      "name": "Sunflower",
+      "family": "sunflower",
+      "type": "fresh",
+      "origin": null,
+      "description": "Sunflowers are a symbol of loyalty, adoration, and positivity. Their sunny blooms bring warmth to graduations, birthdays, and get-well gifts.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 500,
+        "max": 600
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "graduation",
+        "birthday",
+        "get-well",
+        "just-because"
+      ],
+      "mood": [
+        "happy",
+        "hopeful",
+        "cheerful"
+      ],
+      "color": [
+        "yellow",
+        "orange",
+        "red"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-014",
+      "image": "/images/flowers/anthurium.png",
+      "name": "Anthurium",
+      "family": "anthurium",
+      "type": "fresh",
+      "origin": null,
+      "description": "Anthuriums are a symbol of hospitality, happiness, and abundance. Their glossy, heart-shaped blooms are a bold gift for congratulations and housewarmings.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 450,
+        "max": 780
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "congratulations",
+        "housewarming",
+        "anniversary"
+      ],
+      "mood": [
+        "elegant",
+        "passionate",
+        "welcoming"
+      ],
+      "color": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-015",
+      "image": "/images/flowers/gimba.png",
+      "name": "Gimba",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": null,
+      "description": "Gimba (also spelled Jimba) is a chrysanthemum variety sold in bundles during Undas. Like other chrysanthemums, it stands for loyalty, friendship, and lasting remembrance.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 480,
+        "max": 480
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "undas",
+        "funeral",
+        "birthday"
+      ],
+      "mood": [
+        "solemn",
+        "peaceful",
+        "respectful"
+      ],
+      "color": [
+        "white",
+        "yellow",
+        "pink"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-016",
+      "image": "/images/flowers/chrysanthemum.png",
+      "name": "Chrysanthemum",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": null,
+      "description": "Chrysanthemums symbolize loyalty, friendship, and lasting remembrance. In the Philippines, they are a traditional Undas flower for honoring loved ones who have passed.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 480,
+        "max": 480
+      },
+      "seasonalPrices": {
+        "undas": 650
+      },
+      "price": null,
+      "occasion": [
+        "undas",
+        "funeral",
+        "birthday"
+      ],
+      "mood": [
+        "solemn",
+        "peaceful",
+        "respectful"
+      ],
+      "color": [
+        "white",
+        "yellow",
+        "pink"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-017",
+      "image": "/images/flowers/colored-mum.png",
+      "name": "Colored Mum",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": null,
+      "description": "Colored mums share the chrysanthemum's meaning of loyalty, friendship, and remembrance. Their bright shades add cheer to birthdays and graduations while remaining a familiar Undas flower.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": null,
+      "seasonalPrices": {
+        "undas": 500
+      },
+      "price": null,
+      "occasion": [
+        "undas",
+        "birthday",
+        "graduation"
+      ],
+      "mood": [
+        "cheerful",
+        "hopeful",
+        "solemn"
+      ],
+      "color": [
+        "pink",
+        "purple",
+        "blue"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-018",
+      "image": "/images/flowers/puto-puto.png",
+      "name": "Puto-puto",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": null,
+      "description": "Puto-puto is a chrysanthemum variety grown in the Philippines and a familiar flower during Undas. It symbolizes remembrance and respect for loved ones who have passed.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": null,
+      "seasonalPrices": {
+        "undas": 450
+      },
+      "price": null,
+      "occasion": [
+        "undas",
+        "funeral",
+        "birthday"
+      ],
+      "mood": [
+        "solemn",
+        "peaceful",
+        "respectful"
+      ],
+      "color": [
+        "white",
+        "yellow",
+        "pink"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-019",
+      "image": "/images/flowers/ping-pong.png",
+      "name": "Ping Pong",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": null,
+      "description": "Ping pong mums stand for cheerfulness, friendship, and joy. Their round, playful blooms are a fun choice for birthdays, graduations, and congratulations.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 850,
+        "max": 850
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "birthday",
+        "graduation",
+        "congratulations",
+        "just-because"
+      ],
+      "mood": [
+        "happy",
+        "playful",
+        "cheerful"
+      ],
+      "color": [
+        "white",
+        "green",
+        "yellow"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-020",
+      "image": "/images/flowers/hydrangea.png",
+      "name": "Hydrangea",
+      "family": "hydrangea",
+      "type": "fresh",
+      "origin": null,
+      "description": "Hydrangeas are a symbol of gratitude, heartfelt emotion, and abundance. Their full, lush clusters make a graceful gift for weddings, anniversaries, and Mother's Day.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 350,
+        "max": 350
+      },
+      "seasonalPrices": {},
+      "price": null,
+      "occasion": [
+        "wedding",
+        "anniversary",
+        "mothers-day",
+        "just-because"
+      ],
+      "mood": [
+        "grateful",
+        "elegant",
+        "peaceful"
+      ],
+      "color": [
+        "blue",
+        "pink",
+        "white"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-023",
+      "image": "/images/flowers/radus.png",
+      "name": "Radus",
+      "family": "chrysanthemum",
+      "type": "fresh",
+      "origin": "local",
+      "description": "Radus is the local name for Malaysian mums, a chrysanthemum variety widely grown in Benguet. Chrysanthemums symbolize loyalty, friendship, and lasting remembrance, which is why radus is a staple of Undas and funeral flowers.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": {
+        "min": 350,
+        "max": 400
+      },
+      "seasonalPrices": {
+        "undas": 500
+      },
+      "price": null,
+      "occasion": [
+        "undas",
+        "funeral",
+        "birthday"
+      ],
+      "mood": [
+        "solemn",
+        "peaceful",
+        "respectful"
+      ],
+      "color": [
+        "white",
+        "yellow",
+        "purple"
+      ],
+      "active": true
+    },
+    {
+      "id": "flower-024",
+      "image": "/images/flowers/sunlight.png",
+      "name": "Sunlight",
+      "family": "sunlight",
+      "type": "fresh",
+      "origin": null,
+      "description": "",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": null,
+      "seasonalPrices": {
+        "undas": 1000
+      },
+      "price": null,
+      "occasion": [],
+      "mood": [],
+      "color": [],
+      "active": false
+    },
+    {
+      "id": "flower-025",
+      "image": "/images/flowers/lily-local.png",
+      "name": "Lily (Local)",
+      "family": "lily",
+      "type": "fresh",
+      "origin": "local",
+      "description": "Lilies are a classic symbol of purity, devotion, and peace. They are often chosen for Undas and funerals to express respect and comfort, and they also suit Mother's Day.",
+      "stock": null,
+      "bundleSize": null,
+      "bundlePrice": null,
+      "seasonalPrices": {
+        "undas": 300
+      },
+      "price": null,
+      "occasion": [
+        "undas",
+        "funeral",
+        "mothers-day"
+      ],
+      "mood": [
+        "solemn",
+        "peaceful",
+        "elegant"
+      ],
+      "color": [
+        "white",
+        "pink",
+        "yellow"
+      ],
+      "active": true
+    }
+  ]
+}

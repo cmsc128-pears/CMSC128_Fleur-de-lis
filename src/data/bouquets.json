@@ -1,0 +1,228 @@
+{
+  "_documentation": {
+    "file": "bouquets.json",
+    "purpose": "Preset bouquet prices by number of pieces or by size.",
+    "lastUpdated": "2026-11-15",
+    "conventions": [
+      "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
+      "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
+      "`null` means the value is not known yet. It never means zero. Check for null before doing math on a value.",
+      "Enumerated values (type, origin, occasion, mood, etc.) are lowercase, with hyphens instead of spaces where noted.",
+      "`id` values are unique and stable. Gaps in the numbering are fine, and ids should not be reused or renumbered.",
+      "`image` paths are served from the site root, so `/images/flowers/x.png` means the file `public/images/flowers/x.png`. The image files themselves have not been added yet."
+    ],
+    "fields": {
+      "id": "string. Unique id, format `bouquet-###`.",
+      "image": "string. Image path (see conventions).",
+      "name": "string. Display name.",
+      "tierType": "string. `pcs` if tiers are by piece count, `size` if tiers are by size label.",
+      "tiers": "array. Each tier is {pcs, price} when tierType is `pcs` (3, 6, 12, 24, 36 pieces) or {size, price} when tierType is `size` (extra small, small, medium, large).",
+      "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
+    },
+    "notes": [
+      "Tier prices are for the finished preset bouquet. They are separate from the per-stem prices in flowers.json, which are used when a customer designs their own bouquet.",
+      "African and Indian are assumed to be rose varieties."
+    ]
+  },
+  "items": [
+    {
+      "id": "bouquet-001",
+      "image": "/images/bouquets/local-rose.png",
+      "name": "Local Rose Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 799
+        },
+        {
+          "pcs": 6,
+          "price": 1499
+        },
+        {
+          "pcs": 12,
+          "price": 2099
+        },
+        {
+          "pcs": 24,
+          "price": 2999
+        },
+        {
+          "pcs": 36,
+          "price": 5499
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-002",
+      "image": "/images/bouquets/china-rose.png",
+      "name": "China Rose Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 1400
+        },
+        {
+          "pcs": 6,
+          "price": 2000
+        },
+        {
+          "pcs": 12,
+          "price": 4000
+        },
+        {
+          "pcs": 24,
+          "price": 5500
+        },
+        {
+          "pcs": 36,
+          "price": 7500
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-003",
+      "image": "/images/bouquets/ecuadorian-rose.png",
+      "name": "Ecuadorian Rose Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 1799
+        },
+        {
+          "pcs": 6,
+          "price": 2899
+        },
+        {
+          "pcs": 12,
+          "price": 6199
+        },
+        {
+          "pcs": 24,
+          "price": 9099
+        },
+        {
+          "pcs": 36,
+          "price": 14199
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-004",
+      "image": "/images/bouquets/carnation.png",
+      "name": "Carnation Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 799
+        },
+        {
+          "pcs": 6,
+          "price": 1499
+        },
+        {
+          "pcs": 12,
+          "price": 2099
+        },
+        {
+          "pcs": 24,
+          "price": 2799
+        },
+        {
+          "pcs": 36,
+          "price": 3599
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-005",
+      "image": "/images/bouquets/african-rose.png",
+      "name": "African Rose Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 1299
+        },
+        {
+          "pcs": 6,
+          "price": 1899
+        },
+        {
+          "pcs": 12,
+          "price": 3899
+        },
+        {
+          "pcs": 24,
+          "price": 5099
+        },
+        {
+          "pcs": 36,
+          "price": 6999
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-006",
+      "image": "/images/bouquets/indian-rose.png",
+      "name": "Indian Rose Bouquet",
+      "tierType": "pcs",
+      "tiers": [
+        {
+          "pcs": 3,
+          "price": 999
+        },
+        {
+          "pcs": 6,
+          "price": 1599
+        },
+        {
+          "pcs": 12,
+          "price": 2299
+        },
+        {
+          "pcs": 24,
+          "price": 2999
+        },
+        {
+          "pcs": 36,
+          "price": 3999
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "bouquet-007",
+      "image": "/images/bouquets/mix-flowers.png",
+      "name": "Mix Flowers Bouquet",
+      "tierType": "size",
+      "tiers": [
+        {
+          "size": "extra small",
+          "price": 1499
+        },
+        {
+          "size": "small",
+          "price": 2999
+        },
+        {
+          "size": "medium",
+          "price": 3999
+        },
+        {
+          "size": "large",
+          "price": 4999
+        }
+      ],
+      "active": true
+    }
+  ]
+}

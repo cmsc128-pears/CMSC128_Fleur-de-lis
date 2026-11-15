@@ -1,0 +1,95 @@
+{
+  "_documentation": {
+    "file": "addons.json",
+    "purpose": "Extras that can be added to a bouquet: bears (stuffed toys) and chocolates.",
+    "lastUpdated": "2026-11-15",
+    "conventions": [
+      "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
+      "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
+      "`null` means the value is not known yet. It never means zero. Check for null before doing math on a value.",
+      "Enumerated values (type, origin, occasion, mood, etc.) are lowercase, with hyphens instead of spaces where noted.",
+      "`id` values are unique and stable. Gaps in the numbering are fine, and ids should not be reused or renumbered.",
+      "`image` paths are served from the site root, so `/images/flowers/x.png` means the file `public/images/flowers/x.png`. The image files themselves have not been added yet."
+    ],
+    "fields": {
+      "id": "string. Unique id, format `addon-###`.",
+      "image": "string. Image path (see conventions).",
+      "name": "string. Display name.",
+      "type": "string. `stuffed toy` or `chocolate`.",
+      "size": "string or null. Bear height (`1-2 ft`, `3 ft`, `5 ft`). Null for chocolates.",
+      "brand": "string or null. Chocolate brand. Null for stuffed toys.",
+      "price": "number or null. Bear prices are filled in. Chocolate prices are not known yet.",
+      "description": "string. Free text, may be empty.",
+      "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
+    },
+    "notes": []
+  },
+  "items": [
+    {
+      "id": "addon-001",
+      "image": "/images/addons/bear-1-2-ft.png",
+      "name": "Bear (1-2 ft)",
+      "type": "stuffed toy",
+      "size": "1-2 ft",
+      "brand": null,
+      "price": 999,
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "addon-002",
+      "image": "/images/addons/bear-3-ft.png",
+      "name": "Bear (3 ft)",
+      "type": "stuffed toy",
+      "size": "3 ft",
+      "brand": null,
+      "price": 1899,
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "addon-003",
+      "image": "/images/addons/bear-5-ft.png",
+      "name": "Bear (5 ft)",
+      "type": "stuffed toy",
+      "size": "5 ft",
+      "brand": null,
+      "price": 4999,
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "addon-004",
+      "image": "/images/addons/ferrero.png",
+      "name": "Ferrero",
+      "type": "chocolate",
+      "size": null,
+      "brand": "Ferrero",
+      "price": null,
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "addon-005",
+      "image": "/images/addons/dairy-milk.png",
+      "name": "Dairy Milk",
+      "type": "chocolate",
+      "size": null,
+      "brand": "Cadbury",
+      "price": null,
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "addon-006",
+      "image": "/images/addons/toblerone.png",
+      "name": "Toblerone",
+      "type": "chocolate",
+      "size": null,
+      "brand": "Toblerone",
+      "price": null,
+      "description": "",
+      "active": true
+    }
+  ]
+}

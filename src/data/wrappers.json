@@ -1,0 +1,53 @@
+{
+  "_documentation": {
+    "file": "wrappers.json",
+    "purpose": "Wrapping options for a bouquet.",
+    "lastUpdated": "2026-11-15",
+    "conventions": [
+      "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
+      "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
+      "`null` means the value is not known yet. It never means zero. Check for null before doing math on a value.",
+      "Enumerated values (type, origin, occasion, mood, etc.) are lowercase, with hyphens instead of spaces where noted.",
+      "`id` values are unique and stable. Gaps in the numbering are fine, and ids should not be reused or renumbered.",
+      "`image` paths are served from the site root, so `/images/flowers/x.png` means the file `public/images/flowers/x.png`. The image files themselves have not been added yet."
+    ],
+    "fields": {
+      "id": "string. Unique id, format `wrapper-###`.",
+      "image": "string. Image path (see conventions).",
+      "name": "string. Display name.",
+      "type": "string. One of: cloth, paper, mesh.",
+      "color": "string. Wrapper color.",
+      "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
+    },
+    "notes": [
+      "PLACEHOLDER DATA: the three entries are samples to show the format. Replace them with the shop's real wrappers.",
+      "All entries are inactive (`active: false`) because they are placeholders. Set `active` to true once the real wrappers are added."
+    ]
+  },
+  "items": [
+    {
+      "id": "wrapper-001",
+      "image": "/images/wrappers/kraft-paper.png",
+      "name": "Paper",
+      "type": "paper",
+      "color": "brown",
+      "active": false
+    },
+    {
+      "id": "wrapper-002",
+      "image": "/images/wrappers/cloth-cream.png",
+      "name": "Cloth",
+      "type": "cloth",
+      "color": "cream",
+      "active": false
+    },
+    {
+      "id": "wrapper-003",
+      "image": "/images/wrappers/mesh-pink.png",
+      "name": "Mesh",
+      "type": "mesh",
+      "color": "pink",
+      "active": false
+    }
+  ]
+}

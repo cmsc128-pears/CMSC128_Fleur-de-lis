@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInAnonymously,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signOut,
   onAuthStateChanged,
@@ -61,13 +62,22 @@ export async function signUp({ firstName, lastName, contact, email, password }) 
       contact: normalizeContact(contact) || null, // optional
       createdAt: serverTimestamp(),
     });
-    return user;
+
   } catch (err) {
     // roll back so the user can retry with the same email
     await user.delete().catch(() => {});
     console.error("Firestore write failed:", err);
     throw new Error("Couldn't save your profile. Please try again.");
   }
+
+  try {
+    await sendEmailVerification(user);
+  } catch (err) {
+    console.error("Verification email failed:", err);
+  }
+
+  return user;
+  
 }
 
 export async function logInAsGuest() {
@@ -86,6 +96,8 @@ export async function resetPassword(email) {
     throw friendly(err);
   }
 }
+
+
 
 export function logOut() {
   return signOut(auth);

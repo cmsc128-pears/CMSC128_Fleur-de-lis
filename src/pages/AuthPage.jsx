@@ -52,6 +52,7 @@ export default function AuthPage ({
     const updateSignup = (e) => setSignup({ ...signup, [e.target.name]: e.target.value });
 
     const validEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim());
+    const validContact = (v) => /^(\+63|0)?9\d{2}[\s-]?\d{3}[\s-]?\d{4}$/.test(v.trim());
 
     const validate = (values, isSignup) => {
     const next = {};
@@ -113,7 +114,7 @@ export default function AuthPage ({
         setFormError("");
         setSubmitting(true);
         try {
-            await onResetPassword?.(email);
+            await onResetPassword(email);
             setResetSent(true);
         } catch (err) {
             setFormError(friendlyError(err));
@@ -181,12 +182,15 @@ export default function AuthPage ({
             </Field>
 
           <button
-            type="button"
-            className="link-button"
-            onClick={() => onForgotPassword?.()}
-          >
-            Forgot Password?
-          </button>
+                type="button"
+                className="link-button"
+                onClick={() => {
+                    setResetEmail(login.email);
+                    switchMode("forgot");
+                }}
+            >
+                Forgot Password?
+            </button>
 
           <div className="button-row">
             <button type="button" className="btn btn-secondary" onClick={handleGuest} disabled={submitting}>
@@ -195,17 +199,10 @@ export default function AuthPage ({
               </svg>
               Log in as Guest
             </button>
-            </div>
-
-            <div className="button-row">
-                <button type="button" className="btn btn-secondary" onClick={handleGuest} disabled={submitting}>
-                    <span className="guest-icon" aria-hidden="true" />
-                    Log in as Guest
-                </button>
-                <button type="submit" className="btn btn-primary" disabled={submitting}>
-                    Log In
-                </button>
-            </div>
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              Log In
+            </button>
+          </div>
 
             <p className="switch-text">
                 Don't have an account?{" "}

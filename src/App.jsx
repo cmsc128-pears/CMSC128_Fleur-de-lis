@@ -4,7 +4,7 @@ import Onboarding from "./pages/Onboarding";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
-import { logIn, signUp, logInAsGuest, logOut } from "./services/Auth";
+import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import "/src/app.css";
 
 export default function App() {
@@ -32,6 +32,7 @@ export default function App() {
                     onLogin={logIn}
                     onSignup={signUp}
                     onGuest={logInAsGuest}
+                    onResetPassword={resetPassword}
                     onAuthSuccess={() => setView("profile")}
                 />
             )}

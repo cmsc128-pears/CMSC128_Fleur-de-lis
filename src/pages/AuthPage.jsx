@@ -164,7 +164,9 @@ export default function AuthPage ({
 
           <div className="button-row">
             <button type="button" className="btn btn-secondary" onClick={handleGuest} disabled={submitting}>
-              <span className="guest-icon" aria-hidden="true" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="8" r="4.2" /><path d="M3.5 21c0-4.6 3.8-7.5 8.5-7.5s8.5 2.9 8.5 7.5z" />
+              </svg>
               Log in as Guest
             </button>
             <button type="submit" className="btn btn-primary" disabled={submitting}>

@@ -4,7 +4,10 @@ import Onboarding from "./pages/Onboarding";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
-import { logIn, signUp, logInAsGuest, logOut } from "./services/Auth";
+import ChangePassword from "./pages/ChangePassword";
+import TopBar from "./components/TopBar";
+import BottomNav, { hasNav } from "./components/BottomNav";
+import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import "/src/app.css";
 
 export default function App() {
@@ -20,29 +23,47 @@ export default function App() {
 
     return (
         <div className="shell">
-            {view === "landing" && <Landing onStart={() => setView("onboarding")} />}
+            {hasNav(view) && <TopBar />}
 
-            {view === "onboarding" && (
-                // TEMP: guest goes to profile for testing, change back to "feed" later
-                <Onboarding onGuest={() => setView("feed")} onAuth={() => setView("auth")} />
-            )}
+            <div className="shell__content">
+                {view === "landing" && <Landing onStart={() => setView("onboarding")} />}
 
-            {view === "auth" && (
-                <AuthPage
-                    onLogin={logIn}
-                    onSignup={signUp}
-                    onGuest={logInAsGuest}
-                    onAuthSuccess={() => setView("profile")}
-                />
-            )}
+                {view === "onboarding" && (
+                    // TEMP: guest goes to profile for testing, change back to "feed" later
+                    <Onboarding onGuest={() => setView("feed")} onAuth={() => setView("auth")} />
+                )}
 
-            {view === "profile" && (
-                <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
-            )}
-            {view === "editProfile" && <EditProfile onBack={() => setView("profile")} />}
+                {view === "auth" && (
+                    <AuthPage
+                        onLogin={logIn}
+                        onSignup={signUp}
+                        onGuest={logInAsGuest}
+                        onResetPassword={resetPassword}
+                        onAuthSuccess={() => setView("profile")}
+                    />
+                )}
 
-            {/* todo: replace with actual feed screen */}
-            {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
+                {view === "profile" && (
+                    <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
+                )}
+                {view === "editProfile" && (
+                    <EditProfile
+                        onBack={() => setView("profile")}
+                        onChangePassword={() => setView("changePassword")}
+                    />
+                )}
+                {view === "changePassword" && (
+                    <ChangePassword onBack={() => setView("editProfile")} />
+                )}
+
+                {/* todo: replace with actual feed screen */}
+                {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
+
+                {/* todo: replace with actual create screen */}
+                {view === "create" && <main style={{ padding: 24 }}>Create</main>}
+            </div>
+
+            <BottomNav view={view} onNavigate={setView} />
         </div>
     );
 }

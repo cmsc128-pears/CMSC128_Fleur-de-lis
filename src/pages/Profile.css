@@ -1,109 +1,161 @@
-/* ---------- profile page ---------- */
+/* ------------------------------------------------------------------
+  Profile.css 
+------------------------------------------------------------------- */
+
+.profile {
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  font-family: var(--FONT-BODY);
+}
 .profile__body {
-  padding: 32px 16px;
+  padding: var(--SPACE-6) var(--SPACE-4);
 }
 
-/* card with avatar + name + contact */
+/* keyboard focus for every button on this page */
+.profile button:focus-visible {
+  outline: 2px solid var(--COLOR-FOCUS);
+  outline-offset: 2px;
+}
+
+/* ---------- profile card (avatar + name + contact) ---------- */
+.profile__card-wrap {
+  position: relative;
+}
 .profile-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 24px;
-  background: var(--color-field, #efefef);
+  gap: var(--SPACE-4);
+  padding: var(--SPACE-5);
+  border-radius: var(--RADIUS-CARD);
+  background: var(--COLOR-ACCENTGREEN);
 }
-.profile-card__avatar {
+/* keep text clear of the log out icon on the right */
+.profile__card-wrap .profile-card {
+  padding-right: calc(var(--TAP-TARGET) + var(--SPACE-4));
+}
+.profile-card .profile-card__avatar {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 88px;
   height: 88px;
-  font-size: 1.5rem;
+  border-radius: var(--RADIUS-FULL);
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  font-family: var(--FONT-BODY);
+  font-size: var(--FONT-SIZE-2XL);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
 }
 .profile-card__info {
   min-width: 0;
 }
 .profile-card__name {
-  margin: 0 0 6px;
-  font-family: var(--font-brand, Georgia, serif);
-  font-size: 1.4rem;
-  font-weight: 400;
+  position: relative;
+  top: var(--SPACE-1); /* nudge name down; raise/lower to taste */
+  margin: 0;
+  font-family: var(--FONT-DISPLAY);
+  font-size: var(--FONT-SIZE-XL);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
+  line-height: var(--LINE-HEIGHT-SNUG);
+  overflow-wrap: anywhere;
 }
 .profile-card__line {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 2px 0;
-  font-size: 0.7rem;
+  gap: var(--SPACE-2);
+  margin: var(--SPACE-1) 0 0;
+  font-size: var(--FONT-SIZE-SM);
+  line-height: var(--LINE-HEIGHT-SNUG);
   overflow-wrap: anywhere;
 }
-
-/* edit profile button */
-.profile__edit {
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--color-field, #efefef);
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
+.profile-card__line svg {
+  flex-shrink: 0;
+  color: var(--COLOR-ICON);
 }
 
-/* log out icon button, sits on the right side of the profile card */
-.profile__card-wrap {
-  position: relative;
-}
-.profile__card-wrap .profile-card {
-  padding-right: 56px; /* keep text clear of the icon */
-}
+/* log out icon button, right side of the card */
 .profile__logout {
   position: absolute;
   top: 50%;
-  right: 12px;
+  right: var(--SPACE-2);
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: var(--TAP-TARGET);
+  height: var(--TAP-TARGET);
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--RADIUS-FULL);
   background: none;
-  color: inherit;
+  color: var(--COLOR-TEXT);
   cursor: pointer;
 }
-.profile__logout:hover,
-.profile__logout:focus-visible {
-  background: rgba(0, 0, 0, 0.08);
+.profile__logout:hover {
+  color: var(--COLOR-TERRACOTTA);
 }
 
-/* tabs */
+/* ---------- edit profile button ---------- */
+.profile__edit {
+  display: block;
+  width: 100%;
+  min-height: var(--TAP-TARGET);
+  margin-top: var(--SPACE-3);
+  padding: var(--SPACE-2) var(--SPACE-4);
+  border: 0;
+  border-radius: var(--RADIUS-BUTTON);
+  background: var(--COLOR-BROWN);
+  color: var(--COLOR-TEXT-ON-DARK);
+  font: inherit;
+  font-size: var(--FONT-SIZE-BASE);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
+  cursor: pointer;
+}
+.profile .profile__edit:hover {
+  background: var(--COLOR-TEXT);
+  color: var(--COLOR-TEXT-ON-DARK);
+}
+
+/* ---------- tabs ---------- */
 .profile__tabs {
   display: flex;
   justify-content: center;
-  gap: 40px;
-  margin-top: 40px;
-  border-bottom: 1px solid #e6e6e6;
+  gap: var(--SPACE-8);
+  margin-top: var(--SPACE-10);
+  border-bottom: 1px solid var(--COLOR-BORDER);
 }
 .profile__tab {
-  padding: 0 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: var(--SPACE-2);
+  min-height: var(--TAP-TARGET);
+  padding: 0 var(--SPACE-1);
+  margin-bottom: -1px; /* active underline sits on top of the divider */
   border: 0;
   border-bottom: 2px solid transparent;
   background: none;
+  color: var(--COLOR-TEXT);
   font: inherit;
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: var(--FONT-SIZE-XS);
+  font-weight: var(--FONT-WEIGHT-SEMIBOLD);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   cursor: pointer;
 }
 .profile__tab--active {
-  border-bottom-color: #333;
+  border-bottom-color: var(--COLOR-TEXT-MUTED);
+}
+/* icons are SVG files (<img>), so they keep the colors drawn in the file */
+.profile__tab-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
-/* design grid */
+/* ---------- design grid ---------- */
 .design-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -111,12 +163,22 @@
 }
 .design-grid__item {
   aspect-ratio: 1;
-  background: var(--color-field, #efefef);
+  background: var(--COLOR-IMAGE-FILL);
   overflow: hidden;
 }
 .design-grid__item img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+}
+
+/* ---------- empty tab message ---------- */
+.profile__empty {
+  margin: 0;
+  padding: var(--SPACE-10) var(--SPACE-6);
+  text-align: center;
+  color: var(--COLOR-TEXT-MUTED);
+  font-size: var(--FONT-SIZE-SM);
+  line-height: var(--LINE-HEIGHT-BASE);
 }

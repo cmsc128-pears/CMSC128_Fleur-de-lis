@@ -8,7 +8,7 @@ const MOCK_PROFILE = {
   uid: "mock_user",
   firstName: "Test",
   lastName: "User",
-  contactNumber: "0912 345 6789",
+  contact: "09123456789",
   email: "test@example.com",
   yourDesigns: [],
   likedDesigns: [],
@@ -31,11 +31,15 @@ export default function useUserProfile() {
       }
       try {
         const data = await getUserProfile(user.uid);
+        const [fallbackFirst = "", ...fallbackRest] = (user.displayName || "").split(" ");
         setProfile({
           ...data,
           uid: user.uid,
-          email: data.email || user.email,
-          contactNumber: data.contactNumber || data.contact || "",
+          firstName: data.firstName || fallbackFirst || (user.isAnonymous ? "Guest" : ""),
+          lastName: data.lastName || fallbackRest.join(" ") || "",
+          email: data.email || user.email || "",
+          contact: data.contact || data.contactNumber || null,
+          isGuest: Boolean(user.isAnonymous),
           yourDesigns: Array.isArray(data.yourDesigns) ? data.yourDesigns : [],
           likedDesigns: Array.isArray(data.likedDesigns) ? data.likedDesigns : [],
         });

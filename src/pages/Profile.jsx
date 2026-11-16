@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUserProfile from "../services/userUserProfile.js";
+import { getUserDesigns, getLikedDesigns } from "../services/designService.js";
 import ProfileCard from "../components/ProfileCard.jsx";
 import DesignGrid from "../components/DesignGrid.jsx";
 import designsIcon from "../assets/icons/designs.svg";
@@ -17,6 +18,27 @@ function Profile({ onEdit, onLogout }) {
   const [likedDesigns, setLikedDesigns] = useState([]);
 
   const [activeTab, setActiveTab] = useState("your");
+
+  // Load "Your Designs" and "Liked Designs" for the logged-in user
+  useEffect(() => {
+    if (!profile?.uid) return;
+    let active = true;
+
+    Promise.all([
+      getUserDesigns(profile.uid),
+      getLikedDesigns(profile.uid),
+    ])
+      .then(([own, liked]) => {
+        if (!active) return;
+        setDesigns(own);
+        setLikedDesigns(liked);
+      })
+      .catch((err) => console.error("Failed to load designs:", err));
+
+    return () => {
+      active = false;
+    };
+  }, [profile?.uid]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

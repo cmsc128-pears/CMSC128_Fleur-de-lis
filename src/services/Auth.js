@@ -55,19 +55,23 @@ export async function signUp({ firstName, lastName, contact, email, password }) 
   }
 
   try {
+    const normalizedContact = normalizeContact(contact) || null;
     await setDoc(doc(db, "users", user.uid), {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: normalizeEmail(email),
-      contact: normalizeContact(contact) || null, // optional
+      contact: normalizedContact,
+      yourDesigns: [],
+      likedDesigns: [],
       createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
 
   } catch (err) {
     // roll back so the user can retry with the same email
     await user.delete().catch(() => {});
     console.error("Firestore write failed:", err);
-    throw new Error("Couldn't save your profile. Please try again.");
+    throw new Error("Couldn't save your profile. Please try again.", { cause: err });
   }
 
   try {

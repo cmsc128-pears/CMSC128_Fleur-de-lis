@@ -50,10 +50,6 @@
   --COLOR-DOT-ACTIVE: var(--COLOR-GREEN);
   --COLOR-TAPE: rgba(165, 139, 116, 0.55);
 
-  /* icons + focus ring */
-  --COLOR-ICON: var(--COLOR-GREEN);
-  --COLOR-FOCUS: var(--COLOR-TEXT);
-
   /* ============ FONTS ============ */
   --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
   --FONT-BODY: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;

@@ -8,7 +8,7 @@ import ChangePassword from "./pages/ChangePassword";
 import TopBar from "./components/TopBar";
 import BottomNav, { hasNav } from "./components/BottomNav";
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
-import "/src/app.css";
+import "/src/appshared.css";
 
 export default function App() {
     // tells which screen we are on

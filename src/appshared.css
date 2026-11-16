@@ -1,0 +1,116 @@
+/* -------------------------------------------------------------------------
+    global.css — styles every page shares
+---------------------------------------------------------------------------*/
+
+@import url("./variables.css");
+
+*, *::before, *::after { box-sizing: border-box; }
+html,body, #root { 
+    height: 100%; 
+    margin: 0; 
+}
+
+body {
+    background-color: var(--COLOR-BG);
+    color: var(--COLOR-TEXT);
+    font-family: var(--FONT-BODY);
+    font-size: var(--FONT-SIZE-BODY);
+    line-height: var(--LINE-HEIGHT-BASE);
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+:focus-visible {
+    outline: 2px solid var(--COLOR-FOCUS);
+    outline-offset: 3px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/*  ---------- app frame ----------
+    on a phone: fills the real screen
+    on a laptop: a standard 390 x 844 phone-sized frame
+    (--APP-HEIGHT, --FRAME-WIDTH and --FRAME-HEIGHT are defined in variables.css)
+*/
+
+.shell {
+    max-width: 430px;
+    min-height: var(--APP-HEIGHT);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 600px) {
+    .shell {
+        width: var(--FRAME-WIDTH);
+        height: var(--APP-HEIGHT);
+        margin: var(--SPACE-6) auto;
+        border: 1px solid var(--COLOR-IMAGE-LINE);
+        border-radius: var(--RADIUS-CARD);
+        overflow-y: auto;
+    }
+}
+
+/* ---------- shared pieces ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--SPACE-2);
+    min-height: var(--TAP-TARGET);
+    padding: 0 var(--SPACE-4);
+    background: var(--COLOR-BUTTON-BG);
+    color: var(--COLOR-BUTTON-TEXT);
+    border: 0;
+    border-radius: var(--RADIUS-BUTTON);
+    font-size: var(--FONT-SIZE-BUTTON);
+    font-weight: var(--FONT-WEIGHT-BUTTON);
+}
+
+/* add className="btn btn--secondary" for the softer pink button */
+.btn--secondary {
+    background: var(--COLOR-BUTTON-SECONDARY-BG);
+    color: var(--COLOR-BUTTON-SECONDARY-TEXT);
+}
+
+/* outlined button: used by Skip and Log In. add className="btn btn--outline" */
+.btn--outline {
+    background: transparent;
+    color: var(--COLOR-BROWN);
+    border: 1.5px solid var(--COLOR-BROWN);
+}
+
+.btn--outline:active {
+    background: color-mix(in srgb, var(--COLOR-BROWN) 10%, transparent);
+}
+
+.btn svg { color: var(--COLOR-ICON); }
+
+.link {
+    min-height: var(--TAP-TARGET);
+    padding: 0 var(--SPACE-2);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-size: var(--FONT-SIZE-BUTTON);
+}
+
+.brand {
+    font-family: var(--FONT-DISPLAY);
+    font-style: italic;
+    font-weight: var(--FONT-WEIGHT-REGULAR);
+}

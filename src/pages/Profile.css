@@ -146,12 +146,13 @@
 .profile__tab--active {
   border-bottom-color: var(--COLOR-TEXT-MUTED);
 }
+/* icons are SVG files (<img>), so they keep the colors drawn in the file */
 .profile__tab-icon {
+  display: block;
   flex-shrink: 0;
-  color: var(--COLOR-ICON);
-}
-.profile__tab-icon--heart {
-  color: var(--COLOR-PINK);
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* ---------- design grid ---------- */
@@ -170,4 +171,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* ---------- empty tab message ---------- */
+.profile__empty {
+  margin: 0;
+  padding: var(--SPACE-10) var(--SPACE-6);
+  text-align: center;
+  color: var(--COLOR-TEXT-MUTED);
+  font-size: var(--FONT-SIZE-SM);
+  line-height: var(--LINE-HEIGHT-BASE);
 }

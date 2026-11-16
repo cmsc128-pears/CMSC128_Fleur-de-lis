@@ -8,25 +8,25 @@
   /* ============ COLORS ============ */
 
   /* base */
-  --COLOR-BG: #F8F0DB;                 /* page background (cream) */
+  --COLOR-BG: #FFFCF2;                 /* page background (cream) */
   --COLOR-SURFACE: #E4E1D2;            /* neutral fills: avatar, image placeholders */
   --COLOR-TEXT: #3E3129;               /* main text (deep brown) */
-  --COLOR-TEXT-MUTED: #705E50;         /* secondary text */
-  --COLOR-TEXT-ON-DARK: #F8F0DB;       /* text and icons on green bars */
+  --COLOR-TEXT-MUTED: #A58B74;         /* secondary text */
+  --COLOR-TEXT-ON-DARK: #FFFCF2;       /* text and icons on green bars */
 
   /* brand */
   --COLOR-GREEN: #5F6A52;              /* header, bottom nav, icons */
   --COLOR-PINK: #E0949E;               /* primary buttons */
   --COLOR-PINK-SOFT: #E6BBBC;          /* cards, secondary buttons */
-  --COLOR-TERRACOTTA: #AD6A62;         /* accents, hover, wordmark */
+  --COLOR-TERRACOTTA: #DE8B84;         /* accents, hover, wordmark */
 
   /* header + bottom nav */
   --COLOR-HEADER-BG: var(--COLOR-GREEN);
   --COLOR-HEADER-TEXT: var(--COLOR-TEXT-ON-DARK);
   --COLOR-NAV-BG: var(--COLOR-GREEN);
-  --COLOR-NAV-ICON: #D9D6BE;           /* inactive nav icon + label */
-  --COLOR-NAV-ICON-ACTIVE: #F8F0DB;    /* active nav icon + label */
-  --COLOR-LOGO-BG: #F8F0DB;            /* the round logo badge */
+  --COLOR-NAV-ICON: #D1D7B0;           /* inactive nav icon + label */
+  --COLOR-NAV-ICON-ACTIVE: #FFFCF2;    /* active nav icon + label */
+  --COLOR-LOGO-BG: #FFFCF2;            /* the round logo badge */
 
   /* buttons */
   --COLOR-BUTTON-BG: var(--COLOR-PINK);
@@ -43,10 +43,9 @@
   --COLOR-IMAGE-FILL: var(--COLOR-SURFACE);
   --COLOR-IMAGE-LINE: #CFADA4;
 
-  /* onboarding dots, taped photo */
-  --COLOR-DOT: #CFADA4;
+  /* onboarding dots */
+  --COLOR-DOT: var(--COLOR-NAV-ICON);
   --COLOR-DOT-ACTIVE: var(--COLOR-GREEN);
-  --COLOR-TAPE: rgba(165, 139, 116, 0.55);
 
   /* icons + focus ring */
   --COLOR-ICON: var(--COLOR-GREEN);

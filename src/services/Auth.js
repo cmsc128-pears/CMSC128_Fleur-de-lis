@@ -61,17 +61,17 @@ export async function signUp({ firstName, lastName, contact, email, password }) 
       lastName: lastName.trim(),
       email: normalizeEmail(email),
       contact: normalizedContact,
-      contactNumber: normalizedContact,
       yourDesigns: [],
       likedDesigns: [],
       createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     });
 
   } catch (err) {
     // roll back so the user can retry with the same email
     await user.delete().catch(() => {});
     console.error("Firestore write failed:", err);
-    throw new Error("Couldn't save your profile. Please try again.");
+    throw new Error("Couldn't save your profile. Please try again.", { cause: err });
   }
 
   try {

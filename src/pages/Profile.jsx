@@ -4,10 +4,47 @@ import ProfileCard from "../components/ProfileCard.jsx";
 import DesignGrid from "../components/DesignGrid.jsx";
 import "./Profile.css";
 
+function SparkleIcon() {
+  return (
+    <svg
+      className="profile__tab-icon"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M10 3l1.9 5.1L17 10l-5.1 1.9L10 17l-1.9-5.1L3 10l5.1-1.9L10 3z" />
+      <path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9L18 14z" />
+    </svg>
+  );
+}
+
+function HeartIcon() {
+  return (
+    <svg
+      className="profile__tab-icon profile__tab-icon--heart"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 21s-7.5-4.6-9.7-9.3C.7 8.3 2.8 4.5 6.5 4.5c2 0 3.7 1 5.5 3 1.8-2 3.5-3 5.5-3 3.7 0 5.8 3.8 4.2 7.2C19.5 16.4 12 21 12 21z" />
+    </svg>
+  );
+}
+
 function Profile({ onEdit, onLogout }) {
   const { profile, loading, error } = useUserProfile();
+
+  // Replace these with real data (API / props) when it's ready.
+  // Each design is { id, name, imageUrl }, for example:
+  // { id: 1, name: "Spring bouquet", imageUrl: "/images/designs/1.jpg" }
+  // While a list is empty, DesignGrid shows grey placeholder cells.
   const [designs, setDesigns] = useState([]);
   const [likedDesigns, setLikedDesigns] = useState([]);
+
   const [activeTab, setActiveTab] = useState("your");
 
   if (loading) return <p>Loading...</p>;
@@ -16,12 +53,6 @@ function Profile({ onEdit, onLogout }) {
 
   return (
     <main className="profile">
-      {/* .topbar styles live in EditProfile.css for now */}
-      <header className="topbar">
-        <div className="topbar__logo">LOGO</div>
-        <span className="topbar__brand">fleur de lis</span>
-      </header>
-
       <div className="profile__body">
         <div className="profile__card-wrap">
           <ProfileCard profile={profile} />
@@ -49,6 +80,7 @@ function Profile({ onEdit, onLogout }) {
             </svg>
           </button>
         </div>
+
         <button type="button" className="profile__edit" onClick={onEdit}>
           Edit Profile
         </button>
@@ -57,15 +89,19 @@ function Profile({ onEdit, onLogout }) {
           <button
             type="button"
             className={`profile__tab ${activeTab === "your" ? "profile__tab--active" : ""}`}
+            aria-pressed={activeTab === "your"}
             onClick={() => setActiveTab("your")}
           >
+            <SparkleIcon />
             Your Designs
           </button>
           <button
             type="button"
             className={`profile__tab ${activeTab === "liked" ? "profile__tab--active" : ""}`}
+            aria-pressed={activeTab === "liked"}
             onClick={() => setActiveTab("liked")}
           >
+            <HeartIcon />
             Liked Designs
           </button>
         </nav>

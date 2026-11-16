@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------
-  Profile.css — every value comes from variables.css (no new variables).
+  Profile.css 
 ------------------------------------------------------------------- */
 
 .profile {
@@ -55,7 +55,7 @@
   top: var(--SPACE-1); /* nudge name down; raise/lower to taste */
   margin: 0;
   font-family: var(--FONT-DISPLAY);
-  font-size: var(--FONT-SIZE-2XL);
+  font-size: var(--FONT-SIZE-XL);
   font-weight: var(--FONT-WEIGHT-REGULAR);
   line-height: var(--LINE-HEIGHT-SNUG);
   overflow-wrap: anywhere;
@@ -108,8 +108,8 @@
   background: var(--COLOR-BROWN);
   color: var(--COLOR-TEXT-ON-DARK);
   font: inherit;
-  font-size: var(--FONT-SIZE-MD);
-  font-weight: var(--FONT-WEIGHT-MEDIUM);
+  font-size: var(--FONT-SIZE-BASE);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
   cursor: pointer;
 }
 .profile .profile__edit:hover {

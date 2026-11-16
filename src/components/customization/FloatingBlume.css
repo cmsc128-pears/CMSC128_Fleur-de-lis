@@ -204,10 +204,10 @@
   width: 24px;
   height: 24px;
   border-radius: var(--RADIUS-FULL);
-  background: var(--COLOR-ACCENTGREEN);
+  background: var(--COLOR-GREEN-SOFT);
   color: var(--COLOR-TEXT);
-  font-size: 0.6rem;
-  font-weight: var(--FONT-WEIGHT-SEMIBOLD);
+  font-size: var(--FONT-SIZE-CAPTION);
+  font-weight: var(--FONT-WEIGHT-BOLD);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -216,10 +216,10 @@
 /* Message bubbles */
 .blume__bubble {
   max-width: 235px;      /* <-- [BLUME-SIZE] MAX BUBBLE WIDTH */
-  padding: 8px 13px;
-  border-radius: 16px;
-  font-size: 0.78rem;    /* <-- [BLUME-SIZE] MESSAGE TEXT SIZE */
-  line-height: 1.38;
+  padding: var(--SPACE-2) var(--SPACE-3);
+  border-radius: var(--RADIUS-BUTTON);
+  font-size: var(--FONT-SIZE-BODY);    /* <-- [BLUME-SIZE] MESSAGE TEXT SIZE */
+  line-height: var(--LINE-HEIGHT-SNUG);
   word-wrap: break-word;
 }
 
@@ -229,7 +229,7 @@
 }
 
 .blume__bubble--user {
-  background: var(--COLOR-ACCENTGREEN);
+  background: var(--COLOR-GREEN-SOFT);
   color: var(--COLOR-TEXT);
 }
 

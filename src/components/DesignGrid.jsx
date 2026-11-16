@@ -1,14 +1,16 @@
-// shows 6 empty grey cells when there are no designs yet (matches the wireframe)
-const PLACEHOLDER_COUNT = 6;
+const EMPTY_MESSAGES = {
+  your: "You haven't made any designs yet.",
+  liked: "Designs you like will show up here.",
+};
+const DEFAULT_EMPTY_MESSAGE = "No designs yet.";
 
-function DesignGrid({ designs }) {
-  if (designs.length === 0) {
+function DesignGrid({ designs, type }) {
+  // covers undefined, null and an empty array
+  if (!designs || designs.length === 0) {
     return (
-      <section className="design-grid" aria-label="No designs yet">
-        {Array.from({ length: PLACEHOLDER_COUNT }, (_, i) => (
-          <div key={i} className="design-grid__item" />
-        ))}
-      </section>
+      <p className="profile__empty">
+        {EMPTY_MESSAGES[type] ?? DEFAULT_EMPTY_MESSAGE}
+      </p>
     );
   }
 
@@ -16,7 +18,9 @@ function DesignGrid({ designs }) {
     <section className="design-grid">
       {designs.map((design) => (
         <div key={design.id} className="design-grid__item">
-          <img src={design.imageUrl} alt={design.name} />
+          {design.imageUrl && (
+            <img src={design.imageUrl} alt={design.name ?? ""} loading="lazy" />
+          )}
         </div>
       ))}
     </section>

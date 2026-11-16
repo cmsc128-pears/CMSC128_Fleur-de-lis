@@ -15,7 +15,9 @@
   --COLOR-TEXT-ON-DARK: #FFFCF2;       /* text and icons on green bars */
 
   /* brand */
+  --COLOR-BROWN: #54371F;              /* main button colors */
   --COLOR-GREEN: #5F6A52;              /* header, bottom nav, icons */
+  --COLOR-ACCENTGREEN: #D1D7B0;        /* accen green */
   --COLOR-PINK: #E0949E;               /* primary buttons */
   --COLOR-PINK-SOFT: #E6BBBC;          /* cards, secondary buttons */
   --COLOR-TERRACOTTA: #DE8B84;         /* accents, hover, wordmark */
@@ -47,13 +49,9 @@
   --COLOR-DOT: var(--COLOR-NAV-ICON);
   --COLOR-DOT-ACTIVE: var(--COLOR-GREEN);
 
-  /* icons + focus ring */
-  --COLOR-ICON: var(--COLOR-GREEN);
-  --COLOR-FOCUS: var(--COLOR-TEXT);
-
   /* ============ FONTS ============ */
   --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --FONT-BODY: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --FONT-BODY: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* ============ FONT SIZES (mobile scale) ============
     rem = relative to the phone's text-size setting (1rem = 16px by default),

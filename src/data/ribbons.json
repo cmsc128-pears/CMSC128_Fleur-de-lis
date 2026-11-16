@@ -1,0 +1,170 @@
+{
+  "_documentation": {
+    "file": "ribbons.json",
+    "purpose": "Ribbon options for a bouquet.",
+    "lastUpdated": "2026-11-15",
+    "conventions": [
+      "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
+      "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
+      "`null` means the value is not known yet. It never means zero. Check for null before doing math on a value.",
+      "Enumerated values (type, origin, occasion, mood, etc.) are lowercase, with hyphens instead of spaces where noted.",
+      "`id` values are unique and stable. Gaps in the numbering are fine, and ids should not be reused or renumbered.",
+      "`image` paths are served from the site root, so `/images/flowers/x.png` means the file `public/images/flowers/x.png`. The image files themselves have not been added yet."
+    ],
+    "fields": {
+      "id": "string. Unique id, format `ribbon-###`.",
+      "image": "string. Image path (see conventions).",
+      "type": "string. One of: plain, design, sheer.",
+      "color": "string. Ribbon color.",
+      "design": "string or null. The printed text or pattern, used only for `design` ribbons (for example, `Love is eternal`). Null for plain and sheer ribbons.",
+      "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
+    },
+    "notes": []
+  },
+  "items": [
+    {
+      "id": "ribbon-001",
+      "image": "/images/ribbons/plain-purple.png",
+      "type": "plain",
+      "color": "Purple",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-002",
+      "image": "/images/ribbons/plain-red.png",
+      "type": "plain",
+      "color": "Red",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-003",
+      "image": "/images/ribbons/plain-green.png",
+      "type": "plain",
+      "color": "Green",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-004",
+      "image": "/images/ribbons/plain-pink.png",
+      "type": "plain",
+      "color": "Pink",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-005",
+      "image": "/images/ribbons/plain-blue.png",
+      "type": "plain",
+      "color": "Blue",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-006",
+      "image": "/images/ribbons/plain-peach.png",
+      "type": "plain",
+      "color": "Peach",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-007",
+      "image": "/images/ribbons/plain-white.png",
+      "type": "plain",
+      "color": "White",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-008",
+      "image": "/images/ribbons/plain-orange.png",
+      "type": "plain",
+      "color": "Orange",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-009",
+      "image": "/images/ribbons/plain-metallic-gold.png",
+      "type": "plain",
+      "color": "Metallic Gold",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-010",
+      "image": "/images/ribbons/plain-baby-pink.png",
+      "type": "plain",
+      "color": "Baby Pink",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-011",
+      "image": "/images/ribbons/plain-fuchsia-pink.png",
+      "type": "plain",
+      "color": "Fuchsia Pink",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-012",
+      "image": "/images/ribbons/design-brown.png",
+      "type": "design",
+      "color": "Brown",
+      "design": "Love with heart",
+      "active": true
+    },
+    {
+      "id": "ribbon-013",
+      "image": "/images/ribbons/design-black.png",
+      "type": "design",
+      "color": "Black",
+      "design": "Just for you (white design)",
+      "active": true
+    },
+    {
+      "id": "ribbon-014",
+      "image": "/images/ribbons/design-red.png",
+      "type": "design",
+      "color": "Red",
+      "design": "Love is eternal",
+      "active": true
+    },
+    {
+      "id": "ribbon-015",
+      "image": "/images/ribbons/design-white.png",
+      "type": "design",
+      "color": "White",
+      "design": "Happy birthday",
+      "active": true
+    },
+    {
+      "id": "ribbon-016",
+      "image": "/images/ribbons/sheer-baby-pink.png",
+      "type": "sheer",
+      "color": "Baby Pink",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-017",
+      "image": "/images/ribbons/sheer-black.png",
+      "type": "sheer",
+      "color": "Black",
+      "design": null,
+      "active": true
+    },
+    {
+      "id": "ribbon-018",
+      "image": "/images/ribbons/sheer-maroon.png",
+      "type": "sheer",
+      "color": "Maroon",
+      "design": null,
+      "active": true
+    }
+  ]
+}

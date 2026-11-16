@@ -4,6 +4,7 @@ import Onboarding from "./pages/Onboarding";
 import AuthPage from "./pages/AuthPage";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import ChangePassword from "./pages/ChangePassword";
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import "/src/app.css";
 
@@ -40,7 +41,15 @@ export default function App() {
             {view === "profile" && (
                 <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
             )}
-            {view === "editProfile" && <EditProfile onBack={() => setView("profile")} />}
+            {view === "editProfile" && (
+                <EditProfile
+                    onBack={() => setView("profile")}
+                    onChangePassword={() => setView("changePassword")}
+                />
+            )}
+            {view === "changePassword" && (
+                <ChangePassword onBack={() => setView("editProfile")} />
+            )}
 
             {/* todo: replace with actual feed screen */}
             {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}

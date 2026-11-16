@@ -56,7 +56,7 @@
 
   /* ============ FONTS ============ */
   --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --FONT-BODY: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --FONT-BODY: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* ============ FONT SIZES (mobile scale) ============
     rem = relative to the phone's text-size setting (1rem = 16px by default),

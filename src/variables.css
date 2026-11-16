@@ -1,80 +1,102 @@
-/* ------------------------------------------------------------------
-  variables.css — shared for the whole app.
-------------------------------------------------------------------- */
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap");
+/* -------------------------------------------------------------------------
+    variables.css — the shared "paint cans and rulers" for the whole app.
+    Never type a hex code or a pixel size inside a page's CSS; 
+    use var(--NAME) instead.
+---------------------------------------------------------------------------*/
+
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@400;700&display=swap");
 
 :root {
+  /* =========================== BRAND COLORS =========================== */
 
-  /* ============ COLORS ============ */
+  /* neutrals */
+  --COLOR-BG: #FFFCF2;                 /* background, the app's "white" */
+  --COLOR-TEXT: #3E3129;               /* text, the app's "black" */
+  --COLOR-LINE: #DFDAD2;               /* lines and dividers */
 
-  /* base */
-  --COLOR-BG: #FFFCF2;                 /* page background (cream) */
-  --COLOR-SURFACE: #E4E1D2;            /* neutral fills: avatar, image placeholders */
-  --COLOR-TEXT: #3E3129;               /* main text (deep brown) */
-  --COLOR-TEXT-MUTED: #705E50;         /* secondary text */
-  --COLOR-TEXT-ON-DARK: #F8F0DB;       /* text and icons on green bars */
+  /* greens */
+  --COLOR-GREEN: #5F6A52;              /* main green: header, nav, labels, icons */
+  --COLOR-GREEN-SOFT: #D1D7B0;         /* accent green */
 
-  /* brand */
-  --COLOR-BROWN: #54371F;              /* main button colors */
-  --COLOR-GREEN: #5F6A52;              /* header, bottom nav, icons */
-  --COLOR-ACCENTGREEN: #D1D7B0;        /* accen green */
-  --COLOR-PINK: #E0949E;               /* primary buttons */
-  --COLOR-PINK-SOFT: #E6BBBC;          /* cards, secondary buttons */
-  --COLOR-TERRACOTTA: #AD6A62;         /* accents, hover, wordmark */
+  /* pinks */
+  --COLOR-PINK: #E0949E;               /* main pink (flower in the logo) */
+  --COLOR-PINK-SOFT: #E6BBBC;          /* accent pink */
+
+  /* browns */
+  --COLOR-BROWN: #54371F;              /* main brown: buttons, logo, subheadings */
+  --COLOR-BROWN-SOFT: #A58B74;         /* accent brown: toaster background */
+
+
+  /* ============ ROLE COLORS (what each color is used for) ============ */
+
+  /* text */
+  --COLOR-TEXT-MUTED: color-mix(in srgb, var(--COLOR-TEXT) 75%, var(--COLOR-BG));
+  --COLOR-TEXT-ON-DARK: var(--COLOR-BG);          /* text on green or brown */
+  --COLOR-SUBHEADING: var(--COLOR-BROWN);
+
+  /* buttons */
+  --COLOR-BUTTON-BG: var(--COLOR-BROWN);          /* primary button */
+  --COLOR-BUTTON-TEXT: var(--COLOR-BG);
+  --COLOR-BUTTON-SECONDARY-BG: var(--COLOR-PINK); /* secondary button (e.g. Edit Profile) */
+  --COLOR-BUTTON-SECONDARY-TEXT: var(--COLOR-TEXT);
 
   /* header + bottom nav */
   --COLOR-HEADER-BG: var(--COLOR-GREEN);
   --COLOR-HEADER-TEXT: var(--COLOR-TEXT-ON-DARK);
   --COLOR-NAV-BG: var(--COLOR-GREEN);
-  --COLOR-NAV-ICON: #D9D6BE;           /* inactive nav icon + label */
-  --COLOR-NAV-ICON-ACTIVE: #F8F0DB;    /* active nav icon + label */
-  --COLOR-LOGO-BG: #F8F0DB;            /* the round logo badge */
+  --COLOR-NAV-ICON: var(--COLOR-GREEN-SOFT);      /* inactive tab */
+  --COLOR-NAV-ICON-ACTIVE: var(--COLOR-BG);       /* active tab */
+  --COLOR-LOGO-BG: var(--COLOR-BG);
 
-  /* buttons */
-  --COLOR-BUTTON-BG: var(--COLOR-PINK);
-  --COLOR-BUTTON-TEXT: var(--COLOR-TEXT);
-  --COLOR-BUTTON-SOFT-BG: var(--COLOR-PINK-SOFT);
-
-  /* cards */
-  --COLOR-CARD-BG: var(--COLOR-PINK-SOFT);   /* profile card */
-  --COLOR-AVATAR-BG: var(--COLOR-SURFACE);
+  /* cards + profile */
+  --COLOR-CARD-BG: var(--COLOR-PINK-SOFT);
+  --COLOR-AVATAR-BG: var(--COLOR-LINE);
 
   /* lines, tabs, placeholders */
-  --COLOR-BORDER: #DDD3BA;             /* thin dividers, e.g. under tabs */
+  --COLOR-BORDER: var(--COLOR-LINE);
   --COLOR-TAB-ACTIVE: var(--COLOR-GREEN);
-  --COLOR-IMAGE-FILL: var(--COLOR-SURFACE);
-  --COLOR-IMAGE-LINE: #CFADA4;
+  --COLOR-IMAGE-FILL: var(--COLOR-LINE);
+  --COLOR-IMAGE-LINE: rgba(165, 139, 116, 0.5);   /* the X in image placeholders */
 
   /* onboarding dots, taped photo */
-  --COLOR-DOT: #CFADA4;
+  --COLOR-DOT: var(--COLOR-GREEN-SOFT);
   --COLOR-DOT-ACTIVE: var(--COLOR-GREEN);
-  --COLOR-TAPE: rgba(165, 139, 116, 0.55);
+
+  /* toast (small pop-up messages) */
+  --COLOR-TOAST-BG: var(--COLOR-BROWN-SOFT);
+  --COLOR-TOAST-TEXT: var(--COLOR-TEXT);
+
+  /* icons + focus ring */
+  --COLOR-ICON: var(--COLOR-GREEN);
+  --COLOR-FOCUS: var(--COLOR-TEXT);
+
 
   /* ============ FONTS ============ */
-  --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --FONT-BODY: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --FONT-DISPLAY: "Instrument Serif", Georgia, "Times New Roman", serif;  /* wordmark, names (regular + italic) */
+  --FONT-BODY: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif; /* everything else (regular + bold) */
+  --FONT-HEADING: var(--FONT-BODY);
 
-  /* ============ FONT SIZES (mobile scale) ============
-    rem = relative to the phone's text-size setting (1rem = 16px by default),
-    so people who enlarge their phone text still get readable pages. */
-  --FONT-SIZE-XS: 0.75rem;     /* 12px  captions, nav labels, tab labels */
-  --FONT-SIZE-SM: 0.875rem;    /* 14px  secondary text, small buttons */
-  --FONT-SIZE-BASE: 1rem;      /* 16px  body text, inputs (never smaller on inputs) */
-  --FONT-SIZE-MD: 1.125rem;    /* 18px  emphasized body, button labels */
-  --FONT-SIZE-LG: 1.25rem;     /* 20px  small headings, card titles */
-  --FONT-SIZE-XL: 1.5rem;      /* 24px  page headings, profile name */
-  --FONT-SIZE-2XL: 2rem;       /* 32px  landing + onboarding titles */
-  --FONT-SIZE-3XL: 2.5rem;     /* 40px  big display moments */
+  --FONT-WEIGHT-REGULAR: 400;
+  --FONT-WEIGHT-BOLD: 700;
+  --FONT-WEIGHT-BUTTON: 700;           
 
-  /* line heights (spacing between lines) */
-  --LINE-HEIGHT-TIGHT: 1.1;    /* big display titles */
-  --LINE-HEIGHT-SNUG: 1.3;     /* headings */
+
+  /* ============ FONT SIZES (brand sheet ranges, made phone-friendly) ============
+      clamp(smallest, flexible, biggest) = a size that stretches with the phone's
+      width but never goes below the smallest or above the biggest. */
+  --FONT-SIZE-DISPLAY: clamp(3.5rem, 15vw, 4.5rem);     /* 56-72px  Main display text */
+  --FONT-SIZE-TITLE: clamp(2rem, 9vw, 3rem);            /* 32-48px  Page or section title */
+  --FONT-SIZE-SUBHEADING: clamp(1.25rem, 6vw, 1.75rem); /* 20-28px  Subheading */
+  --FONT-SIZE-BUTTON: 1rem;                             /* 16px     Button labels */
+  --FONT-SIZE-BODY: clamp(0.75rem, 3.6vw, 0.875rem);    /* 12-14px  Body text */
+  --FONT-SIZE-CAPTION: 0.625rem;                        /* 10px     nav labels, tiny captions */
+  --FONT-SIZE-INPUT: 1rem;                              /* 16px     text fields (iPhones zoom in on anything smaller) */
+
+  /* line heights (spacing between lines of text) */
+  --LINE-HEIGHT-TIGHT: 1.1;    /* display + titles */
+  --LINE-HEIGHT-SNUG: 1.3;     /* subheadings */
   --LINE-HEIGHT-BASE: 1.5;     /* body text */
 
-  /* weights */
-  --FONT-WEIGHT-REGULAR: 400;
-  --FONT-WEIGHT-MEDIUM: 500;
-  --FONT-WEIGHT-SEMIBOLD: 600;
 
   /* ============ SPACING (4px steps) ============ */
   --SPACE-1: 4px;
@@ -86,11 +108,13 @@
   --SPACE-8: 32px;
   --SPACE-10: 40px;
 
+
   /* ============ SHAPE ============ */
   --RADIUS-SM: 8px;
   --RADIUS-BUTTON: 10px;
   --RADIUS-CARD: 28px;         /* the big rounded profile card */
   --RADIUS-FULL: 999px;        /* circles: avatar, logo, dots */
+
 
   /* ============ SIZES ============ */
   --TAP-TARGET: 44px;          /* minimum height for anything tappable */
@@ -103,12 +127,12 @@
   --FRAME-WIDTH: 390px;
   --FRAME-HEIGHT: 844px;
   --APP-HEIGHT: 100vh;         /* fallback for older browsers */
-}
 
-@supports (height: 100dvh) {
-  :root { --APP-HEIGHT: 100dvh; }
-}
+  @supports (height: 100dvh) {
+    :root { --APP-HEIGHT: 100dvh; }
+  }
 
-@media (min-width: 600px) {
-  :root { --APP-HEIGHT: var(--FRAME-HEIGHT); }
+  @media (min-width: 600px) {
+    :root { --APP-HEIGHT: var(--FRAME-HEIGHT); }
+  }
 }

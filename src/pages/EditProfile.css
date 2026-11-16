@@ -47,6 +47,15 @@
   font-weight: var(--FONT-WEIGHT-MEDIUM);
   cursor: pointer;
 }
+
+/* back arrow is an SVG file (<img>), so it keeps the colors drawn in the file */
+.edit__back-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
 .edit__avatar {
   position: relative;
   width: 112px;

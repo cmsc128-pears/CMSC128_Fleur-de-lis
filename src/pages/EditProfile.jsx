@@ -2,6 +2,7 @@ import { useState } from "react";
 import useUserProfile from "../services/userUserProfile.js";
 import { auth } from "../services/firebase";
 import { updateUserProfile } from "../services/userService";
+import backIcon from "../assets/icons/back.svg";
 import "./EditProfile.css";
 
 function EditProfileForm({ profile, onBack, onChangePassword }) {
@@ -39,7 +40,8 @@ function EditProfileForm({ profile, onBack, onChangePassword }) {
     <main className="edit">
       <div className="edit__body">
         <button type="button" className="edit__back" onClick={onBack}>
-          <span aria-hidden="true">←</span> Edit Profile
+          <img className="edit__back-icon" src={backIcon} alt="" />
+          Edit Profile
         </button>
 
         <div className="edit__avatar">

@@ -6,6 +6,7 @@ import {
   updatePassword,
 } from "firebase/auth";
 import { auth } from "../services/firebase";
+import backIcon from "../assets/icons/back.svg";
 import "./ChangePassword.css";
 
 const MIN_LENGTH = 8;
@@ -107,7 +108,8 @@ function ChangePassword({ onBack }) {
     <main className="password">
       <div className="password__body">
         <button type="button" className="password__back" onClick={onBack}>
-          <span aria-hidden="true">←</span> Change Password
+          <img className="password__back-icon" src={backIcon} alt="" />
+          Change Password
         </button>
 
         <p className="password__intro">

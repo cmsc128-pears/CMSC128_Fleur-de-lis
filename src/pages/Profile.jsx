@@ -2,12 +2,20 @@ import { useState } from "react";
 import useUserProfile from "../services/userUserProfile.js";
 import ProfileCard from "../components/ProfileCard.jsx";
 import DesignGrid from "../components/DesignGrid.jsx";
+import designsIcon from "../assets/icons/designs.svg";
+import heartIcon from "../assets/icons/heart.svg";
 import "./Profile.css";
 
 function Profile({ onEdit, onLogout }) {
   const { profile, loading, error } = useUserProfile();
+
+  // Replace these with real data (API / props) 
+  // Each design is { id, name, imageUrl }, for example:
+  // { id: 1, name: "Spring bouquet", imageUrl: "/images/designs/1.jpg" }
+  // While a list is empty, DesignGrid shows a short "no designs yet" message.
   const [designs, setDesigns] = useState([]);
   const [likedDesigns, setLikedDesigns] = useState([]);
+
   const [activeTab, setActiveTab] = useState("your");
 
   if (loading) return <p>Loading...</p>;
@@ -16,12 +24,6 @@ function Profile({ onEdit, onLogout }) {
 
   return (
     <main className="profile">
-      {/* .topbar styles live in EditProfile.css for now */}
-      <header className="topbar">
-        <div className="topbar__logo">LOGO</div>
-        <span className="topbar__brand">fleur de lis</span>
-      </header>
-
       <div className="profile__body">
         <div className="profile__card-wrap">
           <ProfileCard profile={profile} />
@@ -49,6 +51,7 @@ function Profile({ onEdit, onLogout }) {
             </svg>
           </button>
         </div>
+
         <button type="button" className="profile__edit" onClick={onEdit}>
           Edit Profile
         </button>
@@ -57,20 +60,27 @@ function Profile({ onEdit, onLogout }) {
           <button
             type="button"
             className={`profile__tab ${activeTab === "your" ? "profile__tab--active" : ""}`}
+            aria-pressed={activeTab === "your"}
             onClick={() => setActiveTab("your")}
           >
+            <img className="profile__tab-icon" src={designsIcon} alt="" />
             Your Designs
           </button>
           <button
             type="button"
             className={`profile__tab ${activeTab === "liked" ? "profile__tab--active" : ""}`}
+            aria-pressed={activeTab === "liked"}
             onClick={() => setActiveTab("liked")}
           >
+            <img className="profile__tab-icon" src={heartIcon} alt="" />
             Liked Designs
           </button>
         </nav>
 
-        <DesignGrid designs={activeTab === "your" ? designs : likedDesigns} />
+        <DesignGrid
+          designs={activeTab === "your" ? designs : likedDesigns}
+          type={activeTab}
+        />
       </div>
     </main>
   );

@@ -1,140 +1,194 @@
-/* ---------- top bar ---------- */
-.topbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: var(--color-surface, #e3e1dc);
-}
-.topbar__logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--color-muted, #8c8a85);
-  font-size: 7px;
-}
-.topbar__brand {
-  font-family: var(--font-brand, Georgia, serif);
-  font-style: italic;
-  font-size: 1.25rem;
-}
+/* ------------------------------------------------------------------
+  EditProfile.css — every color, font, size and spacing comes from
+  variables.css (no new variables).
+------------------------------------------------------------------- */
 
-/* ---------- avatar ---------- */
+/* ---------- avatar (also used by the profile card) ---------- */
 .avatar {
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  background: var(--color-surface, #e3e1dc);
+  border-radius: var(--RADIUS-FULL);
+  background: var(--COLOR-AVATAR-BG);
+  color: var(--COLOR-TEXT);
 }
 .avatar--lg {
-  width: 104px;
-  height: 104px;
-  font-size: 1.6rem;
+  width: 112px;
+  height: 112px;
+  font-size: var(--FONT-SIZE-2XL);
 }
 
 /* ---------- edit profile page ---------- */
-.edit__body {
-  padding: 16px 24px 32px;
+.edit {
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  font-family: var(--FONT-BODY);
 }
+.edit__body {
+  padding: var(--SPACE-4) var(--SPACE-6) var(--SPACE-8);
+}
+
+/* keyboard focus for every button on this page */
+.edit button:focus-visible {
+  outline: 2px solid var(--COLOR-FOCUS);
+  outline-offset: 2px;
+}
+
 .edit__back {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--SPACE-3);
+  min-height: var(--TAP-TARGET);
   padding: 0;
   border: 0;
   background: none;
+  color: inherit;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: var(--FONT-SIZE-SM);
+  font-weight: var(--FONT-WEIGHT-MEDIUM);
   cursor: pointer;
+}
+
+/* back arrow is an SVG file (<img>), so it keeps the colors drawn in the file */
+.edit__back-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 .edit__avatar {
   position: relative;
-  width: 104px;
-  margin: 20px auto 28px;
+  width: 112px;
+  margin: var(--SPACE-2) auto var(--SPACE-10);
 }
 .edit__avatar-btn {
   position: absolute;
-  right: 0;
-  bottom: 4px;
-  width: 22px;
-  height: 22px;
+  right: var(--SPACE-1);
+  bottom: var(--SPACE-1);
   display: grid;
   place-items: center;
+  width: var(--SPACE-8);
+  height: var(--SPACE-8);
+  padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: #333;
-  color: #fff;
+  border-radius: var(--RADIUS-FULL);
+  background: var(--COLOR-BROWN);
+  color: var(--COLOR-TEXT-ON-DARK);
   cursor: pointer;
+}
+/* invisible extra hit area so the small badge still meets the tap target */
+.edit__avatar-btn::after {
+  content: "";
+  position: absolute;
+  inset: calc((var(--TAP-TARGET) - var(--SPACE-8)) / -2);
+}
+.edit__avatar-btn:hover {
+  background: var(--COLOR-TEXT);
 }
 
 /* ---------- form ---------- */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--SPACE-4);
 }
 .form__section {
   margin: 0;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #e6e6e6;
-  font-size: 0.95rem;
-  font-weight: 400;
+  padding-bottom: var(--SPACE-2);
+  border-bottom: 1px solid var(--COLOR-BORDER);
+  font-size: var(--FONT-SIZE-BASE);
+  font-weight: var(--FONT-WEIGHT-MEDIUM);
 }
 .form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: var(--SPACE-4);
 }
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--SPACE-2);
   min-width: 0;
 }
 .field__label {
-  font-size: 0.75rem;
+  font-size: var(--FONT-SIZE-XS);
+  font-weight: var(--FONT-WEIGHT-MEDIUM);
 }
 .field__input {
   width: 100%;
   box-sizing: border-box;
-  padding: 12px;
-  border: 1px solid #8a8a8a;
-  border-radius: 10px;
-  background: #fff;
+  min-height: var(--TAP-TARGET);
+  padding: var(--SPACE-3);
+  border: 1px solid var(--COLOR-BROWN);
+  border-radius: var(--RADIUS-BUTTON);
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: var(--FONT-SIZE-BASE); /* inputs never smaller than 16px */
 }
 .field__input::placeholder {
-  color: #aaa;
+  color: var(--COLOR-TEXT-MUTED);
 }
 .field__input:focus {
-  outline: 2px solid var(--color-muted, #8c8a85);
+  outline: 2px solid var(--COLOR-FOCUS);
   outline-offset: 1px;
 }
+
+/* change password row */
 .form__link-row {
+  margin-top: var(--SPACE-3);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 12px;
+  min-height: var(--TAP-TARGET);
+  padding: var(--SPACE-2) var(--SPACE-4);
   border: 0;
-  border-radius: 8px;
-  background: var(--color-field, #efefef);
+  border-radius: var(--RADIUS-BUTTON);
+  background: var(--COLOR-ACCENTGREEN);
+  color: var(--COLOR-TEXT);
   font: inherit;
-  font-size: 0.8rem;
+  font-size: var(--FONT-SIZE-BASE);
+  font-weight: var(--FONT-WEIGHT-MEDIUM);
   cursor: pointer;
 }
+.form__link-chevron {
+  display: grid;
+  place-items: center;
+  width: var(--SPACE-6);
+  height: var(--SPACE-6);
+  border-radius: var(--RADIUS-FULL);
+  background: var(--COLOR-GREEN);
+  color: var(--COLOR-TEXT-ON-DARK);
+}
+
 .form__error {
   margin: 0;
-  color: #b3261e;
-  font-size: 0.8rem;
+  color: var(--COLOR-TERRACOTTA);
+  font-size: var(--FONT-SIZE-SM);
 }
-.form__save {
-  margin-top: 32px;
+
+/* save button */
+.edit .form__save {
+  display: block;
   width: 100%;
+  min-height: var(--TAP-TARGET);
+  margin-top: var(--SPACE-10);
+  padding: var(--SPACE-2) var(--SPACE-4);
+  border: 0;
+  border-radius: var(--RADIUS-BUTTON);
+  background: var(--COLOR-BROWN);
+  color: var(--COLOR-TEXT-ON-DARK);
+  font: inherit;
+  font-size: var(--FONT-SIZE-BASE);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
+  cursor: pointer;
 }
-.form__save:disabled {
+@media (hover: hover) {
+  .edit .form__save:hover {
+    background: var(--COLOR-TEXT);
+  }
+}
+.edit .form__save:disabled {
   opacity: 0.6;
   cursor: default;
 }

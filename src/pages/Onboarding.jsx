@@ -33,6 +33,7 @@ export default function Onboarding({ onGuest, onAuth }) {
     return (
         <main className="onboarding">
             <p className="sr-only" aria-live="polite">{index +1} of {slides.length}</p>
+            <p className="brand onboarding__name">fleur de lis</p>
 
             <div className="onboarding__viewport" onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
                 <div className="track" style={{ transform: `translateX(-${index * 100}%)` }}>

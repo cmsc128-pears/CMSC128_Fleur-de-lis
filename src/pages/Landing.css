@@ -2,8 +2,8 @@
 
 .landing {
     position: relative;
-    min-height: var(--APP-HEIGHT);
     overflow: hidden;
+    height: 100%;
 }
 
 /* faint plant silhouette behind the text (decorative) */
@@ -11,11 +11,11 @@
     position: absolute;
     inset: 0 0 0 auto;
     width: 60%;
-    height: 110%;
+    height: 100%;
     transform: scale(130%);
     overflow: hidden;
     object-fit: cover;
-    object-position: center top;
+    object-position: center bottom;
     pointer-events: none;
     z-index: 0;
 }
@@ -27,6 +27,12 @@
     width: 38%;
     height: 100%;
     z-index: 1;
+    display: block;
+    object-fit: cover;
+}
+
+.landing__hero--empty {
+    background: var(--COLOR-IMAGE-FILL);
 }
 
 /* logo + tagline, pinned to the right column */

@@ -1,26 +1,18 @@
 /* ------------------------------------------------------------------
-   FloatingBlume.css — Floating Blume AI trigger & popover chat box
-   QUICK SEARCH TAGS FOR DEBUGGING:
-   - [BLUME-LAYOUT]       Wrapper positioning & z-index
-   - [BLUME-GREETING]     Closed speech bubble pill
-   - [BLUME-AVATAR]       Main circular Blume button & status dot
-   - [BLUME-SIZE]         Chat drawer width, messages height & bubble size
-   - [BLUME-SCROLLBAR]    Custom scrollbar inside chat drawer
-   - [BLUME-INPUT]        Bottom "Ask Blume.." input bar & send button
+   FloatingBlume.css — Floating Blume AI chat head & Messenger sheet
 ------------------------------------------------------------------- */
 
-/* [BLUME-LAYOUT]
-   TODO: Check z-index and positioning once placed inside
-   ManualCustomize.jsx header so the popover floats cleanly above the stepper. */
+/* ---------- wrapper ---------- */
+/* TODO: Verify z-index once placed inside the Manual Customization header. */
 .blume {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--SPACE-2);
-  z-index: 30;
+  z-index: 100;
 }
 
-/* [BLUME-GREETING] Closed greeting speech pill */
+/* ---------- 5-second greeting pill ---------- */
 .blume__greeting-pill {
   position: relative;
   max-width: 155px;
@@ -30,14 +22,26 @@
   background: var(--COLOR-GREEN);
   color: var(--COLOR-TEXT-ON-DARK);
   font-family: var(--FONT-BODY);
-  font-size: 0.65rem;
+  font-size: var(--FONT-SIZE-CAPTION);
   line-height: 1.25;
   text-align: left;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(62, 49, 41, 0.15);
+  animation: blumePillFadeIn 200ms ease-out;
 }
 
-/* Little speech triangle pointing to Blume avatar */
+@keyframes blumePillFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Speech triangle pointing to the Blume avatar */
 .blume__greeting-pill::after {
   content: "";
   position: absolute;
@@ -50,7 +54,7 @@
   border-left: 6px solid var(--COLOR-GREEN);
 }
 
-/* [BLUME-AVATAR] Circular Blume chat-head button */
+/* ---------- circular Blume chat-head button ---------- */
 .blume__avatar-btn {
   position: relative;
   flex-shrink: 0;
@@ -78,7 +82,7 @@
   object-fit: contain;
 }
 
-/* Dark green status dot on top-right of avatar (like Messenger badge) */
+/* Online indicator dot on top-right of avatar */
 .blume__status-dot {
   position: absolute;
   top: 0;
@@ -90,51 +94,38 @@
   border: 2px solid var(--COLOR-BG);
 }
 
-/* ==================================================================
-   [BLUME-SIZE] CONVERSATION / CHAT BOX SIZE CONTROLS
-   TODO: Adjust these 3 values if the chat box overflows
-   on smaller mobile screens (phone frame is 390px wide):
-   1. `.blume__drawer`   -> `width` (overall chat box width)
-   2. `.blume__messages` -> `max-height` (scrollable chat area height)
-   3. `.blume__bubble`   -> `max-width` & `font-size` (message bubble size)
-=================================================================== */
-
-/* Open floating chat drawer (Messenger Chat Head bubble + pointer) */
+/* ---------- full-width Messenger chat sheet ---------- */
+/* Width, left, top, and height are synced dynamically to `.shell` in FloatingBlume.jsx */
 .blume__drawer {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 340px;          /* <-- [BLUME-SIZE] CHAT BOX WIDTH (fits 390px phone frame) */
-  max-width: calc(100vw - 32px);
-  padding: 14px 14px 12px;
-  border-radius: 20px;
+  position: fixed;
+  z-index: 120;
+  border-radius: 18px 18px 0 0;
   background: var(--COLOR-GREEN);
   color: var(--COLOR-TEXT);
-  box-shadow: 0 10px 26px rgba(62, 49, 41, 0.28);
+  box-shadow: 0 -4px 24px rgba(62, 49, 41, 0.28);
   display: flex;
   flex-direction: column;
-  gap: 10px;
   transform-origin: top right;
   animation: blumeChatHeadPop 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Upward triangle pointer connecting the chat window to the Blume chat head */
+/* Upward triangle pointer centered beneath the Blume chat head */
 .blume__drawer::before {
   content: "";
   position: absolute;
-  top: -8px;
-  right: 16px;           /* Centers pointer directly under the 48px Blume chat head */
+  top: -10px;
+  right: var(--blume-pointer-right, 20px);
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid var(--COLOR-GREEN);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--COLOR-GREEN);
 }
 
 @keyframes blumeChatHeadPop {
   from {
     opacity: 0;
-    transform: scale(0.92) translateY(-4px);
+    transform: scale(0.96) translateY(-6px);
   }
   to {
     opacity: 1;
@@ -142,23 +133,69 @@
   }
 }
 
-/* Scrollable messages area with custom pill scrollbar */
-.blume__messages {
-  max-height: 160px;     /* <-- [BLUME-SIZE] CHAT MESSAGES HEIGHT */
-  overflow-y: auto;
-  padding-right: 6px;
+/* ---------- sheet header ---------- */
+.blume__header {
+  flex-shrink: 0;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--SPACE-3) var(--SPACE-4);
+  border-bottom: 1px solid color-mix(in srgb, var(--COLOR-TEXT-ON-DARK) 20%, transparent);
 }
 
-/* [BLUME-SCROLLBAR] Custom scrollbar track & thumb */
+.blume__header-info {
+  display: flex;
+  align-items: center;
+  gap: var(--SPACE-2);
+}
+
+.blume__header-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--RADIUS-FULL);
+  background: var(--COLOR-BG);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blume__header-title {
+  color: var(--COLOR-TEXT-ON-DARK);
+  font-size: var(--FONT-SIZE-BODY);
+  font-weight: var(--FONT-WEIGHT-BOLD);
+}
+
+.blume__close-btn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--RADIUS-FULL);
+  background: transparent;
+  color: var(--COLOR-TEXT-ON-DARK);
+  font-size: var(--FONT-SIZE-BODY);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ---------- scrollable messages list ---------- */
+.blume__messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--SPACE-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--SPACE-3);
+}
+
 .blume__messages::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
 }
 
 .blume__messages::-webkit-scrollbar-track {
-  background: var(--COLOR-TEXT-ON-DARK);
+  background: color-mix(in srgb, var(--COLOR-TEXT-ON-DARK) 25%, transparent);
   border-radius: var(--RADIUS-FULL);
 }
 
@@ -167,11 +204,11 @@
   border-radius: var(--RADIUS-FULL);
 }
 
-/* Message rows */
+/* ---------- message bubbles & bottom-corner avatars ---------- */
 .blume__row {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  align-items: flex-end; /* Keeps avatars anchored to the bottom corner of each bubble */
+  gap: var(--SPACE-2);
 }
 
 .blume__row--bot {
@@ -184,13 +221,15 @@
 
 .blume__mini-avatar {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  margin-bottom: -2px;
   border-radius: var(--RADIUS-FULL);
   background: var(--COLOR-BG);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
 .blume__mini-img {
@@ -203,6 +242,7 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
+  margin-bottom: -2px;
   border-radius: var(--RADIUS-FULL);
   background: var(--COLOR-GREEN-SOFT);
   color: var(--COLOR-TEXT);
@@ -211,14 +251,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
-/* Message bubbles */
+/* TODO: Adjust `max-width` or `font-size` here to resize chat bubbles */
 .blume__bubble {
-  max-width: 235px;      /* <-- [BLUME-SIZE] MAX BUBBLE WIDTH */
-  padding: var(--SPACE-2) var(--SPACE-3);
-  border-radius: var(--RADIUS-BUTTON);
-  font-size: var(--FONT-SIZE-BODY);    /* <-- [BLUME-SIZE] MESSAGE TEXT SIZE */
+  max-width: 76%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: var(--FONT-SIZE-BODY);
   line-height: var(--LINE-HEIGHT-SNUG);
   word-wrap: break-word;
 }
@@ -226,42 +267,48 @@
 .blume__bubble--bot {
   background: var(--COLOR-TEXT-ON-DARK);
   color: var(--COLOR-TEXT);
+  border-bottom-left-radius: 6px;
 }
 
 .blume__bubble--user {
   background: var(--COLOR-GREEN-SOFT);
   color: var(--COLOR-TEXT);
+  border-bottom-right-radius: 6px;
 }
 
-/* [BLUME-INPUT] Input bar + send button */
+/* ---------- bottom input bar ---------- */
 .blume__form {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--SPACE-2);
+  padding: var(--SPACE-3) var(--SPACE-4);
+  padding-bottom: calc(var(--SPACE-3) + env(safe-area-inset-bottom));
+  border-top: 1px solid color-mix(in srgb, var(--COLOR-TEXT-ON-DARK) 20%, transparent);
 }
 
 .blume__input {
   flex: 1;
   min-width: 0;
-  height: 26px;
-  padding: 0 10px;
-  border: 1px solid var(--COLOR-TEXT-ON-DARK);
+  height: 40px;
+  padding: 0 var(--SPACE-4);
+  border: 1.5px solid var(--COLOR-TEXT-ON-DARK);
   border-radius: var(--RADIUS-FULL);
-  background: transparent;
+  background: color-mix(in srgb, var(--COLOR-TEXT-ON-DARK) 12%, transparent);
   color: var(--COLOR-TEXT-ON-DARK);
   font-family: var(--FONT-BODY);
-  font-size: 0.68rem;
+  font-size: var(--FONT-SIZE-INPUT); /* 16px prevents mobile browsers from zooming on focus */
   outline: none;
 }
 
 .blume__input::placeholder {
-  color: rgba(248, 240, 219, 0.75);
+  color: color-mix(in srgb, var(--COLOR-TEXT-ON-DARK) 75%, transparent);
 }
 
 .blume__send-btn {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: 0;
   background: none;

@@ -1,27 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getAllInventory } from "../../services/inventoryService";
 import blumeAvatar from "../../assets/images/blume.png";
 import "./FloatingBlume.css";
 
-// ============================================================================
-// [BLUME-PICKS-CONTEXT]
-// Formats the user's current manual customization selections into a prompt string
-// so Blume knows what is already in the bouquet.
-// TODO: Verify property names match Yona's `draftBouquet`
-// state and Member 2 & 3's item schemas (`flowers`, `fillers`, `wrapper`, `addOns`).
-// DEBUG: Search "[BLUME-PICKS-CONTEXT]" to inspect how user selections are parsed.
-// ============================================================================
+// ---------- prompt helper (formats current user selections for Blume) ----------
+// TODO: Verify property names match the shared `draftBouquet` state once
+// the Flowers, Fillers, Wrappers, and Add-ons steps are connected.
 function buildUserPicksContext(draftBouquet = {}, currentStep = 1) {
   const items = draftBouquet?.items || {};
+
   const flowers = (items.flowers || [])
     .map((f) => `${f.quantity || 1}x ${f.color ? `${f.color} ` : ""}${f.name}`)
     .join(", ");
+
   const fillers = (items.fillers || [])
     .map((f) => `${f.quantity || 1}x ${f.name}`)
     .join(", ");
+
   const wrapper = items.wrapper
     ? `${items.wrapper.color || ""} ${items.wrapper.name || items.wrapper.type || "Wrapper"}`.trim()
     : "None yet";
+
   const addOns = (items.addOns || [])
     .map((a) => a.selectedOption || a.name)
     .join(", ");
@@ -40,47 +39,41 @@ function buildUserPicksContext(draftBouquet = {}, currentStep = 1) {
   };
 }
 
-// ============================================================================
-// [BLUME-REPLY-ENGINE]
-// Generates a contextual Blume reply using the user's message and current picks.
-// TODO: Replace or expand keyword rules if connecting to a live LLM API
-// (e.g., Gemini API) or adding more specific tag/occasion matching from JSON data.
-// DEBUG: Search "[BLUME-REPLY-ENGINE]" if Blume returns unexpected recommendations.
-// ============================================================================
+// ---------- reply generator (uses user's picks + inventory data) ----------
+// TODO: Expand keyword matching or connect to the live AI service if needed.
 function generateBlumeReply(userText, draftBouquet, currentStep) {
-  const q = userText.toLowerCase();
+  const query = userText.toLowerCase();
   const picks = buildUserPicksContext(draftBouquet, currentStep);
   const inventory = getAllInventory();
+
   const sampleFillers =
-    inventory.fillers
-      .slice(0, 2)
-      .map((f) => f.name)
-      .join(" or ") || "Baby's Breath or Eucalyptus";
+    inventory.fillers.slice(0, 2).map((f) => f.name).join(" or ") ||
+    "Baby's Breath or Eucalyptus";
+
   const sampleFlowers =
-    inventory.flowers
-      .slice(0, 2)
-      .map((f) => f.name)
-      .join(" or ") || "Roses or Sunflowers";
+    inventory.flowers.slice(0, 2).map((f) => f.name).join(" or ") ||
+    "Roses or Sunflowers";
+
   const hasFlowers = (draftBouquet?.items?.flowers || []).length > 0;
 
-  if (q.includes("match") || q.includes("pair") || q.includes("filler") || q.includes("go with")) {
+  if (query.includes("match") || query.includes("pair") || query.includes("filler") || query.includes("go with")) {
     if (hasFlowers) {
       return `With your ${picks.flowers}, ${sampleFillers} fillers and a Cream Kraft wrapper would look lovely!`;
     }
     return `Try starting with focal blooms like ${sampleFlowers}, then pair them with ${sampleFillers}!`;
   }
 
-  if (q.includes("wrapper") || q.includes("wrap") || q.includes("color")) {
+  if (query.includes("wrapper") || query.includes("wrap") || query.includes("color")) {
     return hasFlowers
       ? `To complement your ${picks.flowers}, I suggest a soft Cream, Blush Pink, or Matte Kraft wrapper.`
       : "Warm tones (Red, Yellow, Peach) look great with Kraft or Cream paper, while pastels pop with Frosted or White wraps!";
   }
 
-  if (q.includes("romance") || q.includes("anniversary") || q.includes("valentine")) {
+  if (query.includes("romance") || query.includes("anniversary") || query.includes("valentine")) {
     return "For a romantic vibe, classic Red or Pink Roses with Baby's Breath and chocolates are always a favorite!";
   }
 
-  if (q.includes("birthday") || q.includes("graduation") || q.includes("cheerful")) {
+  if (query.includes("birthday") || query.includes("graduation") || query.includes("cheerful")) {
     return "Sunflowers or Tulips paired with greenery fillers and a cute stuffed toy add-on make a bright, cheerful gift!";
   }
 
@@ -91,38 +84,31 @@ function generateBlumeReply(userText, draftBouquet, currentStep) {
   return "I can help you pick flowers, fillers, wrappers, or add-ons! Tell me the occasion, mood, or colors you like.";
 }
 
-// ============================================================================
-// [BLUME-AVATAR-ICON]
-// Renders the Blume PNG asset (`src/assets/images/blume.png`).
-// DEBUG: Search "[BLUME-AVATAR-ICON]" if the avatar image fails to load or scale.
-// ============================================================================
+// ---------- Blume avatar image ----------
 function BlumeBotIcon({ className = "blume__bot-img" }) {
-  return (
-    <img
-      src={blumeAvatar}
-      alt=""
-      className={className}
-      aria-hidden="true"
-    />
-  );
+  return <img src={blumeAvatar} alt="" className={className} aria-hidden="true" />;
 }
 
-// ============================================================================
-// [BLUME-MAIN-COMPONENT]
-// Floating Blume AI trigger + expandable popover chat drawer.
-// TODO: Mount `<FloatingBlume />` inside the Manual
-// Customization header row next to the 1-2-3-4 stepper and pass:
-//   - `userInitials` (from logged-in user profile, e.g. first + last initials)
-//   - `draftBouquet` (live bouquet state from ManualCustomize.jsx)
-//   - `currentStep` (active step 1..4)
-// ============================================================================
+// ---------- main component ----------
+// TODO: Mount `<FloatingBlume />` inside the Manual Customization header and pass:
+//   - `userInitials` (logged-in user's initials, e.g. "PS")
+//   - `draftBouquet` (current bouquet selections state)
+//   - `currentStep` (active step number 1–4)
 export default function FloatingBlume({
   userInitials = "FN",
   draftBouquet = {},
   currentStep = 1,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showGreetingPill, setShowGreetingPill] = useState(true);
   const [inputText, setInputText] = useState("");
+  const [drawerMetrics, setDrawerMetrics] = useState({
+    top: "120px",
+    left: "0px",
+    width: "390px",
+    height: "500px",
+    pointerRight: "20px",
+  });
   const [messages, setMessages] = useState([
     {
       id: "msg_welcome",
@@ -133,15 +119,76 @@ export default function FloatingBlume({
 
   const chatListRef = useRef(null);
   const containerRef = useRef(null);
+  const avatarBtnRef = useRef(null);
 
-  // [BLUME-AUTOSCROLL] Scrolls chat container to the latest message on send/open
+  // Show the greeting pill for 5 seconds on each visit to the page
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGreetingPill(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Align the open chat sheet to the full width of `.shell` and adjust height when the mobile keyboard opens
+  const updateDrawerLayout = useCallback(() => {
+    if (!avatarBtnRef.current) return;
+
+    const btnRect = avatarBtnRef.current.getBoundingClientRect();
+    const shellEl = avatarBtnRef.current.closest(".shell") || document.documentElement;
+    const shellRect = shellEl.getBoundingClientRect();
+
+    // Center the upward triangle pointer directly under the Blume chat head
+    const pointerRight = Math.max(
+      12,
+      shellRect.right - btnRect.right + btnRect.width / 2 - 10
+    );
+
+    // Shrink height when the mobile keyboard opens so the input bar stays visible above it
+    const vv = window.visualViewport;
+    const visibleBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+    const effectiveBottom = Math.min(shellRect.bottom, visibleBottom);
+
+    const drawerTop = btnRect.bottom + 10;
+    const availableHeight = Math.max(160, effectiveBottom - drawerTop);
+
+    setDrawerMetrics({
+      top: `${drawerTop}px`,
+      left: `${shellRect.left}px`,
+      width: `${shellRect.width}px`,
+      height: `${availableHeight}px`,
+      pointerRight: `${pointerRight}px`,
+    });
+
+    if (chatListRef.current) {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const vv = window.visualViewport;
+    window.addEventListener("resize", updateDrawerLayout);
+    window.addEventListener("scroll", updateDrawerLayout, true);
+    vv?.addEventListener("resize", updateDrawerLayout);
+    vv?.addEventListener("scroll", updateDrawerLayout);
+
+    return () => {
+      window.removeEventListener("resize", updateDrawerLayout);
+      window.removeEventListener("scroll", updateDrawerLayout, true);
+      vv?.removeEventListener("resize", updateDrawerLayout);
+      vv?.removeEventListener("scroll", updateDrawerLayout);
+    };
+  }, [isOpen, updateDrawerLayout]);
+
+  // Auto-scroll to the newest message whenever a message is sent or the chat opens
   useEffect(() => {
     if (isOpen && chatListRef.current) {
       chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
     }
   }, [messages, isOpen]);
 
-  // [BLUME-OUTSIDE-CLICK] Closes the popover drawer when user clicks outside of it
+  // Close the chat sheet when clicking outside of it
   useEffect(() => {
     function handleClickOutside(e) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -155,12 +202,15 @@ export default function FloatingBlume({
   }, [isOpen]);
 
   const handleToggle = () => {
-    setIsOpen((prev) => !prev);
+    setShowGreetingPill(false);
+    setIsOpen((prev) => {
+      const next = !prev;
+      if (next) updateDrawerLayout();
+      return next;
+    });
   };
 
-  // [BLUME-SEND-HANDLER] Builds prompt with user's picks and appends Blume's reply
-  // TODO: If saving AI chat history to Firestore `ai_sessions`
-  // is needed later, call your Firestore service inside `handleSend`.
+  // TODO: Connect to Firestore AI session saving here if chat persistence is required.
   const handleSend = (e) => {
     e.preventDefault();
     const trimmed = inputText.trim();
@@ -169,8 +219,8 @@ export default function FloatingBlume({
     const picksContext = buildUserPicksContext(draftBouquet, currentStep);
     const promptWithPicks = `${picksContext.summaryPrompt} User asks: ${trimmed}`;
 
-    // DEBUG: Uncomment the console.log below when testing to see the exact prompt with user picks
-    // console.log("[DEBUG BLUME PROMPT]:", promptWithPicks);
+    // DEBUG: Uncomment below to inspect the formatted prompt in the browser console
+    // console.log("[BLUME PROMPT]:", promptWithPicks);
 
     const userMsg = {
       id: `user_${Date.now()}`,
@@ -192,8 +242,8 @@ export default function FloatingBlume({
 
   return (
     <div className="blume" ref={containerRef}>
-      {/* [BLUME-CLOSED-PILL] Speech bubble shown only when chat drawer is closed */}
-      {!isOpen && (
+      {/* Greeting pill (auto-hides after 5s or when chat opens) */}
+      {!isOpen && showGreetingPill && (
         <button
           type="button"
           className="blume__greeting-pill"
@@ -203,8 +253,9 @@ export default function FloatingBlume({
         </button>
       )}
 
-      {/* [BLUME-TRIGGER-BTN] Circular Blume avatar button that toggles chat open/closed */}
+      {/* Blume circular chat-head button */}
       <button
+        ref={avatarBtnRef}
         type="button"
         className="blume__avatar-btn"
         onClick={handleToggle}
@@ -215,9 +266,36 @@ export default function FloatingBlume({
         <span className="blume__status-dot" aria-hidden="true" />
       </button>
 
-      {/* [BLUME-OPEN-DRAWER] Floating chat box ("open chat-bot" wireframe) */}
+      {/* Open Messenger-style full-width chat sheet */}
       {isOpen && (
-        <section className="blume__drawer" aria-label="Blume AI Assistant Chat">
+        <section
+          className="blume__drawer"
+          aria-label="Blume AI Assistant Chat"
+          style={{
+            top: drawerMetrics.top,
+            left: drawerMetrics.left,
+            width: drawerMetrics.width,
+            height: drawerMetrics.height,
+            "--blume-pointer-right": drawerMetrics.pointerRight,
+          }}
+        >
+          <header className="blume__header">
+            <div className="blume__header-info">
+              <span className="blume__header-avatar" aria-hidden="true">
+                <BlumeBotIcon className="blume__mini-img" />
+              </span>
+              <span className="blume__header-title">Blume • AI Assistant</span>
+            </div>
+            <button
+              type="button"
+              className="blume__close-btn"
+              onClick={() => setIsOpen(false)}
+              aria-label="Minimize Blume chat"
+            >
+              ✕
+            </button>
+          </header>
+
           <div className="blume__messages" ref={chatListRef}>
             {messages.map((msg) =>
               msg.sender === "blume" ? (
@@ -242,7 +320,6 @@ export default function FloatingBlume({
             )}
           </div>
 
-          {/* [BLUME-INPUT-FORM] User question input + paper-plane submit button */}
           <form className="blume__form" onSubmit={handleSend}>
             <input
               type="text"
@@ -250,6 +327,7 @@ export default function FloatingBlume({
               placeholder="Ask Blume.."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              onFocus={updateDrawerLayout}
               aria-label="Ask Blume"
             />
             <button
@@ -259,8 +337,8 @@ export default function FloatingBlume({
               aria-label="Send message"
             >
               <svg
-                width="16"
-                height="16"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"

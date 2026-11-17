@@ -126,7 +126,6 @@
      pages should use var(--APP-HEIGHT) instead of 100dvh */
   --FRAME-WIDTH: 390px;
   --FRAME-HEIGHT: 844px;
-  --APP-HEIGHT: 100vh;         /* fallback for older browsers */
 
   @supports (height: 100dvh) {
     :root { --APP-HEIGHT: 100dvh; }

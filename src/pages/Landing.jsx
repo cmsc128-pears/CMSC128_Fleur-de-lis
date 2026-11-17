@@ -2,7 +2,6 @@
     landing.jsx
 ---------------------------------------------------------------- */
 import "./Landing.css";
-import ImageSlot from "../components/ImageSlot";
 
 import heroImage from "../assets/images/hero-img.png";          // tall flower strip on the left
 import logoImage from "../assets/images/logo.png";            // the "Fleur" wordmark (SVG or PNG)
@@ -15,7 +14,11 @@ export default function Landing({ onStart }) {
             <img className="landing__watermark" src={watermarkImage} alt="" aria-hidden="true" />
         )}
 
-        <ImageSlot className="landing__hero" src={heroImage} alt="" />
+        {heroImage ? (
+            <img className="landing__hero" src={heroImage} alt="" />
+        ) : (
+            <div className="landing__hero landing__hero--empty" aria-hidden="true" />
+        )}
 
         <section className="landing__copy">
             <h1 className="landing__logo">

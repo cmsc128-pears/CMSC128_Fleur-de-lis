@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------
-    global.css — styles every page shares
+    appshared.css — styles every page shares
 ---------------------------------------------------------------------------*/
 
 @import url("./variables.css");
@@ -8,6 +8,11 @@
 html,body, #root { 
     height: 100%; 
     margin: 0; 
+}
+
+html, body {
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 body {
@@ -42,22 +47,34 @@ button {
 /*  ---------- app frame ----------
     on a phone: fills the real screen
     on a laptop: a standard 390 x 844 phone-sized frame
-    (--APP-HEIGHT, --FRAME-WIDTH and --FRAME-HEIGHT are defined in variables.css)
+    every page fills the frame with height: 100%.
+    the frame itself never scrolls;
+    a page that needs scrolling (like the feed) scrolls inside itself.
 */
 
 .shell {
+    width: 100%;
     max-width: 430px;
-    min-height: var(--APP-HEIGHT);
+    height: 100vh;               /* fallback for older phones */
+    height: 100dvh;              /* the visible part of the screen */
     margin: 0 auto;
-    position: relative;
+    position: fixed;
+    inset: 0;
     overflow: hidden;
 }
 
 @media (min-width: 600px) {
+    body { overflow: hidden; }
+
+    #root {
+        display: grid;
+        place-items: center;
+    }
     .shell {
+        position: relative;
         width: var(--FRAME-WIDTH);
-        height: var(--APP-HEIGHT);
-        margin: var(--SPACE-6) auto;
+        height: min(var(--FRAME-HEIGHT), calc(100vh - var(--SPACE-6) * 2));
+        margin: 0;
         border: 1px solid var(--COLOR-IMAGE-LINE);
         border-radius: var(--RADIUS-CARD);
         overflow-y: auto;

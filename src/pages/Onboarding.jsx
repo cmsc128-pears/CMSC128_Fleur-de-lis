@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { slides } from "./slides";
 import "./Onboarding.css";
-import ImageSlot from "../components/ImageSlot";
 
 import logoImage from "../assets/images/logo.png";            // the "Fleur" wordmark (SVG or PNG)
 import watermarkImage from "../assets/images/flower-watermark.png"; // faint plant silhouette behind the text
@@ -56,7 +55,11 @@ export default function Onboarding({ onBack, onLogin, onJoin, onGuest }) {
             <div className="track" style={{ transform: `translateX(-${index * 100}%)` }}>
             {slides.map((s, i) => (
                 <section key={s.id} className="slide" aria-hidden={i !== index}>
-                <ImageSlot className="slide__image" src={s.image} alt={s.alt} />
+                {s.image ? (
+                    <img className="slide__image" src={s.image} alt={s.alt} />
+                    ) : (
+                    <div className="slide__image slide__image--empty" aria-hidden="true" />
+                )}
                 <h2 className="brand slide__title">{s.title}</h2>
                 <p className="slide__body">{s.body}</p>
                 </section>

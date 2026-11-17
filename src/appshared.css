@@ -54,10 +54,8 @@ button {
 
 .shell {
     width: 100%;
-    max-width: 430px;
     height: 100vh;               /* fallback for older phones */
     height: 100dvh;              /* the visible part of the screen */
-    margin: 0 auto;
     position: fixed;
     inset: 0;
     overflow: hidden;

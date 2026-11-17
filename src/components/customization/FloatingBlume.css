@@ -184,6 +184,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   padding: var(--SPACE-4);
   display: flex;
   flex-direction: column;
@@ -268,6 +270,17 @@
   background: var(--COLOR-TEXT-ON-DARK);
   color: var(--COLOR-TEXT);
   border-bottom-left-radius: 6px;
+}
+
+.blume__preview-img {
+  display: block;
+  width: 100%;
+  max-width: 210px;
+  aspect-ratio: 1;
+  margin-top: var(--SPACE-2);
+  border-radius: var(--RADIUS-SM);
+  object-fit: cover;
+  background: var(--COLOR-LINE);
 }
 
 .blume__bubble--user {

@@ -9,6 +9,7 @@ import TopBar from "./components/TopBar";
 import BottomNav, { hasNav } from "./components/BottomNav";
 import FloatingBlume from "./components/customization/FloatingBlume"; // TODO: to be put in main cutomization page
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
+import ManualCustomization from "./pages/ManualCustomization";
 import "/src/appshared.css";
 
 export default function App() {
@@ -61,7 +62,8 @@ export default function App() {
                 {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
 
                 {/* todo: replace with actual create screen */}
-                {view === "create" && <main style={{ padding: 24 }}>Create</main>}
+                {view === "create" && <ManualCustomization />}
+                {/* TODO: Blume moves into ManualCustomization (currentStep + draftBouquet come from the page's state)
                 {view === "create" && (
                     <main style={{ padding: 24, display: "flex", justifyContent: "flex-end" }}>
                         <FloatingBlume
@@ -77,7 +79,8 @@ export default function App() {
                             }}
                         />
                     </main>
-                )}
+                )}*/
+                }
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

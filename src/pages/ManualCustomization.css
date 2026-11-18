@@ -1,0 +1,103 @@
+/* -------------------------------------------------------------------------
+    ManualCustomization.css
+---------------------------------------------------------------------------*/
+
+.mc {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--COLOR-BG);
+    color: var(--COLOR-TEXT);
+    font-family: var(--FONT-BODY);
+}
+
+/* --------------- header --------------- */
+.mc__head {
+    padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2);
+    text-align: center;
+}
+
+.mc__title {
+    margin: 0;
+    font-family: var(--FONT-HEADING);
+    font-size: var(--FONT-SIZE-SUBHEADING);
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    line-height: var(--LINE-HEIGHT-TIGHT);
+    text-transform: uppercase;
+    color: var(--COLOR-SUBHEADING);
+}
+
+.mc__sub {
+    margin: var(--SPACE-1) 0 var(--SPACE-3);
+    font-size: var(--FONT-SIZE-BODY);
+    line-height: var(--LINE-HEIGHT-BASE);
+}
+
+
+/* --------------- stepper --------------- */
+.mc__stepper {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mc-step {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--SPACE-1);
+}
+
+.mc-step__label {
+    font-size: var(--FONT-SIZE-BODY);
+}
+
+/* connector line: sits behind the circles, centered on them */
+.mc-step + .mc-step::before {
+    content: "";
+    position: absolute;
+    left: -50%;
+    bottom: calc(var(--TAP-TARGET) / 2 - 1.5px);
+    width: 100%;
+    height: 3px;
+    background: var(--COLOR-DOT);
+}
+
+.mc-step.is-reached + .mc-step.is-reached::before {
+    background: var(--COLOR-DOT-ACTIVE);
+}
+
+.mc-step__dot {
+    position: relative;
+    z-index: 1;
+    width: var(--TAP-TARGET);
+    height: var(--TAP-TARGET);
+    border: 3px solid var(--COLOR-DOT);
+    border-radius: var(--RADIUS-FULL);
+    background: var(--COLOR-BG);
+    color: var(--COLOR-TEXT);
+    font-family: inherit;
+    font-size: var(--FONT-SIZE-SUBHEADING);
+    line-height: 1;
+    cursor: pointer;
+}
+
+.mc-step.is-reached .mc-step__dot {
+    background: var(--COLOR-DOT-ACTIVE);
+    color: var(--COLOR-TEXT-ON-DARK);
+}
+
+.mc-step__dot[aria-current="step"] {
+    box-shadow: 0 0 0 2px var(--COLOR-BG), 0 0 0 4px var(--COLOR-DOT-ACTIVE);
+}
+
+
+/* --------------- placeholders for steps 2 and 3 --------------- */
+
+.mc-bar {
+    min-height: calc(var(--TAP-TARGET) + var(--SPACE-4));
+}

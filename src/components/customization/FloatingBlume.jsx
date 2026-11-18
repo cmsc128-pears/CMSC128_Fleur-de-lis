@@ -3,6 +3,65 @@ import { getBlumeResponse } from "../../services/blumeService";
 import blumeAvatar from "../../assets/images/blume.png";
 import "./FloatingBlume.css";
 
+// Parses **bold** and *italic* text inside a single line
+function renderInlineText(line) {
+  const parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith("*") && part.endsWith("*")) {
+      return <em key={i}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+}
+
+// Renders headings (###), bullet points (- or *), and paragraphs cleanly inside chat bubbles
+function renderFormattedMessage(text = "") {
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  const blocks = [];
+  let listItems = [];
+
+  // Pushes accumulated bullet points into a single <ul> block
+  const flushList = (key) => {
+    if (listItems.length > 0) {
+      blocks.push(
+        <ul key={`list_${key}`} className="blume__msg-list">
+          {listItems}
+        </ul>
+      );
+      listItems = [];
+    }
+  };
+
+  lines.forEach((line, idx) => {
+    if (/^#{1,4}\s+/.test(line)) {
+      flushList(idx);
+      const headingText = line.replace(/^#{1,4}\s+/, "");
+      blocks.push(
+        <h4 key={`h_${idx}`} className="blume__msg-heading">
+          {renderInlineText(headingText)}
+        </h4>
+      );
+    } else if (/^[-•*]\s+/.test(line)) {
+      const itemText = line.replace(/^[-•*]\s+/, "");
+      listItems.push(<li key={`li_${idx}`}>{renderInlineText(itemText)}</li>);
+    } else {
+      flushList(idx);
+      blocks.push(
+        <p key={`p_${idx}`} className="blume__msg-para">
+          {renderInlineText(line)}
+        </p>
+      );
+    }
+  });
+
+  flushList("end");
+  return blocks;
+}
+
+// Floating Blume chat head and expandable Messenger-style AI assistant sheet
 // TODO: Pass `userInitials`, `draftBouquet`, and `currentStep` from ManualCustomize.jsx
 export default function FloatingBlume({
   userInitials = "FN",
@@ -19,7 +78,7 @@ export default function FloatingBlume({
     {
       id: "welcome",
       sender: "blume",
-      text: "Hi! I'm Blume. Ask me what flowers, fillers, or wrappers match your picks!",
+      text: "Hi! I'm Blume 🌸 Your Fleur AI florist friend! Ask me what blooms, fillers, or wrappers match your picks ✨",
     },
   ]);
 
@@ -66,12 +125,12 @@ export default function FloatingBlume({
     };
   }, [isOpen, syncSheetPosition]);
 
-  // Scroll to the bottom when a new message arrives or the chat opens
+  // Scroll to the bottom when a new message arrives, typing starts, or the chat opens
   useEffect(() => {
     if (isOpen && chatListRef.current) {
       chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isSending]);
 
   // Close when clicking outside the chat
   useEffect(() => {
@@ -84,6 +143,7 @@ export default function FloatingBlume({
     return () => document.removeEventListener("mousedown", onOutsideClick);
   }, [isOpen]);
 
+  // Opens or closes the chat sheet and hides the 5-second greeting pill
   const toggleChat = () => {
     setShowPill(false);
     setIsOpen((prev) => {
@@ -92,6 +152,7 @@ export default function FloatingBlume({
     });
   };
 
+  // Sends the user's message to Blume and appends the AI response to the chat
   const handleSend = async (e) => {
     e.preventDefault();
     const trimmed = inputText.trim();
@@ -168,7 +229,7 @@ export default function FloatingBlume({
                     <img src={blumeAvatar} alt="" className="blume__mini-img" />
                   </span>
                   <div className="blume__bubble blume__bubble--bot">
-                    {msg.text}
+                    {renderFormattedMessage(msg.text)}
                     {msg.imageUrl && (
                       <img
                         src={msg.imageUrl}
@@ -187,6 +248,19 @@ export default function FloatingBlume({
                   </span>
                 </div>
               )
+            )}
+
+            {isSending && (
+              <div className="blume__row blume__row--bot" role="status" aria-label="Blume is typing">
+                <span className="blume__mini-avatar" aria-hidden="true">
+                  <img src={blumeAvatar} alt="" className="blume__mini-img" />
+                </span>
+                <div className="blume__bubble blume__bubble--bot blume__bubble--typing">
+                  <span className="blume__typing-dot" />
+                  <span className="blume__typing-dot" />
+                  <span className="blume__typing-dot" />
+                </div>
+              </div>
             )}
           </div>
 

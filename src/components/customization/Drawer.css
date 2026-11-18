@@ -1,0 +1,27 @@
+.drawer {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--COLOR-BG);
+    border-top: 1px solid var(--COLOR-BORDER);
+}
+
+/* reserved strip for pill,will attach in pass 2 */
+.drawer__grip {
+    flex: none;
+    min-height: var(--TAP-TARGET);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* the only scrolling area */
+.drawer__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0 var(--SPACE-4) var(--SPACE-4);
+}

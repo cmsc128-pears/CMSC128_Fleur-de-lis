@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ManualCustomization.css";
+import Drawer from "../components/customization/Drawer";
 
 const STEPS = ["Flowers","Fillers", "Wrappers", "Add-ons"];
 
@@ -32,7 +33,12 @@ export default function ManualCustomization() {
                 </nav>
             </header>
 
-            <section className="mc-drawer" />
+            {/* TEMP: tall dummy content to test scrolling. sam & erine will replace */}
+            <Drawer handle={<div style={{ width: 96, height: 5, borderRadius: 999, background: "var(--COLOR-DOT)" }} />}>
+                        {Array.from({ length: 30 }, (_, i)=> (
+                            <p key={i}>Placeholder row {i + 1}</p>
+                        ))}
+            </Drawer>
             
             <section className="mc-bar" />
         </main>

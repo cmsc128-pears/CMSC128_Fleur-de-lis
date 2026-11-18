@@ -1,27 +1,35 @@
 .drawer {
-    position: relative;
-    flex: 1;
-    min-height: 0;
+    position: absolute;
+    inset: auto 0 0 0;            /* left, right, bottom = 0; top is set by the component */
+    z-index: 2;                   /* stays above the stepper circles when expanded */
     display: flex;
     flex-direction: column;
     background: var(--COLOR-BG);
     border-top: 1px solid var(--COLOR-BORDER);
+    transition: top 0.25s ease;
 }
+.drawer.is-dragging { transition: none; }  /* follow the finger exactly */
 
-/* reserved strip for pill,will attach in pass 2 */
 .drawer__grip {
     flex: none;
     min-height: var(--TAP-TARGET);
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: none;           /* the browser must not scroll while dragging */
+    user-select: none;
+    cursor: grab;
 }
+.drawer.is-dragging .drawer__grip { cursor: grabbing; }
 
-/* the only scrolling area */
 .drawer__body {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: 0 var(--SPACE-4) var(--SPACE-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .drawer { transition: none; }
 }

@@ -36,7 +36,7 @@
 
 
 /* --------------- stepper --------------- */
-.mc__stepper {
+.mc-stepper {
     display: flex;
     margin: 0;
     padding: 0;
@@ -97,6 +97,12 @@
 
 
 /* --------------- placeholders for steps 2 and 3 --------------- */
+.mc__stage {
+    position: relative;     /* drawer is positioned inside this */
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
 
 .mc-bar {
     min-height: calc(var(--TAP-TARGET) + var(--SPACE-4));

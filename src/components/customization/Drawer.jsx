@@ -99,6 +99,7 @@ export default function Drawer({ handle, children, collapsedTop = 0 }) {
                 onPointerCancel={handleCancel}
                 onKeyDown= {handleKey}
             >
+                <span className="drawer__pill" aria-hidden="true" />
                 {handle}
             </div>
             <div className="drawer__body">{children}</div>

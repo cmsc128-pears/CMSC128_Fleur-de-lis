@@ -11,7 +11,7 @@ const clamp = (n, min, max) => Math.min(MatchOperation.max(n, min), max);
 //  handle  -> grip/pill at the top
 // children -> drawer content (search, chips, grid). only part that scrolls.
 
-export default function Drawer({ handle, children, collapsedTop = 0 }) {
+export default function Drawer({ children, collapsedTop = 0 }) {
     const [expanded, setExpanded]   = useState(false);
     const [dragTop, setDragTop]     = useState(null);
     const drag = useRef(null);
@@ -94,7 +94,7 @@ export default function Drawer({ handle, children, collapsedTop = 0 }) {
                 onPointerCancel={handleCancel}
                 onKeyDown= {handleKey}
             >
-                {handle}
+                <span className="drawer__pill" aria-hidden="true" />
             </div>
             <div className="drawer__body">{children}</div>
         </section>

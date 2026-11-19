@@ -1,7 +1,10 @@
+// blumeService.js — formats user picks and fetches AI replies from Gemini
+
 import { GoogleGenAI } from "@google/genai";
 import { getAllInventory } from "./inventoryService";
 import { generateBouquetImageUrl } from "./bouquetImageGenerator";
 
+// ---------- Gemini setup ----------
 const STEP_NAMES = {
   1: "Step 1 (Flowers)",
   2: "Step 2 (Fillers)",
@@ -9,7 +12,6 @@ const STEP_NAMES = {
   4: "Step 4 (Add-ons)",
 };
 
-// Models to try in order (falls back if one model has a temporary 503 spike)
 const GEMINI_MODELS = [
   "gemini-3.5-flash-lite",
   "gemini-3.8-flash",
@@ -19,8 +21,8 @@ const GEMINI_MODELS = [
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
-// Formats the user's current bouquet selections into a short summary string for Blume.
-// TODO: Check field names once all 4 customization steps are connected to `draftBouquet`.
+// ---------- user picks formatter ----------
+// Summarizes current bouquet items and estimated total for Blume's context
 export function formatUserPicks(draftBouquet = {}, currentStep = 1) {
   const items = draftBouquet?.items || {};
   const catalogFlowers = getAllInventory().flowers;
@@ -78,7 +80,8 @@ export function formatUserPicks(draftBouquet = {}, currentStep = 1) {
   };
 }
 
-// Builds the system instruction containing the shop catalog and the user's current picks.
+// ---------- system prompt builder ----------
+// Combines Blume's personality, user picks, and shop catalog
 function buildSystemPrompt(draftBouquet, currentStep) {
   const picks = formatUserPicks(draftBouquet, currentStep);
   const { flowers, fillers, wrappers, addons } = getAllInventory();
@@ -107,7 +110,8 @@ function buildSystemPrompt(draftBouquet, currentStep) {
   ].join("\n");
 }
 
-// Simple fallback used only if VITE_GEMINI_API_KEY is missing or the user is offline.
+// ---------- offline fallback ----------
+// Used when VITE_GEMINI_API_KEY is missing or offline
 function getOfflineFallback(userText, picks) {
   const { flowers, fillers } = getAllInventory();
   const match = [...flowers, ...fillers].find((item) =>
@@ -123,7 +127,8 @@ function getOfflineFallback(userText, picks) {
   )}). Add VITE_GEMINI_API_KEY to .env to chat with Blume AI!`;
 }
 
-// Main function called by FloatingBlume.jsx when the user sends a message.
+// ---------- main chat handler ----------
+// Sends user message to Gemini or returns an AI bouquet image preview
 export async function getBlumeResponse({
   userText,
   draftBouquet,
@@ -161,7 +166,7 @@ export async function getBlumeResponse({
           };
         }
       } catch {
-        // Try the next Gemini model in GEMINI_MODELS
+        // try next model
       }
     }
   }

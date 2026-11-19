@@ -2,6 +2,11 @@
     ManualCustomization.css
 ---------------------------------------------------------------------------*/
 
+/* Allow Blume to overlap the top nav bar when the drawer is expanded to top: 0 */
+.shell__content:has(.mc) {
+    overflow: visible;
+}
+
 .mc {
     height: 100%;
     min-height: 0;
@@ -14,7 +19,8 @@
 
 /* --------------- header --------------- */
 .mc__head {
-    padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2);
+    /* padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2); — Increased top & bottom padding so title clears navbar and Blume's bubble clears the pull-up bar */
+    padding: var(--SPACE-8) var(--SPACE-4) calc(var(--SPACE-10) + var(--SPACE-6));
     text-align: center;
 }
 
@@ -99,9 +105,11 @@
 /* --------------- drawer container --------------- */
 .mc__stage {
     position: relative;     /* drawer is positioned inside this */
+    z-index: 10;            /* stacks above TopBar so Blume isn't hidden behind it when expanded */
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    /* overflow: hidden; — Changed to visible so Blume overlaps the top nav bar when the drawer is expanded to top: 0 */
+    overflow: visible;
 }
 
 /* --------------- price total & next --------------- */

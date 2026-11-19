@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import Drawer from "../components/customization/Drawer";
+import FloatingBlume from "../components/customization/FloatingBlume";
 import "./ManualCustomization.css";
 
 const STEPS = ["Flowers","Fillers", "Wrappers", "Add-ons"];
@@ -78,6 +79,7 @@ export default function ManualCustomization({ onFinish }) {
                 {/* TEMP: tall dummy content for testing. sam & erine will replace */}
                 <Drawer 
                     collapsedTop={headH}
+                    handle={<FloatingBlume currentStep={step + 1} draftBouquet={draft} />}
                 >
                     <button
                         type="button"

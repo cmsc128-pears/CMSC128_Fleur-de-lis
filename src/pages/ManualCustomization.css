@@ -96,7 +96,7 @@
 }
 
 
-/* --------------- placeholders for steps 2 and 3 --------------- */
+/* --------------- drawer container --------------- */
 .mc__stage {
     position: relative;     /* drawer is positioned inside this */
     flex: 1;
@@ -104,6 +104,34 @@
     overflow: hidden;
 }
 
+/* --------------- price total & next --------------- */
 .mc-bar {
-    min-height: calc(var(--TAP-TARGET) + var(--SPACE-4));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--SPACE-3);
+    padding: var(--SPACE-3) var(--SPACE-4);
+    background: var(--COLOR-BG);
+    border-top: 1px solid var(--COLOR-BORDER);
+}
+
+.mc-bar__label {
+    margin: 0;
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    color: var(--COLOR-TEXT-MUTED);
+}
+
+.mc-bar__amount {
+    color: var(--COLOR-TEXT);
+}
+
+.mc-bar__actions {
+    display: flex;
+    gap: var(--SPACE-2);
+}
+
+.mc-step__dot:disabled,
+.mc-bar .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

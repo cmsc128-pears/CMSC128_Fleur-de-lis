@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import Drawer from "../components/customization/Drawer";
+import FloatingBlume from "../components/customization/FloatingBlume";
 import "./ManualCustomization.css";
 
 const STEPS = ["Flowers","Fillers", "Wrappers", "Add-ons"];
@@ -49,7 +50,12 @@ export default function ManualCustomization() {
                 {/* TEMP: tall dummy content to test scrolling. sam & erine will replace */}
                 <Drawer 
                     collapsedTop={headH}
-                    handle={<div style={{ width: 96, height: 5, borderRadius: 999, background: "var(--COLOR-DOT)" }} />}
+                    handle={
+                        <>
+                            <div style={{ width: 96, height: 5, borderRadius: 999, background: "var(--COLOR-DOT)" }} />
+                            <FloatingBlume currentStep={step + 1} />
+                        </>
+                    }
                 >
                     {Array.from({ length: 30 }, (_, i)=> (
                         <p key={i}>Placeholder row {i + 1}</p>

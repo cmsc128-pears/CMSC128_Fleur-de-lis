@@ -1,0 +1,160 @@
+.preview-page {
+  /* TODO: add a coral to variables.css for "Save as template" */
+  --coral: color-mix(in srgb, var(--COLOR-PINK) 75%, #E8603C);
+
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;             
+  display: flex;
+  flex-direction: column;
+  padding: var(--SPACE-6) var(--SPACE-8) var(--SPACE-4);
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  font-family: var(--FONT-BODY);
+  text-align: center;
+}
+
+.preview-title {
+  margin: 0;
+  padding-bottom: var(--SPACE-5);
+  font-family: var(--FONT-HEADING);
+  font-size: var(--FONT-SIZE-SUBHEADING);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
+  line-height: var(--LINE-HEIGHT-SNUG);
+}
+
+
+.preview-title,
+.preview-frame { position: relative; }
+.preview-title::after,
+.preview-frame::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--SPACE-4) * -1);
+  right: calc(var(--SPACE-4) * -1);
+  height: 1px;
+  background: var(--COLOR-BORDER);
+}
+.preview-title::after { bottom: 0; }
+.preview-frame::after { bottom: calc(var(--SPACE-4) * -1); }
+
+/* image frame */
+.preview-frame {
+  margin: var(--SPACE-4) 0 var(--SPACE-6);
+  flex: 1 1 0;            
+  min-height: 0;
+  padding: var(--SPACE-1);
+  border: 1px solid var(--COLOR-BROWN-SOFT);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview-frame img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.preview-frame-empty { width: 100%; height: 100%; background: var(--COLOR-IMAGE-FILL); }
+
+/* Edit bouquet card (manual mode only) */
+.edit-card {
+  flex-shrink: 0;
+  border: 1px solid var(--COLOR-TEXT);
+  border-radius: var(--RADIUS-CARD);
+  overflow: hidden;
+  text-align: left;
+}
+.edit-card-head {
+  padding: var(--SPACE-3) var(--SPACE-5);
+  border-bottom: 1px solid var(--COLOR-TEXT);
+}
+.edit-card-head h2 {
+  margin: 0;
+  font-size: var(--FONT-SIZE-BUTTON);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
+  line-height: var(--LINE-HEIGHT-SNUG);
+}
+.edit-card-head p {
+  margin: 0;
+  font-size: var(--FONT-SIZE-BODY);
+  line-height: var(--LINE-HEIGHT-BASE);
+}
+.edit-card .mc-stepper { padding: var(--SPACE-4) var(--SPACE-2); }
+
+/* action buttons */
+.save-actions {
+  margin-top: var(--SPACE-6);
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--SPACE-2);
+}
+.save-actions .btn { color: var(--COLOR-BG); }
+.save-actions .btn svg { color: var(--COLOR-BG); }  
+.save-actions .btn-template { background: var(--coral); }
+.save-actions .btn-image { background: var(--COLOR-PINK); }
+.save-actions .btn-link { grid-column: 1 / -1; background: var(--COLOR-PINK-SOFT); color: var(--COLOR-TEXT); }
+.save-actions .btn-link svg { color: var(--COLOR-TEXT); }
+
+.preview-disclaimer {
+  flex-shrink: 0;
+  margin: var(--SPACE-5) var(--SPACE-2) 0;
+  font-size: var(--FONT-SIZE-BODY);
+  line-height: var(--LINE-HEIGHT-BASE);
+}
+
+/* --------------- stepper ---------------
+   copied from ManualCustomization.css
+   TODO: move into one shared stepper.css and import it from both pages. */
+.mc-stepper {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mc-step {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--SPACE-1);
+}
+
+.mc-step__label {
+    font-size: var(--FONT-SIZE-BODY);
+}
+
+.mc-step + .mc-step::before {
+    content: "";
+    position: absolute;
+    left: -50%;
+    bottom: calc(var(--TAP-TARGET) / 2 - 1.5px);
+    width: 100%;
+    height: 3px;
+    background: var(--COLOR-DOT);
+}
+
+.mc-step.is-reached + .mc-step.is-reached::before {
+    background: var(--COLOR-DOT-ACTIVE);
+}
+
+.mc-step__dot {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;  
+    width: var(--TAP-TARGET);
+    height: var(--TAP-TARGET);
+    padding: 0;
+    border: 3px solid var(--COLOR-DOT);
+    border-radius: var(--RADIUS-FULL);
+    background: var(--COLOR-BG);
+    color: var(--COLOR-TEXT);
+    font-family: inherit;
+    font-size: var(--FONT-SIZE-SUBHEADING);
+    line-height: 1;
+    cursor: pointer;
+}
+
+.mc-step.is-reached .mc-step__dot {
+    background: var(--COLOR-DOT-ACTIVE);
+    color: var(--COLOR-TEXT-ON-DARK);
+}

@@ -78,7 +78,6 @@ export default function ManualCustomization({ onFinish }) {
                 {/* TEMP: tall dummy content for testing. sam & erine will replace */}
                 <Drawer 
                     collapsedTop={headH}
-                    handle={<div style={{ width: 96, height: 5, borderRadius: 999, background: "var(--COLOR-DOT)" }} />}
                 >
                     <button
                         type="button"

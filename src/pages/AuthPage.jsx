@@ -115,7 +115,18 @@ export default function AuthPage({
         if (Object.keys(found).length === 0) run(() => onSignup?.(signup));
     };
 
-    const handleGuest = () => run(() => onGuest?.());
+    const handleGuest = async () => {
+        setFormError("");
+        setSubmitting(true);
+        try {
+            await onGuest?.();   
+        } catch (err) {
+            console.error("Guest login failed:", err);
+            setFormError(friendlyError(err));
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     const handleReset = async (e) => {
         e.preventDefault();

@@ -31,6 +31,12 @@ export default function App() {
         setIsGuest(false);
         setView("landing");
     };
+    // one guest flow for every screen, sign in anonymously, mark as guest, go to the app
+    const startGuest = async () => {
+        await logInAsGuest();     
+        setIsGuest(true);
+        setView("feed");        
+    };
 
     // the finished bouquet; undefined means Preview/Template fall back to the demo data
     const [bouquet, setBouquet] = useState(undefined);
@@ -47,7 +53,7 @@ export default function App() {
                         onBack={() => setView("landing")}
                         onLogin={() => { setAuthMode("login"); setView("auth"); }}
                         onJoin={() => { setAuthMode("signup"); setView("auth"); }}
-                        onGuest={() => setView("preview")}   // TEMP
+                        onGuest={() => startGuest()}
                     />
                 )}
 
@@ -70,7 +76,7 @@ export default function App() {
                         initialMode={authMode}
                         onLogin={async (...args) => { const res = await logIn(...args); setIsGuest(false); return res; }}
                         onSignup={async (...args) => { const res = await signUp(...args); setIsGuest(false); return res; }}
-                        onGuest={async (...args) => { const res = await logInAsGuest(...args); setIsGuest(true); return res; }}
+                        onGuest={startGuest}
                         onResetPassword={resetPassword}
                         onAuthSuccess={() => setView("profile")}
                         onBack={() => setView("onboarding")}

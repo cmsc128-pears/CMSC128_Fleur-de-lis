@@ -32,6 +32,9 @@ export default function App() {
         setView("landing");
     };
 
+    // the finished bouquet; undefined means Preview/Template fall back to the demo data
+    const [bouquet, setBouquet] = useState(undefined);
+
     return (
         <div className="shell">
             {hasNav(view) && <TopBar />}
@@ -48,7 +51,9 @@ export default function App() {
                     />
                 )}
 
-                {view === "preview" && <Preview onDownloadWithDetails={() => setView("details")} />}
+                {view === "preview" && (
+                    <Preview bouquet={bouquet} onDownloadWithDetails={() => setView("details")} />
+                )}
                 {view === "details" && (
                     <DetailsForm
                         initial={orderDetails}
@@ -57,7 +62,7 @@ export default function App() {
                     />
                 )}
                 {view === "template" && (
-                    <DownloadTemplate details={orderDetails} onBack={() => setView("details")} />
+                    <DownloadTemplate bouquet={bouquet} details={orderDetails} onBack={() => setView("details")} />
                 )}
 
                 {view === "auth" && (
@@ -89,7 +94,9 @@ export default function App() {
                 {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
 
                 {/* todo: replace with actual create screen */}
-                {view === "create" && <ManualCustomization isGuest={isGuest} />}
+                {view === "create" && <ManualCustomization isGuest={isGuest} 
+                    onFinish={(items) => { setBouquet(items); setView("preview"); }}
+                />}
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

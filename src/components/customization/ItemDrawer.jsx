@@ -7,7 +7,7 @@ const MOVE_THRESHOLD = 6;    // px before a press counts as a drag
 const CLOSE_DISTANCE = 80;   // px dragged down that closes the drawer
 const FLICK_SPEED    = 0.5;  // px/ms downward flick that closes it
 
-// item: { id, name, description, tags, price, image }
+// item: { id, name, description, tags, price?, image }  (price is optional, e.g. wrappers have none)
 // initialQty: quantity already in the bouquet (null = not added yet)
 // onSave(item, qty): add or update in the bouquet
 // onRemove(item): called when an already-added item is saved with quantity 0
@@ -113,7 +113,9 @@ export default function ItemDrawer({ item, initialQty, onSave, onRemove, onClose
                         </ul>
 
                         <div className="item-drawer__buy">
-                            <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
+                            {item.price != null && (
+                                <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
+                            )}
                             <div className="item-drawer__qty">
                                 <button
                                     type="button"

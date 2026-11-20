@@ -6,7 +6,7 @@ const peso = new Intl.NumberFormat("en-PH", {
     minimumFractionDigits: 0,   // ₱60 instead of ₱60.00 to keep it compact
 });
 
-// items: [{ id, name, image, price, color }]
+// items: [{ id, name, image, price?, color }]  (price is optional, e.g. wrappers have none)
 // quantities: { [id]: qty } for items already in the bouquet (shown as selected + badge)
 // onItemClick: called with the item when a card is clicked (parent opens the item drawer)
 export default function SelectionGrid({ items, quantities = {}, onItemClick }) {
@@ -33,7 +33,9 @@ export default function SelectionGrid({ items, quantities = {}, onItemClick }) {
                             </span>
                             <span className="sel-card__label">
                                 <span className="sel-card__name">{item.name}</span>
-                                <span className="sel-card__price">{peso.format(item.price)}</span>
+                                {item.price != null && (
+                                    <span className="sel-card__price">{peso.format(item.price)}</span>
+                                )}
                             </span>
                         </button>
                     </li>

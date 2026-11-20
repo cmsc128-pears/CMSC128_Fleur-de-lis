@@ -16,12 +16,12 @@
     background: var(--COLOR-BG);
     color: var(--COLOR-TEXT);
     font-family: var(--FONT-BODY);
+    --BLUME-CLEARANCE:var(--SPACE-6); /* room above the drawer edge for Blume + her bubble */
 }
 
 /* --------------- header --------------- */
 .mc__head {
-    /* padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2); — Increased top & bottom padding so title clears navbar and Blume's bubble clears the pull-up bar */
-    padding: var(--SPACE-8) var(--SPACE-4) calc(var(--SPACE-10) + var(--SPACE-6));
+    padding: var(--SPACE-5) var(--SPACE-4) var(--BLUME-CLEARANCE);
     text-align: center;
 }
 
@@ -68,7 +68,7 @@
     content: "";
     position: absolute;
     left: -50%;
-    bottom: calc(var(--TAP-TARGET) / 2 - 1.5px);
+    top: calc(var(--TAP-TARGET) / 2 - 1.5px);
     width: 100%;
     height: 3px;
     background: var(--COLOR-DOT);

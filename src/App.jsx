@@ -11,11 +11,17 @@ import FloatingBlume from "./components/customization/FloatingBlume"; // TODO: t
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import ManualCustomization from "./pages/ManualCustomization";
 import "/src/appshared.css";
+import Preview from "./pages/Preview";
+import DetailsForm from "./pages/DetailsForm";
+import DownloadTemplate from "./pages/DownloadTemplate";
 
 export default function App() {
     // tells which screen we are on
     // can be swapped for React Router later
     const [view, setView] = useState("landing");
+    const [authMode, setAuthMode] = useState("login");
+    const [orderDetails, setOrderDetails] = useState({});
+    
 
     // sign out, then go back to the landing screen
     const handleLogout = async () => {
@@ -31,17 +37,35 @@ export default function App() {
                 {view === "landing" && <Landing onStart={() => setView("onboarding")} />}
 
                 {view === "onboarding" && (
-                    // TEMP: guest goes to profile for testing, change back to "feed" later
-                    <Onboarding onGuest={() => setView("feed")} onAuth={() => setView("auth")} />
+                    <Onboarding
+                        onBack={() => setView("landing")}
+                        onLogin={() => { setAuthMode("login"); setView("auth"); }}
+                        onJoin={() => { setAuthMode("signup"); setView("auth"); }}
+                        onGuest={() => setView("preview")}   // TEMP
+                    />
+                )}
+
+                {view === "preview" && <Preview onDownloadWithDetails={() => setView("details")} />}
+                {view === "details" && (
+                    <DetailsForm
+                        initial={orderDetails}
+                        onBack={() => setView("preview")}
+                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
+                    />
+                )}
+                {view === "template" && (
+                    <DownloadTemplate details={orderDetails} onBack={() => setView("details")} />
                 )}
 
                 {view === "auth" && (
                     <AuthPage
+                        initialMode={authMode}
                         onLogin={logIn}
                         onSignup={signUp}
                         onGuest={logInAsGuest}
                         onResetPassword={resetPassword}
                         onAuthSuccess={() => setView("profile")}
+                        onBack={() => setView("onboarding")}
                     />
                 )}
 

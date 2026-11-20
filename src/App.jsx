@@ -57,19 +57,6 @@ export default function App() {
                     />
                 )}
 
-                {view === "preview" && (
-                    <Preview bouquet={bouquet} onDownloadWithDetails={() => setView("details")} />
-                )}
-                {view === "details" && (
-                    <DetailsForm
-                        initial={orderDetails}
-                        onBack={() => setView("preview")}
-                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
-                    />
-                )}
-                {view === "template" && (
-                    <DownloadTemplate bouquet={bouquet} details={orderDetails} onBack={() => setView("details")} />
-                )}
 
                 {view === "auth" && (
                     <AuthPage
@@ -108,6 +95,26 @@ export default function App() {
                 {view === "create" && <ManualCustomization isGuest={isGuest} 
                     onFinish={(items) => { setBouquet(items); setView("preview"); }}
                 />}
+                
+                {view === "preview" && (
+                    <Preview 
+                    //bouquet={bouquet} ignore this, use hardcode data instead 
+                    onDownloadWithDetails={() => setView("details")} />
+                )}
+
+                {view === "details" && (
+                    <DetailsForm
+                        initial={orderDetails}
+                        onBack={() => setView("preview")}
+                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
+                    />
+                )}
+                
+                {view === "template" && (
+                    <DownloadTemplate 
+                    //bouquet={bouquet} ignore this, use hardcode data instead
+                    details={orderDetails} onBack={() => setView("details")} />
+                )}
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

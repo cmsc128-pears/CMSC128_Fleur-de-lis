@@ -5,9 +5,10 @@ import ProfileCard from "../components/ProfileCard.jsx";
 import DesignGrid from "../components/DesignGrid.jsx";
 import designsIcon from "../assets/icons/designs.svg";
 import heartIcon from "../assets/icons/heart.svg";
+import profileIcon from "../assets/icons/profile.svg";
 import "./Profile.css";
 
-function Profile({ onEdit, onLogout }) {
+function Profile({ onEdit, onLogout, onLogin, onSignup }) {
   const { profile, loading, error } = useUserProfile();
 
   // Replace these with real data (API / props) 
@@ -42,7 +43,23 @@ function Profile({ onEdit, onLogout }) {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-  if (!profile) return <p>Please log in to view your profile.</p>;
+  // not logged in (or guest): offer log in / sign up instead of a dead end
+  if (!profile) {
+    return (
+      <main className="profile profile--signedout">
+        <div className="profile__body profile-gate">
+          <img className="profile-gate__icon" src={profileIcon} alt="" />
+          <h2 className="profile-gate__title">Join Fleur</h2>
+          <p className="profile-gate__text">
+            Log in or create an account to save your bouquet designs,
+            like favorites, and view your profile.
+          </p>
+          <button type="button" className="profile__edit" onClick={onLogin}>Log In</button>
+          <button type="button" className="profile-gate__secondary" onClick={onSignup}>Sign Up</button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="profile">

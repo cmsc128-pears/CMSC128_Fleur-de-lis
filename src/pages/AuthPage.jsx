@@ -23,12 +23,19 @@ function friendlyError(err) {
     return err?.message || "Something went wrong. Please try again.";
 }
 
-function Field({ mode, label, name, error, children, className = "" }) {
+function Field({ mode, label, name, error, children, className = "", action }) {
     return (
         <div className={`auth-field ${className}`}>
             <label htmlFor={`${mode}-${name}`}>{label}</label>
             {children}
-            <p className="auth-field__error" aria-live="polite">{error}</p>
+            {action ? (
+                <div className="auth-field__foot">
+                    <p className="auth-field__error" aria-live="polite">{error}</p>
+                    {action}
+                </div>
+            ) : (
+                <p className="auth-field__error" aria-live="polite">{error}</p>
+            )}
         </div>
     );
 }
@@ -141,7 +148,7 @@ export default function AuthPage({
             <div className="auth__top">
                 {backAction && (
                     <button type="button" className="auth__back" onClick={backAction}>
-                        <img src={backIcon} alt="" width="20" height="20" /> Back
+                        <img src={backIcon} alt="" width="16" height="16" /> Back
                     </button>
                 )}
             </div>
@@ -168,7 +175,24 @@ export default function AuthPage({
                             />
                         </Field>
 
-                        <Field mode={mode} label="Password" name="password" error={errors.password}>
+                        <Field
+                            mode={mode}
+                            label="Password"
+                            name="password"
+                            error={errors.password}
+                            action={
+                                <button
+                            type="button"
+                            className="link auth-form__forgot"
+                            onClick={() => {
+                                setResetEmail(login.email);
+                                switchMode("forgot");
+                            }}
+                        >
+                            Forgot Password?
+                        </button>
+                            }
+                        >
                             <input
                                 id="login-password"
                                 name="password"
@@ -179,17 +203,6 @@ export default function AuthPage({
                                 autoComplete="current-password"
                             />
                         </Field>
-
-                        <button
-                            type="button"
-                            className="link auth-form__forgot"
-                            onClick={() => {
-                                setResetEmail(login.email);
-                                switchMode("forgot");
-                            }}
-                        >
-                            Forgot Password?
-                        </button>
 
                         <p className="auth-form__error" role="alert">{formError}</p>
                         <button type="submit" className="btn auth-form__submit" disabled={submitting}>

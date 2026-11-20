@@ -9,7 +9,7 @@ import "./Navbar.css";
 // Screens that aren't in any tab (landing, onboarding, auth) hide the nav.
 const ITEMS = [
   { id: "home", label: "Home", icon: homeIcon, view: "feed", views: ["feed"] },
-  { id: "create", label: "Create", icon: createIcon, view: "create", views: ["create"] },
+  { id: "create", label: "Create", icon: createIcon, view: "create", views: ["create", "preview"] },
   {
     id: "profile",
     label: "Profile",

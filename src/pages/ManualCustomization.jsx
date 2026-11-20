@@ -143,7 +143,6 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                         <ol className="mc-stepper">
                             {STEPS.map(({ label }, i) => (
                                 <li key={label} className={`mc-step${i <= furthest ? " is-reached" : ""}`}>
-                                    <span className="mc-step__label">{label}</span>
                                     <button
                                         type="button"
                                         className="mc-step__dot"
@@ -154,6 +153,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                                     >
                                         {i + 1}
                                     </button>
+                                    <span className="mc-step__label">{label}</span>
                                 </li>
                             ))}
                         </ol>

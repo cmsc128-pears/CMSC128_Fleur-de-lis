@@ -10,11 +10,17 @@ import BottomNav, { hasNav } from "./components/BottomNav";
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import ManualCustomization from "./pages/ManualCustomization";
 import "/src/appshared.css";
+import Preview from "./pages/Preview";
+import DetailsForm from "./pages/DetailsForm";
+import DownloadTemplate from "./pages/DownloadTemplate";
 
 export default function App() {
     // tells which screen we are on
     // can be swapped for React Router later
     const [view, setView] = useState("landing");
+    const [authMode, setAuthMode] = useState("login");
+    const [orderDetails, setOrderDetails] = useState({});
+    
 
     // guests can browse and build bouquets but cannot favorite
     const [isGuest, setIsGuest] = useState(false);
@@ -26,6 +32,9 @@ export default function App() {
         setView("landing");
     };
 
+    // the finished bouquet; undefined means Preview/Template fall back to the demo data
+    const [bouquet, setBouquet] = useState(undefined);
+
     return (
         <div className="shell">
             {hasNav(view) && <TopBar />}
@@ -34,22 +43,47 @@ export default function App() {
                 {view === "landing" && <Landing onStart={() => setView("onboarding")} />}
 
                 {view === "onboarding" && (
-                    // TEMP: guest goes to profile for testing, change back to "feed" later
-                    <Onboarding onGuest={() => { setIsGuest(true); setView("feed"); }} onAuth={() => setView("auth")} />
+                    <Onboarding
+                        onBack={() => setView("landing")}
+                        onLogin={() => { setAuthMode("login"); setView("auth"); }}
+                        onJoin={() => { setAuthMode("signup"); setView("auth"); }}
+                        onGuest={() => setView("preview")}   // TEMP
+                    />
+                )}
+
+                {view === "preview" && (
+                    <Preview bouquet={bouquet} onDownloadWithDetails={() => setView("details")} />
+                )}
+                {view === "details" && (
+                    <DetailsForm
+                        initial={orderDetails}
+                        onBack={() => setView("preview")}
+                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
+                    />
+                )}
+                {view === "template" && (
+                    <DownloadTemplate bouquet={bouquet} details={orderDetails} onBack={() => setView("details")} />
                 )}
 
                 {view === "auth" && (
                     <AuthPage
+                        initialMode={authMode}
                         onLogin={async (...args) => { const res = await logIn(...args); setIsGuest(false); return res; }}
                         onSignup={async (...args) => { const res = await signUp(...args); setIsGuest(false); return res; }}
                         onGuest={async (...args) => { const res = await logInAsGuest(...args); setIsGuest(true); return res; }}
                         onResetPassword={resetPassword}
                         onAuthSuccess={() => setView("profile")}
+                        onBack={() => setView("onboarding")}
                     />
                 )}
 
                 {view === "profile" && (
-                    <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
+                    <Profile
+                        onEdit={() => setView("editProfile")}
+                        onLogout={handleLogout}
+                        onLogin={() => { setAuthMode("login"); setView("auth"); }}
+                        onSignup={() => { setAuthMode("signup"); setView("auth"); }}
+                    />
                 )}
                 {view === "editProfile" && (
                     <EditProfile
@@ -65,7 +99,9 @@ export default function App() {
                 {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
 
                 {/* todo: replace with actual create screen */}
-                {view === "create" && <ManualCustomization isGuest={isGuest} />}
+                {view === "create" && <ManualCustomization isGuest={isGuest} 
+                    onFinish={(items) => { setBouquet(items); setView("preview"); }}
+                />}
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

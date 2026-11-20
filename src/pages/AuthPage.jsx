@@ -1,38 +1,55 @@
 import { useState } from "react";
+import logoImage from "../assets/images/logo.png";
+import watermarkImage from "../assets/images/flower-watermark.png";
+import backIcon from "../assets/icons/back.svg";
 import "./AuthPage.css";
 
 const emptyLogin = { email: "", password: "" };
 const emptySignup = {
     firstName: "",
     lastName: "",
-    contact: "",
     email: "",
     password: "",
     confirmPassword: "",
+};
+
+const TITLES = {
+    login: "Log in to your account",
+    signup: "Create an account",
+    forgot: "Reset your password",
 };
 
 function friendlyError(err) {
     return err?.message || "Something went wrong. Please try again.";
 }
 
-function Field({ mode, label, name, error, children }) {
+function Field({ mode, label, name, error, children, className = "", action }) {
     return (
-        <div className="field">
+        <div className={`auth-field ${className}`}>
             <label htmlFor={`${mode}-${name}`}>{label}</label>
             {children}
-            {error && <p className="field-error">{error}</p>}
+            {action ? (
+                <div className="auth-field__foot">
+                    <p className="auth-field__error" aria-live="polite">{error}</p>
+                    {action}
+                </div>
+            ) : (
+                <p className="auth-field__error" aria-live="polite">{error}</p>
+            )}
         </div>
     );
 }
 
-export default function AuthPage ({
+export default function AuthPage({
     onLogin,
     onSignup,
     onGuest,
     onResetPassword,
     onAuthSuccess,
+    onBack,                 // new: Back button on the login screen
+    initialMode = "login",  // new: "login" or "signup", set by the onboarding buttons
 }) {
-    const [mode, setMode] = useState("login");
+    const [mode, setMode] = useState(initialMode);   // "login" | "signup" | "forgot"
     const [login, setLogin] = useState(emptyLogin);
     const [signup, setSignup] = useState(emptySignup);
     const [errors, setErrors] = useState({});
@@ -46,47 +63,43 @@ export default function AuthPage ({
         setErrors({});
         setFormError("");
         setResetSent(false);
-        };
+    };
 
     const updateLogin = (e) => setLogin({ ...login, [e.target.name]: e.target.value });
     const updateSignup = (e) => setSignup({ ...signup, [e.target.name]: e.target.value });
 
     const validEmail = (value) => /^\S+@\S+\.\S+$/.test(value.trim());
-    const validContact = (v) => /^(\+63|0)?9\d{2}[\s-]?\d{3}[\s-]?\d{4}$/.test(v.trim());
 
     const validate = (values, isSignup) => {
-    const next = {};
-    if (isSignup) {
-        if (!values.firstName.trim()) next.firstName = "Enter your first name.";
-        if (!values.lastName.trim()) next.lastName = "Enter your last name.";
-    }
+        const next = {};
+        if (isSignup) {
+            if (!values.firstName.trim()) next.firstName = "Enter your first name.";
+            if (!values.lastName.trim()) next.lastName = "Enter your last name.";
+        }
 
-    if (!values.email.trim()) next.email = "Enter your email address.";
-    else if (!validEmail(values.email)) next.email = "Enter a valid email address.";
+        if (!values.email.trim()) next.email = "Enter your email address.";
+        else if (!validEmail(values.email)) next.email = "Enter a valid email address.";
 
-    if (isSignup && values.contact.trim() && !validContact(values.contact))
-        next.contact = "Use a valid number, e.g. 0912 345 6789.";
-
-    if (!values.password) next.password = "Enter your password.";
-    else if (isSignup && values.password.length < 8)
-        next.password = "Password must be at least 8 characters.";
-    if (isSignup && values.confirmPassword !== values.password)
-        next.confirmPassword = "Passwords do not match.";
-    return next;
+        if (!values.password) next.password = "Enter your password.";
+        else if (isSignup && values.password.length < 8)
+            next.password = "Password must be at least 8 characters.";
+        if (isSignup && values.confirmPassword !== values.password)
+            next.confirmPassword = "Passwords do not match.";
+        return next;
     };
 
     const run = async (action) => {
-    setFormError("");
-    setSubmitting(true);
-    try {
-      await action();
-      onAuthSuccess?.();
-    } catch (err) {
-      setFormError(friendlyError(err));
-    } finally {
-      setSubmitting(false);
-    }
-  };
+        setFormError("");
+        setSubmitting(true);
+        try {
+            await action();
+            onAuthSuccess?.();
+        } catch (err) {
+            setFormError(friendlyError(err));
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -103,6 +116,7 @@ export default function AuthPage ({
     };
 
     const handleGuest = () => run(() => onGuest?.());
+
     const handleReset = async (e) => {
         e.preventDefault();
         const email = resetEmail.trim();
@@ -121,237 +135,224 @@ export default function AuthPage ({
         } finally {
             setSubmitting(false);
         }
-        };
+    };
+
+    // Back: login goes to the previous screen, forgot goes back to login, signup has none
+    const backAction =
+        mode === "login" ? onBack : mode === "forgot" ? () => switchMode("login") : null;
 
     return (
         <main className="auth">
-        <div className="auth-logo" role="img" aria-label="fleur de lis logo" />
-        <h1 className="auth-wordmark">fleur de lis</h1>
+            <img className="auth__backdrop" src={watermarkImage} alt="" aria-hidden="true" />
 
-        {mode !== "forgot" && (
-        <div className="auth-tabs" role="tablist">
-            <button
-                type="button"
-                role="tab"
-                aria-selected={mode === "login"}
-                className={mode === "login" ? "tab active" : "tab"}
-                onClick={() => switchMode("login")}
-                >
-                Log In
-            </button>
-            <button
-                type="button"
-                role="tab"
-                aria-selected={mode === "signup"}
-                className={mode === "signup" ? "tab active" : "tab"}
-                onClick={() => switchMode("signup")}
-                >
-                Sign Up
-            </button>
-        </div>
-        )}
-
-        
-
-
-        {mode === "login" ? (
-        <form className="auth-form" onSubmit={handleLogin} noValidate>
-            {formError && <p className="form-error" role="alert">{formError}</p>}
-            <Field mode={mode} label="Email Address" name="email" error={errors.email}>
-                <input
-                    id="login-email"
-                    name="email"
-                    type="email"
-                    placeholder="e.g. myemail@address.com"
-                    value={login.email}
-                    onChange={updateLogin}
-                    autoComplete="email"
-                />
-            </Field>
-
-            <Field mode={mode} label="Password" name="password" error={errors.password}>
-                <input
-                    id="login-password"
-                    name="password"
-                    type="password"
-                    placeholder="Must be at least 8 characters"
-                    value={login.password}
-                    onChange={updateLogin}
-                    autoComplete="current-password"
-                />
-            </Field>
-
-          <button
-                type="button"
-                className="link-button"
-                onClick={() => {
-                    setResetEmail(login.email);
-                    switchMode("forgot");
-                }}
-            >
-                Forgot Password?
-            </button>
-
-          <div className="button-row">
-            <button type="button" className="btn btn-secondary" onClick={handleGuest} disabled={submitting}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <circle cx="12" cy="8" r="4.2" /><path d="M3.5 21c0-4.6 3.8-7.5 8.5-7.5s8.5 2.9 8.5 7.5z" />
-              </svg>
-              Log in as Guest
-            </button>
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
-              Log In
-            </button>
-          </div>
-
-            <p className="switch-text">
-                Don't have an account?{" "}
-                <button type="button" className="link-button" onClick={() => switchMode("signup")}>
-                    Sign Up
-                </button>
-            </p>
-        </form>
-    ) : mode === "forgot" ? (
-        <form className="auth-form" onSubmit={handleReset} noValidate>
-            <h2 className="auth-subtitle">Reset your password</h2>
-
-            {resetSent ? (
-                <>
-                    <p className="form-success" role="status">
-                        If an account exists for {resetEmail.trim()}, we've sent a link to reset
-                        your password. Check your spam folder if you don't see it.
-                    </p>
-                    <button
-                        type="button"
-                        className="btn btn-primary btn-full"
-                        onClick={() => switchMode("login")}
-                    >
-                        Back to Log In
+            <div className="auth__top">
+                {backAction && (
+                    <button type="button" className="auth__back" onClick={backAction}>
+                        <img src={backIcon} alt="" width="16" height="16" /> Back
                     </button>
-                </>
-            ) : (
-                <>
-                    <p className="switch-text">
-                        Enter the email you signed up with and we'll send you a reset link.
-                    </p>
-                    {formError && <p className="form-error" role="alert">{formError}</p>}
-
-                    <Field mode={mode} label="Email Address" name="email" error={errors.email}>
-                        <input
-                            id="forgot-email"
-                            name="email"
-                            type="email"
-                            placeholder="e.g. myemail@address.com"
-                            value={resetEmail}
-                            onChange={(e) => setResetEmail(e.target.value)}
-                            autoComplete="email"
-                        />
-                    </Field>
-
-                    <button type="submit" className="btn btn-primary btn-full" disabled={submitting}>
-                        {submitting ? "Sending..." : "Send Reset Link"}
-                    </button>
-
-                    <p className="switch-text">
-                        <button type="button" className="link-button" onClick={() => switchMode("login")}>
-                            Back to Log In
-                        </button>
-                    </p>
-                </>
-            )}
-        </form>
-    ) : (
-        <form className="auth-form" onSubmit={handleSignup} noValidate>
-            {formError && <p className="form-error" role="alert">{formError}</p>}
-            <div className="name-row">
-                <Field mode={mode} label="First Name *" name="firstName" error={errors.firstName}>
-                    <input
-                        id="signup-firstName"
-                        name="firstName"
-                        type="text"
-                        value={signup.firstName}
-                        onChange={updateSignup}
-                        autoComplete="given-name"
-                    />
-                </Field>
-                <Field mode={mode} label="Last Name *" name="lastName" error={errors.lastName}>
-                    <input
-                        id="signup-lastName"
-                        name="lastName"
-                        type="text"
-                        value={signup.lastName}
-                        onChange={updateSignup}
-                        autoComplete="family-name"
-                    />
-                </Field>
+                )}
             </div>
 
-            <Field mode={mode} label="Email Address *" name="email" error={errors.email}>
-                <input
-                    id="signup-email"
-                    name="email"
-                    type="email"
-                    placeholder="e.g. myemail@address.com"
-                    value={signup.email}
-                    onChange={updateSignup}
-                    autoComplete="email"
-                />
-            </Field>
+            <div className="auth__logo">
+                <img className="auth__logo-img" src={logoImage} alt="Fleur" />
+            </div>
 
-            <Field mode={mode} label="Contact Number (optional)" name="contact" error={errors.contact}>
-                <input
-                    id="signup-contact"
-                    name="contact"
-                    type="tel"
-                    placeholder="e.g. 0912 345 6789"
-                    value={signup.contact}
-                    onChange={updateSignup}
-                    autoComplete="tel"
-                />
-            </Field>
+            <div className="auth__body">
+                <h1 className={`auth__title auth__title--${mode}`}>{TITLES[mode]}</h1>
 
-            <Field mode={mode} label="Password *" name="password" error={errors.password}>
-                <input
-                    id="signup-password"
-                    name="password"
-                    type="password"
-                    placeholder="Must be at least 8 characters"
-                    value={signup.password}
-                    onChange={updateSignup}
-                    autoComplete="new-password"
-                />
-            </Field>
+                {mode === "login" && (
+                    <form className="auth-form" onSubmit={handleLogin} noValidate>
 
-            <Field
-                mode={mode}
-                label="Confirm Password *"
-                name="confirmPassword"
-                error={errors.confirmPassword}
-            >
-                <input
-                    id="signup-confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="Repeat password"
-                    value={signup.confirmPassword}
-                    onChange={updateSignup}
-                    autoComplete="new-password"
-                />
-            </Field>
+                        <Field mode={mode} label="Email Address" name="email" error={errors.email}>
+                            <input
+                                id="login-email"
+                                name="email"
+                                type="email"
+                                placeholder="e.g. myemail@address.com"
+                                value={login.email}
+                                onChange={updateLogin}
+                                autoComplete="email"
+                            />
+                        </Field>
 
-            <button type="submit" className="btn btn-primary btn-full" disabled={submitting}>
-                Sign Up
-            </button>
+                        <Field
+                            mode={mode}
+                            label="Password"
+                            name="password"
+                            error={errors.password}
+                            action={
+                                <button
+                            type="button"
+                            className="link auth-form__forgot"
+                            onClick={() => {
+                                setResetEmail(login.email);
+                                switchMode("forgot");
+                            }}
+                        >
+                            Forgot Password?
+                        </button>
+                            }
+                        >
+                            <input
+                                id="login-password"
+                                name="password"
+                                type="password"
+                                placeholder="Must be at least 8 characters"
+                                value={login.password}
+                                onChange={updateLogin}
+                                autoComplete="current-password"
+                            />
+                        </Field>
 
-            <p className="switch-text">
-                Already have an account?{" "}
-                <button type="button" className="link-button" onClick={() => switchMode("login")}>
-                    Log In
-                </button>
-            </p>
-        </form>
-        )}
+                        <p className="auth-form__error" role="alert">{formError}</p>
+                        <button type="submit" className="btn auth-form__submit" disabled={submitting}>
+                            Log In
+                        </button>
+
+                        <button
+                            type="button"
+                            className="link auth-form__guest"
+                            onClick={handleGuest}
+                            disabled={submitting}
+                        >
+                            Continue as Guest
+                        </button>
+
+                        <p className="auth-form__switch">
+                            Don't have an account?{" "}
+                            <button type="button" className="link" onClick={() => switchMode("signup")}>
+                                Sign Up
+                            </button>
+                        </p>
+                    </form>
+                )}
+
+                {mode === "forgot" && (
+                    <form className="auth-form" onSubmit={handleReset} noValidate>
+                        {resetSent ? (
+                            <>
+                                <p className="auth-form__success" role="status">
+                                    If an account exists for {resetEmail.trim()}, we've sent a link to
+                                    reset your password. Check your spam folder if you don't see it.
+                                </p>
+                                <button
+                                    type="button"
+                                    className="btn auth-form__submit"
+                                    onClick={() => switchMode("login")}
+                                >
+                                    Back to Log In
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <p className="auth-form__hint">
+                                    Enter the email you signed up with and we'll send you a reset link.
+                                </p>
+
+                                <Field mode={mode} label="Email Address" name="email" error={errors.email}>
+                                    <input
+                                        id="forgot-email"
+                                        name="email"
+                                        type="email"
+                                        placeholder="e.g. myemail@address.com"
+                                        value={resetEmail}
+                                        onChange={(e) => setResetEmail(e.target.value)}
+                                        autoComplete="email"
+                                    />
+                                </Field>
+
+                                <p className="auth-form__error" role="alert">{formError}</p>
+                                <button type="submit" className="btn auth-form__submit" disabled={submitting}>
+                                    {submitting ? "Sending..." : "Send Reset Link"}
+                                </button>
+                            </>
+                        )}
+                    </form>
+                )}
+
+                {mode === "signup" && (
+                    <form className="auth-form" onSubmit={handleSignup} noValidate>
+
+                        <div className="auth-form__row">
+                            <Field mode={mode} label="First Name" name="firstName" error={errors.firstName}>
+                                <input
+                                    id="signup-firstName"
+                                    name="firstName"
+                                    type="text"
+                                    placeholder="Fleur"
+                                    value={signup.firstName}
+                                    onChange={updateSignup}
+                                    autoComplete="given-name"
+                                />
+                            </Field>
+                            <Field mode={mode} label="Last Name" name="lastName" error={errors.lastName}>
+                                <input
+                                    id="signup-lastName"
+                                    name="lastName"
+                                    type="text"
+                                    placeholder="de lis"
+                                    value={signup.lastName}
+                                    onChange={updateSignup}
+                                    autoComplete="family-name"
+                                />
+                            </Field>
+                        </div>
+
+                        <Field mode={mode} label="Email Address" name="email" error={errors.email}>
+                            <input
+                                id="signup-email"
+                                name="email"
+                                type="email"
+                                placeholder="e.g. myemail@address.com"
+                                value={signup.email}
+                                onChange={updateSignup}
+                                autoComplete="email"
+                            />
+                        </Field>
+
+                        <Field mode={mode} label="Password" name="password" error={errors.password}>
+                            <input
+                                id="signup-password"
+                                name="password"
+                                type="password"
+                                placeholder="Must be at least 8 characters"
+                                value={signup.password}
+                                onChange={updateSignup}
+                                autoComplete="new-password"
+                            />
+                        </Field>
+
+                        <Field
+                            mode={mode}
+                            label="Confirm Password"
+                            name="confirmPassword"
+                            error={errors.confirmPassword}
+                        >
+                            <input
+                                id="signup-confirmPassword"
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Repeat Password"
+                                value={signup.confirmPassword}
+                                onChange={updateSignup}
+                                autoComplete="new-password"
+                            />
+                        </Field>
+
+                        <p className="auth-form__error" role="alert">{formError}</p>
+                        <button type="submit" className="btn auth-form__submit" disabled={submitting}>
+                            Sign Up
+                        </button>
+
+                        <p className="auth-form__switch">
+                            Already have an account?{" "}
+                            <button type="button" className="link" onClick={() => switchMode("login")}>
+                                Log In
+                            </button>
+                        </p>
+                    </form>
+                )}
+            </div>
         </main>
     );
-        
 }

@@ -1,235 +1,209 @@
+/* -------------------------------------------------------------------------
+    AuthPage.css — login, sign up and reset password.
+    Every class starts with "auth" so nothing collides with other pages.
+    Variables from variables.css (plus `white` for the input fill).
+
+    Fits the screen without scrolling: sizes scale with the frame's height
+    (cqh = 1% of .auth's height), and every error message has a reserved
+    line, so showing one never moves anything.
+---------------------------------------------------------------------------*/
+
 .auth {
-  min-height: var(--APP-HEIGHT);
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 48px var(--SPACE-5) var(--SPACE-10);
+  position: relative;               /* the watermark is positioned inside this */
+  container-type: size;             /* lets children use cqh units */
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-/* Logo placeholder: gray square with an X, like the wireframe */
-.auth-logo {
-  width: 190px;
-  height: 190px;
-  background:
-    linear-gradient(to top right, transparent calc(50% - 1px), var(--COLOR-IMAGE-LINE) 50%, transparent calc(50% + 1px)),
-    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--COLOR-IMAGE-LINE) 50%, transparent calc(50% + 1px)),
-    var(--COLOR-IMAGE-FILL);
-  border: 1px solid var(--COLOR-IMAGE-LINE);
-}
-
-.auth-wordmark {
-  margin: 18px 0 var(--SPACE-8);
-  font-family: var(--FONT-DISPLAY);
-  font-style: italic;
-  font-weight: var(--FONT-WEIGHT-REGULAR);
-  font-size: var(--FONT-SIZE-2XL);
-  letter-spacing: 0.01em;
-}
-
-/* Tabs */
-.auth-tabs {
-  display: flex;
-  width: 100%;
-  background: var(--COLOR-SURFACE);
-  border-radius: var(--RADIUS-SM);
   overflow: hidden;
-  margin-bottom: var(--SPACE-6);
-}
-
-.tab {
-  flex: 1;
-  padding: 9px 0;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 0.9rem;
+  background: var(--COLOR-BG);
   color: var(--COLOR-TEXT);
-  cursor: pointer;
+  font-family: var(--FONT-BODY);
+
+  /* shared sizes (vh line first as a fallback for old browsers) */
+  --auth-control: clamp(var(--TAP-TARGET), 6vh, calc(var(--TAP-TARGET) + var(--SPACE-2)));
+  --auth-control: clamp(32px, 4.9cqh, 46px);
+  --auth-error-line: clamp(11px, 1.8cqh, 16px);
 }
 
-.tab.active {
-  background: var(--COLOR-TAB-ACTIVE);
-  color: var(--COLOR-TEXT-ON-DARK);
+/* faint lily behind everything */
+.auth__backdrop {
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 2%;
+    inset: 0;
+    width: 95%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Form */
-.auth-form {
-  width: 100%;
+.auth__top,
+.auth__logo,
+.auth__body { position: relative; z-index: 1; }
+
+/* ---------- top: back button ---------- */
+.auth__top {
+  flex: 0 0 auto;
+  min-height: var(--TAP-TARGET);
+  padding: var(--SPACE-2) var(--SPACE-5) 0;
+}
+.auth__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--SPACE-2);
+  min-height: var(--TAP-TARGET);
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: var(--FONT-SIZE-BUTTON);
+}
+.auth__back img { display: block; }
+
+/* ---------- logo: small, fixed, stays above the form ---------- */
+.auth__logo {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: clamp(8px, 13cqh, 110px) var(--SPACE-8) 0;
+}
+.auth__logo-img {
+  display: block;
+  width: auto;
+  height: clamp(48px, 9cqh, 80px);
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* ---------- body: title + form ---------- */
+.auth__body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;                 /* never scrolls: the form compresses instead */
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: clamp(2px, 0.8cqh, 8px);
+  padding: clamp(8px, 11cqh, 96px) var(--SPACE-8) var(--SPACE-4);
 }
+.auth__body > * { flex-shrink: 0; }
 
-.name-row {
+.auth__title {
+  margin: 0 0 clamp(6px, 1.6cqh, 14px);
+  text-align: center;
+  font-family: var(--FONT-HEADING);
+  font-size: min(calc(var(--FONT-SIZE-SUBHEADING) * 0.9), 5.6cqw);
+  white-space: nowrap;
+  font-weight: var(--FONT-WEIGHT-BOLD);
+  line-height: var(--LINE-HEIGHT-TIGHT);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--COLOR-GREEN);            /* login, sign up + reset */
+}
+.auth__title--signup { color: var(--COLOR-GREEN); }
+
+.auth-form {
   display: flex;
-  gap: var(--SPACE-4);
+  flex-direction: column;
+  gap: var(--SPACE-1);
 }
+.auth-form__row { display: flex; gap: var(--SPACE-3); }
+.auth-form__row .auth-field { flex: 1 1 0; min-width: 0; }
 
-.name-row .field {
-  flex: 1;
-  min-width: 0;
+/* ---------- fields ---------- */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
 }
-
-.field label {
+.auth-field label {
+  font-size: var(--FONT-SIZE-BODY);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.auth-field input {
   display: block;
-  margin-bottom: var(--SPACE-1);
-  font-size: var(--FONT-SIZE-XS);
-  color: var(--COLOR-TEXT-MUTED);
-}
-
-.field input {
   width: 100%;
-  height: 46px;
-  padding: 0 14px;
-  border: 1px solid var(--COLOR-TEXT-MUTED);
-  border-radius: 12px;
-  background: transparent;
-  font: inherit;
-  font-size: 0.95rem;
-  color: var(--COLOR-TEXT);
-}
-
-.field input::placeholder {
-  color: var(--COLOR-TEXT-MUTED);
-}
-
-.field input:focus-visible {
-  outline: 2px solid var(--COLOR-FOCUS);
-  outline-offset: 1px;
-}
-
-.field-error {
-  margin: var(--SPACE-1) 0 0;
-  font-size: var(--FONT-SIZE-XS);
-  color: var(--COLOR-TEXT-MUTED);
-}
-
-/* Buttons */
-.button-row {
-  display: flex;
-  gap: var(--SPACE-3);
-  margin-top: var(--SPACE-1);
-}
-
-.btn {
-  height: 46px;
-  border: 0;
-  border-radius: 12px;
-  font: inherit;
-  font-size: 0.95rem;
-  color: var(--COLOR-BUTTON-TEXT);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--COLOR-FOCUS);
-  outline-offset: 2px;
-}
-
-.btn-primary {
-  background: var(--COLOR-BUTTON-BG);
-  flex: 1;
-}
-
-.btn-secondary {
-  background: var(--COLOR-BUTTON-SOFT-BG);
-  flex: 1.3;
-}
-
-.btn-full {
-  width: 100%;
-  margin-top: var(--SPACE-1);
-}
-
-.btn:hover {
-  filter: brightness(0.95);
-}
-
-/* Simple person icon for "Log in as Guest" */
-.guest-icon {
-  position: relative;
-  width: 20px;
-  height: 22px;
-  flex-shrink: 0;
-}
-
-.guest-icon::before,
-.guest-icon::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--COLOR-ICON);
-}
-
-.guest-icon::before {
-  top: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: var(--RADIUS-FULL);
-}
-
-.guest-icon::after {
-  bottom: 0;
-  width: 20px;
-  height: 10px;
-  border-radius: 10px 10px 3px 3px;
-}
-
-/* Text links */
-.link-button {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: var(--FONT-SIZE-XS);
-  color: var(--COLOR-TEXT);
-  text-decoration: underline;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-.switch-text {
-  margin: var(--SPACE-2) 0 0;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--COLOR-TEXT);
-}
-
-.switch-text .link-button {
-  font-size: inherit;
-}
-
-.form-error {
+  min-height: var(--auth-control);
   margin: 0;
-  padding: 10px var(--SPACE-3);
-  border: 1px solid var(--COLOR-BORDER);
-  border-radius: var(--RADIUS-SM);
-  background: var(--COLOR-SURFACE);
-  font-size: 0.8rem;
+  padding: 0 var(--SPACE-4);
+  background: color-mix(in srgb, var(--COLOR-BG) 40%, white);
+  color: var(--COLOR-TEXT);
+  border: 1px solid color-mix(in srgb, var(--COLOR-BROWN-SOFT) 80%, transparent);
+  border-radius: var(--RADIUS-BUTTON);
+  font-family: inherit;
+  font-size: var(--FONT-SIZE-INPUT);   /* 16px so iPhones don't zoom */
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.auth-field input::placeholder { color: var(--COLOR-BROWN-SOFT); opacity: 0.7; }
+.auth-field input:focus-visible {
+  outline: none;
+  border-color: var(--COLOR-BROWN);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--COLOR-GREEN-SOFT) 70%, transparent);
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* reserved line under every field: empty most of the time, so nothing jumps */
+.auth-field__error {
+  margin: 0;
+  min-height: var(--auth-error-line);
+  font-size: 0.75rem;
+  line-height: 1.1;
+  font-weight: var(--FONT-WEIGHT-BOLD);
+  color: var(--COLOR-BROWN);
 }
 
-.form-success {
-  background: #eaf6ec;
-  color: #1e6b32;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.auth-subtitle {
-  font-size: 1.1rem;
-  margin: 0 0 8px;
+/* ---------- messages ---------- */
+/* form-level error: one reserved line above the submit button */
+.auth-form__error {
+  margin: 0;
+  min-height: var(--auth-error-line);
+  font-size: 0.75rem;
+  line-height: 1.1;
+  font-weight: var(--FONT-WEIGHT-BOLD);
   text-align: center;
+  color: var(--COLOR-BROWN);
+}
+.auth-form__success,
+.auth-form__hint {
+  margin: 0;
+  font-size: var(--FONT-SIZE-BODY);
+  text-align: center;
+}
+
+/* ---------- actions ---------- */
+.auth-field__foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--SPACE-2);
+}
+.auth-field__foot .auth-field__error { flex: 1 1 auto; }
+.auth-form__forgot {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 0;
+  font-size: var(--FONT-SIZE-BODY);
+  line-height: var(--LINE-HEIGHT-SNUG);
+  white-space: nowrap;
+}
+.auth-form__submit {
+  width: 100%;
+  min-height: var(--auth-control);
+  border-radius: var(--RADIUS-BUTTON);
+}
+.auth-form__guest { align-self: center; min-height: 0; margin-top: var(--SPACE-1); color: var(--COLOR-GREEN); }
+.auth-form__submit:disabled,
+.auth-form__guest:disabled { opacity: 0.6; cursor: default; }
+
+.auth-form__switch {
+  margin: var(--SPACE-1) 0 0;
+  text-align: center;
+  font-size: var(--FONT-SIZE-BODY);
+}
+.auth-form__switch .link {
+  min-height: 0;
+  padding: 0;
+  font-weight: var(--FONT-WEIGHT-BOLD);
 }

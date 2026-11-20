@@ -1,0 +1,104 @@
+/* -------------------------------------------------------------------------
+    DownloadTemplate.css — the page around the sheet, and the sheet itself.
+    The sheet is a fixed 627 x 811 "paper" (it gets scaled to fit)
+---------------------------------------------------------------------------*/
+
+.dl-page {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  font-family: var(--FONT-BODY);
+}
+
+.dl-top { flex: 0 0 auto; min-height: var(--TAP-TARGET); padding: var(--SPACE-2) var(--SPACE-5) 0; }
+.dl-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--SPACE-2);
+  min-height: var(--TAP-TARGET);
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: var(--FONT-SIZE-BUTTON);
+}
+.dl-back img { display: block; }
+
+/* the sheet is centered in whatever space is left */
+.dl-stage {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--SPACE-2) var(--SPACE-5);
+}
+.dl-fit { position: relative; flex-shrink: 0; }
+
+.dl-footer { flex: 0 0 auto; padding: var(--SPACE-3) var(--SPACE-8) var(--SPACE-6); }
+.dl-download { width: 100%; min-height: calc(var(--TAP-TARGET) + var(--SPACE-2)); }
+
+/* ---------- the sheet ---------- */
+.sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  display: grid;
+  grid-template-rows: 506px 191px 1fr;
+  background: var(--COLOR-BG);
+  color: var(--COLOR-TEXT);
+  border: 1px solid var(--COLOR-BROWN-SOFT);
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.sheet p,
+.sheet h2,
+.sheet h3,
+.sheet ul { margin: 0; }
+.sheet ul { padding-left: 24px; }
+
+/* top row: photo | details */
+.sheet__main {
+  display: grid;
+  grid-template-columns: 354px 1fr;
+  border-bottom: 1px solid var(--COLOR-BROWN-SOFT);
+}
+.sheet__photo {
+  padding: 58px 41px 48px 30px;
+  border-right: 1px solid var(--COLOR-BROWN-SOFT);
+}
+.sheet__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 10px;                 /* the white mat around the photo */
+  background: white;
+  object-fit: cover;
+}
+
+.sheet__details { padding: 58px 32px 0; }
+.sheet__heading { font-size: 24px; font-weight: var(--FONT-WEIGHT-BOLD); line-height: 1.2; }
+.sheet__details .sheet__heading { margin-bottom: 22px; }
+
+.sheet__group { margin-bottom: 18px; }
+.sheet__group h3 { margin-bottom: 4px; font-size: 18px; font-weight: var(--FONT-WEIGHT-BOLD); line-height: 1.2; }
+.sheet__row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+.sheet__item ul { font-size: 13px; }
+.sheet__none { font-size: 13px; }
+.sheet__total { font-size: 15px; }
+
+/* middle row: customer */
+.sheet__customer { padding: 36px 56px 0; border-bottom: 1px solid var(--COLOR-BROWN-SOFT); }
+.sheet__customer .sheet__heading { margin-bottom: 14px; }
+.sheet__customer p { font-size: 16px; min-height: 1.35em; }
+.sheet__customer .sheet__name { font-size: 18px; }
+.sheet__address { margin-top: 20px; white-space: pre-line; }
+
+/* bottom row: notes */
+.sheet__notes { padding: 28px 56px 0; }
+.sheet__notes h3 { margin-bottom: 8px; font-size: 18px; font-weight: var(--FONT-WEIGHT-BOLD); }
+.sheet__notes p { font-size: 14px; white-space: pre-wrap; }

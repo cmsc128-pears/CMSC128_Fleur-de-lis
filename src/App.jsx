@@ -78,7 +78,12 @@ export default function App() {
                 )}
 
                 {view === "profile" && (
-                    <Profile onEdit={() => setView("editProfile")} onLogout={handleLogout} />
+                    <Profile
+                        onEdit={() => setView("editProfile")}
+                        onLogout={handleLogout}
+                        onLogin={() => { setAuthMode("login"); setView("auth"); }}
+                        onSignup={() => { setAuthMode("signup"); setView("auth"); }}
+                    />
                 )}
                 {view === "editProfile" && (
                     <EditProfile

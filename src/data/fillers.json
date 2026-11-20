@@ -68,7 +68,7 @@
         "elegant",
         "peaceful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": null,
       "seasonalPrices": {},
       "price": 30,
@@ -98,7 +98,7 @@
         "sweet",
         "peaceful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 1500,
         "max": 1800
@@ -131,7 +131,7 @@
         "sweet",
         "graceful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 900,
         "max": 900
@@ -163,7 +163,7 @@
         "peaceful",
         "hopeful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 350,
         "max": 380
@@ -197,7 +197,7 @@
         "hopeful",
         "solemn"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 350,
         "max": 380
@@ -231,7 +231,7 @@
         "sentimental",
         "peaceful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 750,
         "max": 750
@@ -264,7 +264,7 @@
         "fresh",
         "cheerful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 450,
         "max": 450
@@ -296,7 +296,7 @@
         "graceful",
         "peaceful"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 350,
         "max": 350
@@ -328,7 +328,7 @@
         "peaceful",
         "elegant"
       ],
-      "bundleSIze": 12,
+      "bundleSize": 12,
       "bundlePrice": {
         "min": 900,
         "max": 900

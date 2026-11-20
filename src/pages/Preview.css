@@ -1,7 +1,10 @@
 .preview-page {
   height: 100%;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;             
+  overflow-y: auto;                  
+  -webkit-overflow-scrolling: touch; 
+  overscroll-behavior: contain;     
   display: flex;
   flex-direction: column;
   padding: var(--SPACE-6) var(--SPACE-8) var(--SPACE-4);
@@ -13,6 +16,7 @@
 
 .preview-title {
   position: relative;
+  flex-shrink: 0;                   
   margin: 0;
   padding-bottom: var(--SPACE-5);
   font-family: var(--FONT-HEADING);
@@ -21,7 +25,6 @@
   line-height: var(--LINE-HEIGHT-SNUG);
 }
 
-/* divider lines under the title and under the image area run wider than the content */
 .preview-title::after,
 .preview-stage::after {
   content: "";
@@ -33,11 +36,12 @@
   background: var(--COLOR-BORDER);
 }
 
-/* the stage takes the leftover height; the 3:4 frame sits centered inside it */
+
 .preview-stage {
   position: relative;
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;                    
+  height: 50dvh;                     
+  min-height: 260px;                
   display: flex;
   justify-content: center;
   padding: var(--SPACE-4) 0;
@@ -52,9 +56,8 @@
 .preview-frame img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .preview-frame-empty { width: 100%; height: 100%; background: var(--COLOR-IMAGE-FILL); }
 
-
+/* Bouquet details */
 .summary {
-  position: relative;
   flex-shrink: 0;
   margin-top: var(--SPACE-2);
   text-align: left;
@@ -68,7 +71,7 @@
   gap: var(--SPACE-3);
   padding: var(--SPACE-3) var(--SPACE-5);
   background: var(--COLOR-BG);
-  border: 1px solid var(--COLOR-TEXT);
+  border: 0;
   border-radius: var(--RADIUS-CARD);
   text-align: left;
 }
@@ -81,23 +84,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* chevron points up while closed (it opens upward) and down while open */
-.summary__chevron { display: inline-flex; transform: rotate(180deg); transition: transform 0.15s; }
-.summary__chevron.is-open { transform: none; }
+
+/* chevron points down while closed and up while open */
+.summary__chevron { display: inline-flex; transition: transform 0.15s; }
+.summary__chevron.is-open { transform: rotate(180deg); }
 
 .summary__panel {
-  position: absolute;
-  z-index: 5;
-  left: 0;
-  right: 0;
-  bottom: calc(100% + var(--SPACE-1));
-  max-height: calc(var(--APP-HEIGHT) * 0.4);
-  overflow-y: auto;
+  margin-top: var(--SPACE-1);
   padding: var(--SPACE-2) var(--SPACE-5);
   background: var(--COLOR-BG);
-  border: 1px solid var(--COLOR-TEXT);
+  border: 0;
   border-radius: var(--RADIUS-CARD);
+  animation: summary-open 160ms ease-out;
 }
+
+@keyframes summary-open {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
 .summary__list { margin: 0; padding: 0; list-style: none; }
 .summary__row { padding: var(--SPACE-2) 0; }
 .summary__row + .summary__row { border-top: 1px solid var(--COLOR-BORDER); }
@@ -110,7 +115,7 @@
 .summary__items { margin: 0; font-size: var(--FONT-SIZE-BODY); line-height: var(--LINE-HEIGHT-BASE); }
 .summary__items--none { color: var(--COLOR-TEXT-MUTED); }
 
-/* action buttons */
+/* action buttons: build on the shared .btn */
 .save-actions {
   flex-shrink: 0;
   display: flex;
@@ -121,7 +126,7 @@
 .save-actions .btn { width: 100%; color: var(--COLOR-TEXT-ON-DARK); }
 .save-actions .btn-save { background: var(--COLOR-GREEN); }
 
-/* Download Design */
+/* Download Design: brown button with a dropdown */
 .download { position: relative; }
 .btn-download { position: relative; }
 .btn-download__chevron {
@@ -165,4 +170,25 @@
   margin: var(--SPACE-4) var(--SPACE-2) 0;
   font-size: var(--FONT-SIZE-BODY);
   line-height: var(--LINE-HEIGHT-BASE);
+}
+
+/* bouquet details: item rows with prices + total */
+.summary__item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--SPACE-3);
+  margin: 0;
+  font-size: var(--FONT-SIZE-BODY);
+  line-height: var(--LINE-HEIGHT-BASE);
+}
+.summary__price { flex-shrink: 0; }
+.summary__total {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--SPACE-3);
+  margin: var(--SPACE-2) 0 0;
+  padding-top: var(--SPACE-3);
+  border-top: 1px solid var(--COLOR-TEXT);
+  font-size: var(--FONT-SIZE-BODY);
+  font-weight: var(--FONT-WEIGHT-BOLD);
 }

@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import bookmarkIcon from "../assets/icons/bookmark.svg";
 import chevronIcon from "../assets/icons/down-chevron.svg";
 import downloadIcon from "../assets/icons/download.svg";
-import sampleImage from "../assets/images/ai_img_sample.jpg"; //hardcoded image
+import sampleImage from "../assets/images/ai_img_sample.jpg"; //hardcoded image sample
+import { DEMO_BOUQUET } from "../pages/demoBouquet"; //demo bouquet data
+import Icon from "../components/Icon";
 import "./Preview.css";
 
 
@@ -18,28 +20,7 @@ const CATEGORIES = [
   { key: "addOns", label: "Add-ons" },
 ];
 
-// hardcoded bouquet details
-const DEMO_BOUQUET = {
-  flowers: [
-    { name: "Red Rose", color: "Red", quantity: 3 },
-    { name: "Tulip", color: "Pink", quantity: 2 },
-  ],
-  fillers: [{ name: "Baby's Breath", quantity: 1 }],
-  wrapper: { name: "Kraft Paper" },
-  addOns: [{ name: "Ribbon", quantity: 1 }],
-};
-
-function Icon({ src, size = 22 }) {
-  return (
-    <span
-      className="icon"
-      aria-hidden="true"
-      style={{ "--icon-src": `url("${src}")`, width: size, height: size }}
-    />
-  );
-}
-
-
+// wrapper is a single object (or null); the rest are arrays
 const itemsOf = (bouquet, key) => {
   const value = bouquet?.[key];
   if (!value) return [];
@@ -69,21 +50,20 @@ function summarize(bouquet) {
 /**
  * imageSrc: the finished bouquet image.
  * bouquet: { flowers: [], fillers: [], wrapper: {} | null, addOns: [] }
- * The details are read-only.
  */
 export default function Preview({
-  imageSrc = sampleImage,        // TODO: drop the sample default once the real image is passed in
-  bouquet = DEMO_BOUQUET,      
+  imageSrc = sampleImage,     //hardcoded
+  bouquet = DEMO_BOUQUET,    //hardcoded
   onSaveDesign = () => {},
   onSaveImage = () => {},
-  onCopyLink = () => {},
+  onDownloadWithDetails = () => {},   // opens the details form
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const downloadRef = useRef(null);
   const detailsRef = useRef(null);
 
-  const handlers = { image: onSaveImage, link: onCopyLink };
+  const handlers = { image: onSaveImage, details: onDownloadWithDetails };
 
   // close either popover on outside tap or Escape
   useEffect(() => {
@@ -108,7 +88,7 @@ export default function Preview({
 
   const choose = (id) => {
     setMenuOpen(false);
-    handlers[id]();
+    handlers[id]?.();
   };
 
   return (

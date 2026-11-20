@@ -21,6 +21,7 @@
   line-height: var(--LINE-HEIGHT-SNUG);
 }
 
+/* divider lines under the title and under the image area run wider than the content */
 .preview-title::after,
 .preview-stage::after {
   content: "";
@@ -32,7 +33,7 @@
   background: var(--COLOR-BORDER);
 }
 
-
+/* the stage takes the leftover height; the 3:4 frame sits centered inside it */
 .preview-stage {
   position: relative;
   flex: 1 1 0;
@@ -120,7 +121,7 @@
 .save-actions .btn { width: 100%; color: var(--COLOR-TEXT-ON-DARK); }
 .save-actions .btn-save { background: var(--COLOR-GREEN); }
 
-/* Download Design: brown button with a dropdown */
+/* Download Design */
 .download { position: relative; }
 .btn-download { position: relative; }
 .btn-download__chevron {
@@ -164,13 +165,4 @@
   margin: var(--SPACE-4) var(--SPACE-2) 0;
   font-size: var(--FONT-SIZE-BODY);
   line-height: var(--LINE-HEIGHT-BASE);
-}
-
-/* icons drawn from an imported svg via a mask, so they follow the text color */
-.icon {
-  display: inline-block;
-  flex-shrink: 0;
-  background-color: currentColor;
-  -webkit-mask: var(--icon-src) center / contain no-repeat;
-  mask: var(--icon-src) center / contain no-repeat;
 }

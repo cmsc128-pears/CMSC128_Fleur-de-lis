@@ -122,24 +122,52 @@ export default function FloatingBlume({
     const height = Math.max(110, bottomEdge - top);
     const pointerRight = Math.max(12, shell.right - btn.right + btn.width / 2 - 10);
 
-    setIsCompact(visibleBottom < shell.bottom - 80);
-    setSheetStyle({
-      top: `${top}px`,
-      left: `${shell.left}px`,
-      width: `${shell.width}px`,
-      height: `${height}px`,
-      "--blume-pointer-right": `${pointerRight}px`,
+    const compact = visibleBottom < shell.bottom - 80;
+    setIsCompact((prev) => (prev === compact ? prev : compact));
+    setSheetStyle((prev) => {
+      const nextTop = `${Math.round(top)}px`;
+      const nextLeft = `${Math.round(shell.left)}px`;
+      const nextWidth = `${Math.round(shell.width)}px`;
+      const nextHeight = `${Math.round(height)}px`;
+      const nextPointer = `${Math.round(pointerRight)}px`;
+
+      if (
+        prev.top === nextTop &&
+        prev.left === nextLeft &&
+        prev.width === nextWidth &&
+        prev.height === nextHeight &&
+        prev["--blume-pointer-right"] === nextPointer
+      ) {
+        return prev;
+      }
+
+      return {
+        top: nextTop,
+        left: nextLeft,
+        width: nextWidth,
+        height: nextHeight,
+        "--blume-pointer-right": nextPointer,
+      };
     });
   }, []);
 
-  // resize chat sheet when window or mobile keyboard changes
+  // follow Blume in real time when the pull-up tab is dragged or when the mobile keyboard changes
   useEffect(() => {
     if (!isOpen) return;
     const vv = window.visualViewport;
+    let rafId;
+
+    const trackPosition = () => {
+      syncSheetPosition();
+      rafId = requestAnimationFrame(trackPosition);
+    };
+    rafId = requestAnimationFrame(trackPosition);
+
     window.addEventListener("resize", syncSheetPosition);
     vv?.addEventListener("resize", syncSheetPosition);
     vv?.addEventListener("scroll", syncSheetPosition);
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", syncSheetPosition);
       vv?.removeEventListener("resize", syncSheetPosition);
       vv?.removeEventListener("scroll", syncSheetPosition);
@@ -153,12 +181,13 @@ export default function FloatingBlume({
     }
   }, [messages, isOpen, isSending]);
 
-  // close chat when clicking outside
+  // close chat when clicking outside (ignores the pull-up tab bar so you can drag it while chat is open)
   useEffect(() => {
     const onOutsideClick = (e) => {
       const clickedButton = containerRef.current?.contains(e.target);
       const clickedDrawer = drawerRef.current?.contains(e.target);
-      if (!clickedButton && !clickedDrawer) {
+      const clickedPullGrip = e.target.closest?.(".drawer__grip");
+      if (!clickedButton && !clickedDrawer && !clickedPullGrip) {
         setIsOpen(false);
       }
     };
@@ -222,7 +251,7 @@ export default function FloatingBlume({
       {/* 5-second greeting pill */}
       {!isOpen && showPill && (
         <button type="button" className="blume__greeting-pill" onClick={toggleChat}>
-          Hi I&apos;m <strong>Blume</strong>, your AI Assistant. Ask me anything!
+          Hi! I&apos;m <strong>Blume</strong>, your AI<br />Assistant. Ask me anything!
         </button>
       )}
 

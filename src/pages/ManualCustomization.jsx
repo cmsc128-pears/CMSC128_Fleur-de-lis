@@ -97,6 +97,9 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
     );
     const setSearch = (next) => setSearches((all) => ({ ...all, [key]: next }));
 
+    // wrappers are picked without a quantity
+    const showQuantity = key !== "wrapper";
+
     // { [id]: qty } so each grid card can show its quantity badge
     const quantities = Object.fromEntries(
         currentEntries.map((it) => [it.id, it.quantity ?? 1])
@@ -194,6 +197,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                                     items={gridItems}
                                     quantities={quantities}
                                     onItemClick={openItem}
+                                    showQuantity={showQuantity}
                                 />
                             )}
                         </div>
@@ -228,6 +232,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                     onRemove={removeItem}
                     onClose={closeItem}
                     isGuest={isGuest}
+                    showQuantity={showQuantity}
                 />
             )}
         </main>

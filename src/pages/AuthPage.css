@@ -22,8 +22,8 @@
 
   /* shared sizes (vh line first as a fallback for old browsers) */
   --auth-control: clamp(var(--TAP-TARGET), 6vh, calc(var(--TAP-TARGET) + var(--SPACE-2)));
-  --auth-control: clamp(var(--TAP-TARGET), 6.3cqh, calc(var(--TAP-TARGET) + var(--SPACE-2)));
-  --auth-error-line: calc(var(--FONT-SIZE-BODY) * var(--LINE-HEIGHT-SNUG));
+  --auth-control: clamp(32px, 4.9cqh, 46px);
+  --auth-error-line: clamp(11px, 1.8cqh, 16px);
 }
 
 /* faint lily behind everything */
@@ -67,13 +67,12 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
-  padding: var(--SPACE-1) var(--SPACE-8) 0;
+  padding: clamp(8px, 13cqh, 110px) var(--SPACE-8) 0;
 }
 .auth__logo-img {
   display: block;
   width: auto;
-  height: clamp(48px, 9vh, 72px);
-  height: clamp(48px, 9cqh, 72px);
+  height: clamp(48px, 9cqh, 80px);
   max-width: 100%;
   object-fit: contain;
 }
@@ -82,25 +81,25 @@
 .auth__body {
   flex: 1 1 0;
   min-height: 0;
-  overflow-y: auto;                 /* safety net only (tiny screens, keyboard); normally never needed */
+  overflow: hidden;                 /* never scrolls: the form compresses instead */
   display: flex;
   flex-direction: column;
-  gap: var(--SPACE-3);
-  padding: clamp(var(--SPACE-2), 3.5vh, var(--SPACE-6)) var(--SPACE-8) var(--SPACE-4);
-  padding-top: clamp(var(--SPACE-2), 3.5cqh, var(--SPACE-6));
+  gap: clamp(2px, 0.8cqh, 8px);
+  padding: clamp(8px, 11cqh, 96px) var(--SPACE-8) var(--SPACE-4);
 }
 .auth__body > * { flex-shrink: 0; }
 
 .auth__title {
-  margin: 0;
+  margin: 0 0 clamp(6px, 1.6cqh, 14px);
   text-align: center;
   font-family: var(--FONT-HEADING);
-  font-size: calc(var(--FONT-SIZE-SUBHEADING) * 0.9);
+  font-size: min(calc(var(--FONT-SIZE-SUBHEADING) * 0.9), 5.6cqw);
+  white-space: nowrap;
   font-weight: var(--FONT-WEIGHT-BOLD);
   line-height: var(--LINE-HEIGHT-TIGHT);
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: var(--COLOR-BROWN);            /* login + reset */
+  color: var(--COLOR-GREEN);            /* login, sign up + reset */
 }
 .auth__title--signup { color: var(--COLOR-GREEN); }
 
@@ -116,13 +115,13 @@
 .auth-field {
   display: flex;
   flex-direction: column;
-  gap: var(--SPACE-1);
+  gap: 2px;
   text-align: left;
 }
 .auth-field label {
   font-size: var(--FONT-SIZE-BODY);
   font-weight: 500;
-  line-height: var(--LINE-HEIGHT-SNUG);
+  line-height: 1.2;
 }
 .auth-field input {
   display: block;
@@ -149,8 +148,8 @@
 .auth-field__error {
   margin: 0;
   min-height: var(--auth-error-line);
-  font-size: var(--FONT-SIZE-BODY);
-  line-height: var(--LINE-HEIGHT-SNUG);
+  font-size: 0.75rem;
+  line-height: 1.1;
   font-weight: var(--FONT-WEIGHT-BOLD);
   color: var(--COLOR-BROWN);
 }
@@ -160,8 +159,8 @@
 .auth-form__error {
   margin: 0;
   min-height: var(--auth-error-line);
-  font-size: var(--FONT-SIZE-BODY);
-  line-height: var(--LINE-HEIGHT-SNUG);
+  font-size: 0.75rem;
+  line-height: 1.1;
   font-weight: var(--FONT-WEIGHT-BOLD);
   text-align: center;
   color: var(--COLOR-BROWN);
@@ -174,23 +173,32 @@
 }
 
 /* ---------- actions ---------- */
+.auth-field__foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--SPACE-2);
+}
+.auth-field__foot .auth-field__error { flex: 1 1 auto; }
 .auth-form__forgot {
-  align-self: flex-end;
+  flex: 0 0 auto;
   min-height: 0;
   padding: 0;
   font-size: var(--FONT-SIZE-BODY);
+  line-height: var(--LINE-HEIGHT-SNUG);
+  white-space: nowrap;
 }
 .auth-form__submit {
   width: 100%;
   min-height: var(--auth-control);
   border-radius: var(--RADIUS-BUTTON);
 }
-.auth-form__guest { align-self: center; min-height: 0; margin-top: var(--SPACE-2); color: var(--COLOR-GREEN); }
+.auth-form__guest { align-self: center; min-height: 0; margin-top: var(--SPACE-1); color: var(--COLOR-GREEN); }
 .auth-form__submit:disabled,
 .auth-form__guest:disabled { opacity: 0.6; cursor: default; }
 
 .auth-form__switch {
-  margin: var(--SPACE-2) 0 0;
+  margin: var(--SPACE-1) 0 0;
   text-align: center;
   font-size: var(--FONT-SIZE-BODY);
 }

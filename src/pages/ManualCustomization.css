@@ -8,6 +8,7 @@
 }
 
 .mc {
+    position: relative;
     height: 100%;
     min-height: 0;
     display: flex;
@@ -110,6 +111,17 @@
     min-height: 0;
     /* overflow: hidden; — Changed to visible so Blume overlaps the top nav bar when the drawer is expanded to top: 0 */
     overflow: visible;
+}
+
+/* --------------- step prompt above the grid --------------- */
+.mc__prompt {
+    margin: 0 0 var(--SPACE-3);
+    font-family: var(--FONT-HEADING);
+    font-size: var(--FONT-SIZE-BODY);
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    line-height: var(--LINE-HEIGHT-SNUG);
+    text-align: center;
+    color: var(--COLOR-SUBHEADING);
 }
 
 /* --------------- price total & next --------------- */

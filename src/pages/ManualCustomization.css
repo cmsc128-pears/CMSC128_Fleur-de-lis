@@ -76,7 +76,7 @@
     z-index: 1;
     width: var(--TAP-TARGET);
     height: var(--TAP-TARGET);
-    border: 3px solid var(--COLOR-DOT);
+    border: 3px solid var(--COLOR-DOT-ACTIVE);
     border-radius: var(--RADIUS-FULL);
     background: var(--COLOR-BG);
     color: var(--COLOR-TEXT);
@@ -92,9 +92,18 @@
 }
 
 .mc-step__dot[aria-current="step"] {
-    box-shadow: 0 0 0 2px var(--COLOR-BG), 0 0 0 4px var(--COLOR-DOT-ACTIVE);
+    box-shadow: 0 0 0 2px var(--COLOR-BG), 0 0 0 4px var(--COLOR-DOT);
 }
 
+.mc-step__dot:disabled {
+    cursor: not-allowed;
+}
+
+.mc-step:not(.is-reached) .mc-step__dot {
+    background: var(--COLOR-LINE);
+    border-color: var(--COLOR-LINE);
+    color: var(--COLOR-TEXT-MUTED);
+}
 
 /* --------------- drawer container --------------- */
 .mc__stage {
@@ -130,7 +139,6 @@
     gap: var(--SPACE-2);
 }
 
-.mc-step__dot:disabled,
 .mc-bar .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;

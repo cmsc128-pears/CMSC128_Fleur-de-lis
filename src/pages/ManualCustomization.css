@@ -163,3 +163,21 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* --------------- drawer content: prompt + search stay put, only the grid scrolls --------------- */
+.mc__pick {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.mc__pick-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* room so the quantity badge and selected outline aren't clipped; negative margin keeps the grid aligned */
+    padding: var(--SPACE-2);
+    margin: 0 calc(var(--SPACE-2) * -1);
+}

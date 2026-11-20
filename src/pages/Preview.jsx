@@ -4,6 +4,7 @@ import chevronIcon from "../assets/icons/down-chevron.svg";
 import downloadIcon from "../assets/icons/download.svg";
 import sampleImage from "../assets/images/ai_img_sample.jpg"; //hardcoded image sample
 import { DEMO_BOUQUET } from "../pages/demoBouquet"; //demo bouquet data
+import { peso, itemsOf, hasPrices, totalOf } from "../data/bouquet";
 import Icon from "../components/Icon";
 import "./Preview.css";
 
@@ -20,20 +21,15 @@ const CATEGORIES = [
   { key: "addOns", label: "Add-ons" },
 ];
 
-// wrapper is a single object (or null); the rest are arrays
-const itemsOf = (bouquet, key) => {
-  const value = bouquet?.[key];
-  if (!value) return [];
-  return Array.isArray(value) ? value : [value];
-};
-
 const formatItem = (item) =>
   `${item.quantity > 1 ? `${item.quantity}× ` : ""}${item.name}`;
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
-// one-line summary shown while the details are collapsed
+// the estimated total, or (if the items have no prices yet) a count of what's in it
 function summarize(bouquet) {
+  if (hasPrices(bouquet)) return `Estimated total: ${peso.format(totalOf(bouquet))}`;
+
   const flowers = itemsOf(bouquet, "flowers").reduce((sum, f) => sum + (f.quantity ?? 1), 0);
   const fillers = itemsOf(bouquet, "fillers").length;
   const wrapper = itemsOf(bouquet, "wrapper")[0];
@@ -50,6 +46,7 @@ function summarize(bouquet) {
 /**
  * imageSrc: the finished bouquet image.
  * bouquet: { flowers: [], fillers: [], wrapper: {} | null, addOns: [] }
+ *          items can carry a `price` (their line total).
  */
 export default function Preview({
   imageSrc = sampleImage,     //hardcoded
@@ -64,6 +61,7 @@ export default function Preview({
   const detailsRef = useRef(null);
 
   const handlers = { image: onSaveImage, details: onDownloadWithDetails };
+  const showPrices = hasPrices(bouquet);
 
   // close either popover on outside tap or Escape
   useEffect(() => {
@@ -131,7 +129,16 @@ export default function Preview({
                   <li key={key} className="summary__row">
                     <h2 className="summary__label">{label}</h2>
                     {items.length ? (
-                      <p className="summary__items">{items.map(formatItem).join(", ")}</p>
+                      <div className="summary__items">
+                        {items.map((item) => (
+                          <p key={item.name} className="summary__item">
+                            <span>{formatItem(item)}</span>
+                            {showPrices && item.price != null && (
+                              <span className="summary__price">{peso.format(item.price)}</span>
+                            )}
+                          </p>
+                        ))}
+                      </div>
                     ) : (
                       <p className="summary__items summary__items--none">None</p>
                     )}
@@ -139,6 +146,13 @@ export default function Preview({
                 );
               })}
             </ul>
+
+            {showPrices && (
+              <p className="summary__total">
+                <span>Total Estimated Price</span>
+                <span>{peso.format(totalOf(bouquet))}</span>
+              </p>
+            )}
           </div>
         )}
       </section>

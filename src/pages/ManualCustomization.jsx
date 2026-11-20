@@ -5,7 +5,7 @@ import SelectionGrid from "../components/customization/SelectionGrid";
 import ItemDrawer from "../components/customization/ItemDrawer";
 import FlowerSearch from "../components/customization/FlowerSearch";
 import { EMPTY_SEARCH } from "../data/Catalog";
-import { FLOWERS, FILTER_GROUPS, QUICK_TAGS, filterFlowers } from "../data/flowerCatalog";
+import { FLOWERS, FILTER_GROUPS, QUICK_TAGS, filterFlowers } from "../data/FlowerCatalog";
 import { FILLERS, FILLER_FILTER_GROUPS, FILLER_QUICK_TAGS, filterFillers } from "../data/fillerCatalog";
 import "./ManualCustomization.css";
 
@@ -112,7 +112,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
         : currentEntries.find((it) => it.id === activeItem.id) ?? null;
 
     // add or update an item with a quantity. every step is multi-select
-    const saveItem = (item, quantity) =>
+    const saveItem = (item, quantity, selectedColor) =>
         setDraft((d) => {
             const list = d.items[key];
             const exists = list.some((it) => it.id === item.id);
@@ -120,8 +120,8 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                 items: {
                     ...d.items,
                     [key]: exists
-                        ? list.map((it) => (it.id === item.id ? { ...it, quantity } : it))
-                        : [...list, { ...item, quantity }],
+                        ? list.map((it) => (it.id === item.id ? { ...it, quantity, selectedColor} : it))
+                        : [...list, { ...item, quantity, selectedColor }],
                 },
             };
         });
@@ -223,6 +223,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                     key={activeItem.id}
                     item={activeItem}
                     initialQty={activeEntry ? activeEntry.quantity : null}
+                    initialColor={activeEntry?.selectedColor ?? null}
                     onSave={saveItem}
                     onRemove={removeItem}
                     onClose={closeItem}

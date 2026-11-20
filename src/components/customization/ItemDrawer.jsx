@@ -12,14 +12,15 @@ const titleCase = (v) => v.split(/[-\s]+/).map((w) => w.charAt(0).toUpperCase() 
 // most color names work directly as CSS colors. add overrides here for any that don't (e.g. peach)
 const SWATCHES = { cream: "#FFFDD0", peach: "#FFDAB9" };
 
-// item: { id, name, description, tags, colors, stock, price, image }
+// item: { id, name, description, tags, colors, stock, price?, image }  (price is optional, e.g. wrappers have none)
 //   tags is display only. colors (array of lowercase names) is selectable; items without it get no Colors section
 // initialQty: quantity already in the bouquet (null = not added yet)
 // initialColor: color already chosen for that bouquet entry (null = none yet)
 // onSave(item, qty, color): add or update in the bouquet
 // onRemove(item): called when an already-added item is saved with quantity 0
 // isGuest: guests cannot favorite, so the heart is hidden
-export default function ItemDrawer({ item, initialQty, initialColor = null, onSave, onRemove, onClose, isGuest = false }) {
+// showQuantity: false hides the quantity stepper (e.g. wrappers). the item is added once, with quantity 1
+export default function ItemDrawer({ item, initialQty, initialColor = null, onSave, onRemove, onClose, isGuest = false, showQuantity = true }) {
     const colors = item.colors ?? [];
     const [qty, setQty]           = useState(initialQty ?? 1);
     const [color, setColor]       = useState(colors.includes(initialColor) ? initialColor : null);
@@ -69,14 +70,14 @@ export default function ItemDrawer({ item, initialQty, initialColor = null, onSa
         setDragY(0);
     };
 
-    // quantity 0 on an added item removes it from the bouquet
-    const isRemoving = isAdded && qty === 0;
+    // quantity 0 on an added item removes it from the bouquet.
+    const isRemoving = isAdded && (qty === 0 || (!showQuantity && color === (initialColor ?? null)));
     // items that have colors need one picked before they can be added
     const needsColor = colors.length > 0 && !color && qty > 0;
     const canSave    = !needsColor && (qty > 0 || isAdded);
 
     const handleSave = () => {
-        if (qty === 0) onRemove(item);
+        if (isRemoving) onRemove(item);
         else onSave(item, qty, color);
         onClose();
     };
@@ -166,8 +167,12 @@ export default function ItemDrawer({ item, initialQty, initialColor = null, onSa
                     )}
 
                     {/* Price and quantity moved below colors */}
+                    {(item.price != null || showQuantity) && (
                     <div className="item-drawer__buy">
-                        <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
+                        {item.price != null && (
+                            <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
+                        )}
+                        {showQuantity && (
                         <div className="item-drawer__qty">
                             <button
                                 type="button"
@@ -186,7 +191,9 @@ export default function ItemDrawer({ item, initialQty, initialColor = null, onSa
                                 +
                             </button>
                         </div>
+                        )}
                     </div>
+                    )}
                 </div>
 
                 <div className="item-drawer__actions">

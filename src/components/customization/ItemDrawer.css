@@ -240,6 +240,7 @@
 }
 
 .item-drawer__qty {
+    margin-left: auto;     /* stays on the right even when there is no price */
     display: flex;
     align-items: center;
     border: 1px solid var(--COLOR-BORDER);

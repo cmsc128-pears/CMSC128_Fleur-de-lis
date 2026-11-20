@@ -21,9 +21,9 @@ const CATALOG = {
     flowers: FLOWERS, // now read from src/data/flowers.json (see data/flowerCatalog.js)
     fillers: FILLERS, // now read from src/data/fillers.json (see data/fillerCatalog.js)
     wrapper: [
-        { id: "kraft",      name: "Kraft Paper", price: 30, color: "Brown", image: "/wrappers/kraft.png",      description: "Rustic brown paper with a natural look.", tags: ["Rustic", "Brown"] },
-        { id: "cellophane", name: "Cellophane",  price: 25, color: "Clear", image: "/wrappers/cellophane.png", description: "Clear, glossy wrap that shows off the blooms.", tags: ["Clear", "Classic"] },
-        { id: "korean",     name: "Korean Wrap", price: 45, color: "Cream", image: "/wrappers/korean.png",     description: "Soft layered paper in a modern style.",   tags: ["Modern", "Cream"] },
+        { id: "kraft",      name: "Kraft Paper", color: "Brown", image: "/wrappers/kraft.png",      description: "Rustic brown paper with a natural look.", tags: ["Rustic", "Brown"] },
+        { id: "cellophane", name: "Cellophane",  color: "Clear", image: "/wrappers/cellophane.png", description: "Clear, glossy wrap that shows off the blooms.", tags: ["Clear", "Classic"] },
+        { id: "korean",     name: "Korean Wrap", color: "Cream", image: "/wrappers/korean.png",     description: "Soft layered paper in a modern style.",   tags: ["Modern", "Cream"] },
     ],
     addOns: [
         { id: "ribbon", name: "Ribbon",       price: 15,  color: "Red",   image: "/addons/ribbon.png", description: "A satin ribbon to finish the bouquet.", tags: ["Satin", "Red"] },
@@ -96,6 +96,9 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
         [searchable, key, search]
     );
     const setSearch = (next) => setSearches((all) => ({ ...all, [key]: next }));
+
+    // wrappers are picked without a quantity
+    const showQuantity = key !== "wrapper";
 
     // { [id]: qty } so each grid card can show its quantity badge
     const quantities = Object.fromEntries(
@@ -194,6 +197,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                                     items={gridItems}
                                     quantities={quantities}
                                     onItemClick={openItem}
+                                    showQuantity={showQuantity}
                                 />
                             )}
                         </div>
@@ -228,6 +232,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                     onRemove={removeItem}
                     onClose={closeItem}
                     isGuest={isGuest}
+                    showQuantity={showQuantity}
                 />
             )}
         </main>

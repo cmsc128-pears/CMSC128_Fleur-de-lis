@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { getBlumeResponse } from "../../services/blumeService";
 import blumeAvatar from "../../assets/images/blume.png";
 import "./FloatingBlume.css";
 
-// Parses **bold** and *italic* text inside a single line
+// ---------- message text formatting ----------
+
+// Converts **bold** and *italic* text into <strong> and <em>
 function renderInlineText(line) {
   const parts = line.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return parts.map((part, i) => {
@@ -17,13 +20,13 @@ function renderInlineText(line) {
   });
 }
 
-// Renders headings (###), bullet points (- or *), and paragraphs cleanly inside chat bubbles
+// Converts headings (###), bullet lists (-), and paragraphs into chat elements
 function renderFormattedMessage(text = "") {
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
   const blocks = [];
   let listItems = [];
 
-  // Pushes accumulated bullet points into a single <ul> block
+  // Wraps consecutive bullet items in a <ul>
   const flushList = (key) => {
     if (listItems.length > 0) {
       blocks.push(
@@ -61,17 +64,18 @@ function renderFormattedMessage(text = "") {
   return blocks;
 }
 
-// Floating Blume chat head and expandable Messenger-style AI assistant sheet
-// TODO: Pass `userInitials`, `draftBouquet`, and `currentStep` from ManualCustomize.jsx
+// ---------- FloatingBlume component ----------
 export default function FloatingBlume({
   userInitials = "FN",
   draftBouquet = {},
   currentStep = 1,
 }) {
+  // state and refs
   const [isOpen, setIsOpen] = useState(false);
   const [showPill, setShowPill] = useState(true);
   const [inputText, setInputText] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
   const [interactionId, setInteractionId] = useState(undefined);
   const [sheetStyle, setSheetStyle] = useState({});
   const [messages, setMessages] = useState([
@@ -84,27 +88,41 @@ export default function FloatingBlume({
 
   const chatListRef = useRef(null);
   const containerRef = useRef(null);
+  const drawerRef = useRef(null);
   const avatarBtnRef = useRef(null);
+  const inputRef = useRef(null);
 
-  // Show the greeting pill for 5 seconds on each visit to the page
+  // auto-resize textarea up to 3 lines, then scroll vertically
+  const resizeTextarea = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 78)}px`;
+  };
+
+  // hide greeting pill after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => setShowPill(false), 5000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Match the phone frame's width and resize height when the mobile keyboard opens
+  // fit chat sheet below Blume without overlapping the chat head, and adjust height for keyboard
   const syncSheetPosition = useCallback(() => {
     if (!avatarBtnRef.current) return;
 
     const btn = avatarBtnRef.current.getBoundingClientRect();
-    const shell = (avatarBtnRef.current.closest(".shell") || document.documentElement).getBoundingClientRect();
+    const shellEl = avatarBtnRef.current.closest(".shell") || document.documentElement;
+    const shell = shellEl.getBoundingClientRect();
     const vv = window.visualViewport;
 
     const visibleBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
-    const top = btn.bottom + 10;
-    const height = Math.max(160, Math.min(shell.bottom, visibleBottom) - top);
+    const bottomEdge = Math.min(shell.bottom, visibleBottom);
+
+    // 12px gap below Blume so the 10px upward triangle sits 2px below the chat head and never covers it
+    const top = btn.bottom + 12;
+    const height = Math.max(110, bottomEdge - top);
     const pointerRight = Math.max(12, shell.right - btn.right + btn.width / 2 - 10);
 
+    setIsCompact(visibleBottom < shell.bottom - 80);
     setSheetStyle({
       top: `${top}px`,
       left: `${shell.left}px`,
@@ -114,28 +132,33 @@ export default function FloatingBlume({
     });
   }, []);
 
+  // resize chat sheet when window or mobile keyboard changes
   useEffect(() => {
     if (!isOpen) return;
     const vv = window.visualViewport;
     window.addEventListener("resize", syncSheetPosition);
     vv?.addEventListener("resize", syncSheetPosition);
+    vv?.addEventListener("scroll", syncSheetPosition);
     return () => {
       window.removeEventListener("resize", syncSheetPosition);
       vv?.removeEventListener("resize", syncSheetPosition);
+      vv?.removeEventListener("scroll", syncSheetPosition);
     };
   }, [isOpen, syncSheetPosition]);
 
-  // Scroll to the bottom when a new message arrives, typing starts, or the chat opens
+  // auto-scroll to latest message
   useEffect(() => {
     if (isOpen && chatListRef.current) {
       chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
     }
   }, [messages, isOpen, isSending]);
 
-  // Close when clicking outside the chat
+  // close chat when clicking outside
   useEffect(() => {
     const onOutsideClick = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
+      const clickedButton = containerRef.current?.contains(e.target);
+      const clickedDrawer = drawerRef.current?.contains(e.target);
+      if (!clickedButton && !clickedDrawer) {
         setIsOpen(false);
       }
     };
@@ -143,7 +166,7 @@ export default function FloatingBlume({
     return () => document.removeEventListener("mousedown", onOutsideClick);
   }, [isOpen]);
 
-  // Opens or closes the chat sheet and hides the 5-second greeting pill
+  // toggle chat sheet open or closed
   const toggleChat = () => {
     setShowPill(false);
     setIsOpen((prev) => {
@@ -152,7 +175,7 @@ export default function FloatingBlume({
     });
   };
 
-  // Sends the user's message to Blume and appends the AI response to the chat
+  // send message to Blume and append reply
   const handleSend = async (e) => {
     e.preventDefault();
     const trimmed = inputText.trim();
@@ -161,6 +184,7 @@ export default function FloatingBlume({
     const userMsg = { id: `u_${Date.now()}`, sender: "user", text: trimmed };
     setMessages((prev) => [...prev, userMsg]);
     setInputText("");
+    if (inputRef.current) inputRef.current.style.height = "auto";
     setIsSending(true);
 
     const { replyText, imageUrl, nextInteractionId } = await getBlumeResponse({
@@ -182,14 +206,27 @@ export default function FloatingBlume({
     setIsSending(false);
   };
 
+  // mount chat overlay directly on .shell
+  const portalTarget =
+    (typeof document !== "undefined" && document.querySelector(".shell")) ||
+    (typeof document !== "undefined" ? document.body : null);
+
   return (
-    <div className="blume" ref={containerRef}>
+    <div
+      className="blume"
+      ref={containerRef}
+      onPointerDown={(e) => e.stopPropagation()}
+      onPointerUp={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+    >
+      {/* 5-second greeting pill */}
       {!isOpen && showPill && (
         <button type="button" className="blume__greeting-pill" onClick={toggleChat}>
           Hi I&apos;m <strong>Blume</strong>, your AI Assistant. Ask me anything!
         </button>
       )}
 
+      {/* Blume button on drawer edge */}
       <button
         ref={avatarBtnRef}
         type="button"
@@ -202,91 +239,119 @@ export default function FloatingBlume({
         <span className="blume__status-dot" aria-hidden="true" />
       </button>
 
-      {isOpen && (
-        <section className="blume__drawer" style={sheetStyle} aria-label="Blume AI Assistant Chat">
-          <header className="blume__header">
-            <div className="blume__header-info">
-              <span className="blume__header-avatar" aria-hidden="true">
-                <img src={blumeAvatar} alt="" className="blume__mini-img" />
-              </span>
-              <span className="blume__header-title">Blume • AI Assistant</span>
-            </div>
-            <button
-              type="button"
-              className="blume__close-btn"
-              onClick={() => setIsOpen(false)}
-              aria-label="Minimize Blume chat"
-            >
-              ✕
-            </button>
-          </header>
+      {/* full-width chat overlay */}
+      {isOpen &&
+        portalTarget &&
+        createPortal(
+          <section
+            ref={drawerRef}
+            className={`blume__drawer${isCompact ? " blume__drawer--compact" : ""}`}
+            style={sheetStyle}
+            aria-label="Blume AI Assistant Chat"
+          >
+            {/* header */}
+            <header className="blume__header">
+              <div className="blume__header-info">
+                <span className="blume__header-avatar" aria-hidden="true">
+                  <img src={blumeAvatar} alt="" className="blume__mini-img" />
+                </span>
+                <span className="blume__header-title">Blume • AI Assistant</span>
+              </div>
+              <button
+                type="button"
+                className="blume__close-btn"
+                onClick={() => setIsOpen(false)}
+                aria-label="Minimize Blume chat"
+              >
+                ✕
+              </button>
+            </header>
 
-          <div className="blume__messages" ref={chatListRef}>
-            {messages.map((msg) =>
-              msg.sender === "blume" ? (
-                <div key={msg.id} className="blume__row blume__row--bot">
+            {/* messages list */}
+            <div className="blume__messages" ref={chatListRef}>
+              {messages.map((msg) =>
+                msg.sender === "blume" ? (
+                  <div key={msg.id} className="blume__row blume__row--bot">
+                    <span className="blume__mini-avatar" aria-hidden="true">
+                      <img src={blumeAvatar} alt="" className="blume__mini-img" />
+                    </span>
+                    <div className="blume__bubble blume__bubble--bot">
+                      {renderFormattedMessage(msg.text)}
+                      {msg.imageUrl && (
+                        <img
+                          src={msg.imageUrl}
+                          alt="AI bouquet preview"
+                          className="blume__preview-img"
+                          loading="lazy"
+                        />
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={msg.id} className="blume__row blume__row--user">
+                    <div className="blume__bubble blume__bubble--user">{msg.text}</div>
+                    <span className="blume__user-badge" aria-hidden="true">
+                      {userInitials}
+                    </span>
+                  </div>
+                )
+              )}
+
+              {/* typing indicator */}
+              {isSending && (
+                <div className="blume__row blume__row--bot" role="status" aria-label="Blume is typing">
                   <span className="blume__mini-avatar" aria-hidden="true">
                     <img src={blumeAvatar} alt="" className="blume__mini-img" />
                   </span>
-                  <div className="blume__bubble blume__bubble--bot">
-                    {renderFormattedMessage(msg.text)}
-                    {msg.imageUrl && (
-                      <img
-                        src={msg.imageUrl}
-                        alt="AI bouquet preview"
-                        className="blume__preview-img"
-                        loading="lazy"
-                      />
-                    )}
+                  <div className="blume__bubble blume__bubble--bot blume__bubble--typing">
+                    <span className="blume__typing-dot" />
+                    <span className="blume__typing-dot" />
+                    <span className="blume__typing-dot" />
                   </div>
                 </div>
-              ) : (
-                <div key={msg.id} className="blume__row blume__row--user">
-                  <div className="blume__bubble blume__bubble--user">{msg.text}</div>
-                  <span className="blume__user-badge" aria-hidden="true">
-                    {userInitials}
-                  </span>
-                </div>
-              )
-            )}
+              )}
+            </div>
 
-            {isSending && (
-              <div className="blume__row blume__row--bot" role="status" aria-label="Blume is typing">
-                <span className="blume__mini-avatar" aria-hidden="true">
-                  <img src={blumeAvatar} alt="" className="blume__mini-img" />
-                </span>
-                <div className="blume__bubble blume__bubble--bot blume__bubble--typing">
-                  <span className="blume__typing-dot" />
-                  <span className="blume__typing-dot" />
-                  <span className="blume__typing-dot" />
-                </div>
-              </div>
-            )}
-          </div>
-
-          <form className="blume__form" onSubmit={handleSend}>
-            <input
-              type="text"
-              className="blume__input"
-              placeholder="Ask Blume.."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onFocus={syncSheetPosition}
-              aria-label="Ask Blume"
-            />
-            <button
-              type="submit"
-              className="blume__send-btn"
-              disabled={!inputText.trim() || isSending}
-              aria-label="Send message"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-              </svg>
-            </button>
-          </form>
-        </section>
-      )}
+            {/* input bar */}
+            <form className="blume__form" onSubmit={handleSend}>
+              <textarea
+                ref={inputRef}
+                rows={1}
+                className="blume__input"
+                placeholder="Ask Blume.."
+                value={inputText}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  resizeTextarea(e.target);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend(e);
+                  }
+                }}
+                onFocus={() => {
+                  syncSheetPosition();
+                  setTimeout(syncSheetPosition, 120);
+                  setTimeout(syncSheetPosition, 300);
+                }}
+                onBlur={() => setTimeout(syncSheetPosition, 150)}
+                aria-label="Ask Blume"
+              />
+              <button
+                type="submit"
+                className="blume__send-btn"
+                disabled={!inputText.trim() || isSending}
+                aria-label="Send message"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </button>
+            </form>
+          </section>,
+          portalTarget
+        )}
     </div>
   );
 }

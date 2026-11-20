@@ -7,7 +7,6 @@ import EditProfile from "./pages/EditProfile";
 import ChangePassword from "./pages/ChangePassword";
 import TopBar from "./components/TopBar";
 import BottomNav, { hasNav } from "./components/BottomNav";
-import FloatingBlume from "./components/customization/FloatingBlume"; // TODO: to be put in main cutomization page
 import { logIn, signUp, logInAsGuest, logOut, resetPassword } from "./services/Auth";
 import ManualCustomization from "./pages/ManualCustomization";
 import "/src/appshared.css";
@@ -23,9 +22,13 @@ export default function App() {
     const [orderDetails, setOrderDetails] = useState({});
     
 
+    // guests can browse and build bouquets but cannot favorite
+    const [isGuest, setIsGuest] = useState(false);
+
     // sign out, then go back to the landing screen
     const handleLogout = async () => {
         await logOut();
+        setIsGuest(false);
         setView("landing");
     };
 
@@ -60,9 +63,9 @@ export default function App() {
                 {view === "auth" && (
                     <AuthPage
                         initialMode={authMode}
-                        onLogin={logIn}
-                        onSignup={signUp}
-                        onGuest={logInAsGuest}
+                        onLogin={async (...args) => { const res = await logIn(...args); setIsGuest(false); return res; }}
+                        onSignup={async (...args) => { const res = await signUp(...args); setIsGuest(false); return res; }}
+                        onGuest={async (...args) => { const res = await logInAsGuest(...args); setIsGuest(true); return res; }}
                         onResetPassword={resetPassword}
                         onAuthSuccess={() => setView("profile")}
                         onBack={() => setView("onboarding")}
@@ -86,25 +89,7 @@ export default function App() {
                 {view === "feed" && <main style={{ padding: 24 }}>Feed (guest)</main>}
 
                 {/* todo: replace with actual create screen */}
-                {view === "create" && <ManualCustomization />}
-                {/* TODO: Blume moves into ManualCustomization (currentStep + draftBouquet come from the page's state)
-                {view === "create" && (
-                    <main style={{ padding: 24, display: "flex", justifyContent: "flex-end" }}>
-                        <FloatingBlume
-                            userInitials="PS"
-                            currentStep={1}
-                            draftBouquet={{
-                                items: {
-                                    flowers: [{ name: "Red Rose", color: "Red", quantity: 3 }],
-                                    fillers: [],
-                                    wrapper: null,
-                                    addOns: [],
-                                },
-                            }}
-                        />
-                    </main>
-                )}*/
-                }
+                {view === "create" && <ManualCustomization isGuest={isGuest} />}
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

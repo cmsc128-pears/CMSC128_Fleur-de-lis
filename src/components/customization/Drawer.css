@@ -22,6 +22,13 @@
 }
 .drawer.is-dragging .drawer__grip { cursor: grabbing; }
 
+.drawer__pill {
+    width: calc(var(--SPACE-6) * 4); /* 96px */
+    height: var(--SPACE-1);
+    border-radius: var(--RADIUS-FULL);
+    background: var(--COLOR-LINE);
+}
+
 .drawer__body {
     flex: 1;
     min-height: 0;

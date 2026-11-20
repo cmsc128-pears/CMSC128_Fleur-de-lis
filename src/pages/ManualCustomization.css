@@ -2,7 +2,13 @@
     ManualCustomization.css
 ---------------------------------------------------------------------------*/
 
+/* Allow Blume to overlap the top nav bar when the drawer is expanded to top: 0 */
+.shell__content:has(.mc) {
+    overflow: visible;
+}
+
 .mc {
+    position: relative;
     height: 100%;
     min-height: 0;
     display: flex;
@@ -14,7 +20,8 @@
 
 /* --------------- header --------------- */
 .mc__head {
-    padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2);
+    /* padding: var(--SPACE-3) var(--SPACE-4) var(--SPACE-2); — Increased top & bottom padding so title clears navbar and Blume's bubble clears the pull-up bar */
+    padding: var(--SPACE-8) var(--SPACE-4) calc(var(--SPACE-10) + var(--SPACE-6));
     text-align: center;
 }
 
@@ -76,7 +83,7 @@
     z-index: 1;
     width: var(--TAP-TARGET);
     height: var(--TAP-TARGET);
-    border: 3px solid var(--COLOR-DOT);
+    border: 3px solid var(--COLOR-DOT-ACTIVE);
     border-radius: var(--RADIUS-FULL);
     background: var(--COLOR-BG);
     color: var(--COLOR-TEXT);
@@ -92,18 +99,85 @@
 }
 
 .mc-step__dot[aria-current="step"] {
-    box-shadow: 0 0 0 2px var(--COLOR-BG), 0 0 0 4px var(--COLOR-DOT-ACTIVE);
+    box-shadow: 0 0 0 2px var(--COLOR-BG), 0 0 0 4px var(--COLOR-DOT);
 }
 
+.mc-step__dot:disabled {
+    cursor: not-allowed;
+}
 
-/* --------------- placeholders for steps 2 and 3 --------------- */
+.mc-step:not(.is-reached) .mc-step__dot {
+    background: var(--COLOR-LINE);
+    border-color: var(--COLOR-LINE);
+    color: var(--COLOR-TEXT-MUTED);
+}
+
+/* --------------- drawer container --------------- */
 .mc__stage {
     position: relative;     /* drawer is positioned inside this */
+    z-index: 10;            /* stacks above TopBar so Blume isn't hidden behind it when expanded */
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    /* overflow: hidden; — Changed to visible so Blume overlaps the top nav bar when the drawer is expanded to top: 0 */
+    overflow: visible;
 }
 
+/* --------------- step prompt above the grid --------------- */
+.mc__prompt {
+    margin: 0 0 var(--SPACE-3);
+    font-family: var(--FONT-HEADING);
+    font-size: var(--FONT-SIZE-BODY);
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    line-height: var(--LINE-HEIGHT-SNUG);
+    text-align: center;
+    color: var(--COLOR-SUBHEADING);
+}
+
+/* --------------- price total & next --------------- */
 .mc-bar {
-    min-height: calc(var(--TAP-TARGET) + var(--SPACE-4));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--SPACE-3);
+    padding: var(--SPACE-3) var(--SPACE-4);
+    background: var(--COLOR-BG);
+    border-top: 1px solid var(--COLOR-BORDER);
+}
+
+.mc-bar__label {
+    margin: 0;
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    color: var(--COLOR-TEXT-MUTED);
+}
+
+.mc-bar__amount {
+    color: var(--COLOR-TEXT);
+}
+
+.mc-bar__actions {
+    display: flex;
+    gap: var(--SPACE-2);
+}
+
+.mc-bar .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --------------- drawer content: prompt + search stay put, only the grid scrolls --------------- */
+.mc__pick {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.mc__pick-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* room so the quantity badge and selected outline aren't clipped; negative margin keeps the grid aligned */
+    padding: var(--SPACE-2);
+    margin: 0 calc(var(--SPACE-2) * -1);
 }

@@ -1,12 +1,7 @@
-// ------------------------------------------------------------------
-// bouquetImageGenerator.js — Free AI bouquet image generator
-// Uses Pollinations.ai to generate a bouquet preview image URL from
-// `draftBouquet` selections without requiring an API key or billing.
-// ------------------------------------------------------------------
+// bouquetImageGenerator.js — builds a free AI bouquet image URL from user picks
 
-// Builds a descriptive florist prompt from the user's current bouquet items.
-// TODO: Verify property names (`flowers`, `fillers`, `wrapper`, `ribbon`, `addOns`)
-// match the shared `draftBouquet` state once all 4 customization steps are wired.
+// ---------- prompt builder ----------
+// Formats selected flowers, fillers, wrapper, ribbon, and add-ons into an image prompt
 export function buildBouquetImagePrompt(draftBouquet = {}) {
   const items = draftBouquet?.items || {};
 
@@ -40,7 +35,8 @@ export function buildBouquetImagePrompt(draftBouquet = {}) {
   return `${mainSubject}${fillerPhrase}, wrapped in ${wrapper}, ${ribbon}${addOnPhrase}, centered product photography on a soft warm cream background, natural studio lighting, high detail`;
 }
 
-// Returns a direct image URL that can be passed into `<img src={...} />`.
+// ---------- URL generator ----------
+// Returns a Pollinations image URL ready for <img src={...} />
 export function generateBouquetImageUrl(
   draftBouquet = {},
   { width = 512, height = 512, seed = 42 } = {}

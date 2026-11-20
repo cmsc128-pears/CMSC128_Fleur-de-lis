@@ -3,7 +3,7 @@
 //  Reads fillers.json for the "Pick your fillers" step. The work is done in catalog.js.
 // -------------------------------------------------------------------------
 import fillersData from "./fillers.json";
-import { buildCatalog } from "./catalog";
+import { buildCatalog } from "./Catalog";
 
 // "Most common first". fillers.json has no family or popularity, so this list sets the
 // order of the cards by name. Fillers not listed here go last, in JSON order.

@@ -13,7 +13,7 @@
 // nicer names for occasion values. anything not listed falls back to Title Case.
 const OCCASION_LABELS = {
     "just-because": "Just Because",
-    birthday: "Birthdays",
+    birthday: "Birthday",
     anniversary: "Anniversary",
     valentines: "Valentine's Day",
     "mothers-day": "Mother's Day",
@@ -107,7 +107,7 @@ export function buildCatalog(rawItems, { sortKey, order = [], keywords = {} }) {
             ...f,                                         // keeps every JSON field (stock, bundlePrice, ...)
             color: colors.map(cap).join(", "),            // old shape: one display string, e.g. "Red, Pink"
             colors,                                       // the raw array, used for filtering
-            tags: [...moods, ...colors].map(titleCase),   // old shape: array of tag labels
+            tags: moods.map(titleCase),   // old shape: array of tag labels
         };
     };
 

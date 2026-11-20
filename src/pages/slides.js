@@ -5,6 +5,7 @@
 import browseImg from "../assets/images/browse-img.png";
 import createImg from "../assets/images/create-img.png";
 import curateImg from "../assets/images/curate-img.png";
+import readyImg from "../assets/images/blume.png";
 
 export const slides = [
     {
@@ -32,7 +33,7 @@ export const slides = [
         id: "four",
         title: "ready",
         body: "Everything’s in bloom. Jump in and start building your first bouquet.",
-        image: null,
+        image: readyImg,
         alt: "",
     },
 ];

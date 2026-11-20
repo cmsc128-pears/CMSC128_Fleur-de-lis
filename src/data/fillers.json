@@ -2,7 +2,7 @@
   "_documentation": {
     "file": "fillers.json",
     "purpose": "Filler flowers and foliage used to complete a bouquet (gypso, eucalyptus, and so on).",
-    "lastUpdated": "2026-11-15",
+    "lastUpdated": "2026-11-20",
     "conventions": [
       "Top level is an object with two keys: `_documentation` (this block, ignored by the app) and `items` (the array of records the app reads).",
       "Prices are in Philippine pesos (PHP), stored as plain numbers with no currency symbol.",
@@ -25,10 +25,23 @@
       "bundleSize": "integer or null. Stems per bundle. Unknown for all fillers so far.",
       "bundlePrice": "object {min, max} or null. Regular price of one bundle. If min equals max it is a single price.",
       "seasonalPrices": "object. Season name mapped to a bundle price, for example {\"undas\": 380}. Empty object if there is none.",
+      "price": "number or null. Per-stem (or per-sprig) price used in the designer. All values are PLACEHOLDERS so the estimated total works while testing: bundle price divided by an assumed 20 stems, rounded up to the nearest 5 pesos. Yucca has no bundle price, so 30 is a guess. Replace with real prices.",
       "active": "boolean. `false` hides the item from the app (unfinished entries or placeholders). Inactive items stay in the file."
     },
     "notes": [
-      "Statice is sold for Valentines (occasion `valentines`). Its origin is not known yet."
+      "Statice is sold for Valentines (occasion `valentines`). Its origin is not known yet.",
+      "PLACEHOLDER PRICES: every filler's `price` is an estimate for testing, not the shop's real price."
+    ],
+    "placeholderPrices": [
+      "Yucca",
+      "Gypso",
+      "Misty",
+      "Aster",
+      "Goldenrod",
+      "Statice",
+      "Chamomile",
+      "Rice Flower",
+      "Eucalyptus"
     ]
   },
   "items": [
@@ -37,7 +50,7 @@
       "image": "/images/fillers/yucca.png",
       "name": "Yucca",
       "description": "Yucca leaves add bold, structural greenery that frames the blooms in a bouquet. They symbolize resilience and protection.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": "imported",
       "color": [
@@ -55,9 +68,10 @@
         "elegant",
         "peaceful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": null,
       "seasonalPrices": {},
+      "price": 30,
       "active": true
     },
     {
@@ -65,7 +79,7 @@
       "image": "/images/fillers/gypso.png",
       "name": "Gypso",
       "description": "Gypso's cloud of tiny white blooms is a classic symbol of everlasting love and innocence. It softens and fills a bouquet beautifully, especially for weddings and anniversaries.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": "imported",
       "color": [
@@ -84,12 +98,13 @@
         "sweet",
         "peaceful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 1500,
         "max": 1800
       },
       "seasonalPrices": {},
+      "price": 90,
       "active": true
     },
     {
@@ -116,12 +131,13 @@
         "sweet",
         "graceful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 900,
         "max": 900
       },
       "seasonalPrices": {},
+      "price": 45,
       "active": true
     },
     {
@@ -129,7 +145,7 @@
       "image": "/images/fillers/aster.png",
       "name": "Aster",
       "description": "Asters are small, daisy-like blooms that stand for love, patience, and faith. They are also a familiar sight during Undas as a tribute to those remembered.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": "local",
       "color": [
@@ -147,7 +163,7 @@
         "peaceful",
         "hopeful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 350,
         "max": 380
@@ -155,6 +171,7 @@
       "seasonalPrices": {
         "undas": 380
       },
+      "price": 20,
       "active": true
     },
     {
@@ -162,7 +179,7 @@
       "image": "/images/fillers/goldenrod.png",
       "name": "Goldenrod",
       "description": "Goldenrod brings bright, golden sprays that stand for encouragement and good fortune. It adds warmth to cheerful bouquets and is also seen in Undas arrangements.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": "local",
       "color": [
@@ -180,7 +197,7 @@
         "hopeful",
         "solemn"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 350,
         "max": 380
@@ -188,6 +205,7 @@
       "seasonalPrices": {
         "undas": 480
       },
+      "price": 20,
       "active": true
     },
     {
@@ -195,7 +213,7 @@
       "image": "/images/fillers/statice.png",
       "name": "Statice",
       "description": "Statice keeps its color long after cutting, which is why it stands for remembrance and lasting love. Its papery clusters make a sweet addition to Valentine's bouquets.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": null,
       "color": [
@@ -213,12 +231,13 @@
         "sentimental",
         "peaceful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 750,
         "max": 750
       },
       "seasonalPrices": {},
+      "price": 40,
       "active": true
     },
     {
@@ -226,7 +245,7 @@
       "image": "/images/fillers/chamomile.png",
       "name": "Chamomile",
       "description": "Chamomile's cheerful, daisy-like blooms symbolize patience and comfort. They are a gentle choice for wishing someone well.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": null,
       "color": [
@@ -245,12 +264,13 @@
         "fresh",
         "cheerful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 450,
         "max": 450
       },
       "seasonalPrices": {},
+      "price": 25,
       "active": true
     },
     {
@@ -258,7 +278,7 @@
       "image": "/images/fillers/rice-flower.png",
       "name": "Rice Flower",
       "description": "Rice flower's tiny clustered buds add soft texture beside larger blooms. Many associate it with abundance and fresh beginnings, as rice itself is a symbol of prosperity.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": null,
       "color": [
@@ -276,12 +296,13 @@
         "graceful",
         "peaceful"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 350,
         "max": 350
       },
       "seasonalPrices": {},
+      "price": 20,
       "active": true
     },
     {
@@ -289,7 +310,7 @@
       "image": "/images/fillers/eucalyptus.png",
       "name": "Eucalyptus",
       "description": "Eucalyptus adds fresh, silvery-green foliage and a calming scent to any arrangement. It symbolizes protection, healing, and new beginnings.",
-      "stock": null,
+      "stock": 1000,
       "type": null,
       "origin": null,
       "color": [
@@ -307,12 +328,13 @@
         "peaceful",
         "elegant"
       ],
-      "bundleSize": null,
+      "bundleSIze": 12,
       "bundlePrice": {
         "min": 900,
         "max": 900
       },
       "seasonalPrices": {},
+      "price": 45,
       "active": true
     }
   ]

@@ -116,8 +116,9 @@
   cursor: pointer;
 }
 .profile .profile__edit:hover {
-  background: var(--COLOR-TEXT);
+  background: var(--COLOR-BROWN);
   color: var(--COLOR-TEXT-ON-DARK);
+  opacity: 0.85;
 }
 
 /* ---------- tabs ---------- */
@@ -236,7 +237,7 @@
   font-weight: 600;
 }
 .profile-gate__secondary:hover {
-  background: var(--COLOR-GREEN-SOFT);
+  background: color-mix(in srgb, var(--COLOR-TEXT) 8%, transparent);
 }
 
 /* center the signed-out prompt in the available space */

@@ -1,8 +1,12 @@
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useLayoutEffect, useMemo, useRef } from "react";
 import Drawer from "../components/customization/Drawer";
 import FloatingBlume from "../components/customization/FloatingBlume";
 import SelectionGrid from "../components/customization/SelectionGrid";
 import ItemDrawer from "../components/customization/ItemDrawer";
+import FlowerSearch from "../components/customization/FlowerSearch";
+import { EMPTY_SEARCH } from "../data/Catalog";
+import { FLOWERS, FILTER_GROUPS, QUICK_TAGS, filterFlowers } from "../data/flowerCatalog";
+import { FILLERS, FILLER_FILTER_GROUPS, FILLER_QUICK_TAGS, filterFillers } from "../data/fillerCatalog";
 import "./ManualCustomization.css";
 
 const STEPS = [
@@ -14,11 +18,8 @@ const STEPS = [
 
 // TEMP placeholder items
 const CATALOG = {
-    flowers: [
-        { id: "rose",      name: "Rose",          price: 60, color: "Red",    image: "/flowers/rose.png",      description: "", tags: ["Attraction", "Red", "Love"] },
-    ],
-    fillers: [
-    ],
+    flowers: FLOWERS, // now read from src/data/flowers.json (see data/flowerCatalog.js)
+    fillers: FILLERS, // now read from src/data/fillers.json (see data/fillerCatalog.js)
     wrapper: [
         { id: "kraft",      name: "Kraft Paper", price: 30, color: "Brown", image: "/wrappers/kraft.png",      description: "Rustic brown paper with a natural look.", tags: ["Rustic", "Brown"] },
         { id: "cellophane", name: "Cellophane",  price: 25, color: "Clear", image: "/wrappers/cellophane.png", description: "Clear, glossy wrap that shows off the blooms.", tags: ["Clear", "Classic"] },
@@ -29,6 +30,12 @@ const CATALOG = {
         { id: "card",   name: "Message Card", price: 20,  color: "White", image: "/addons/card.png",   description: "A small card for your personal note.",  tags: ["Personal", "White"] },
         { id: "teddy",  name: "Mini Teddy",   price: 120, color: "Brown", image: "/addons/teddy.png",  description: "A cuddly little bear to go with the flowers.", tags: ["Cute", "Brown"] },
     ],
+};
+
+// steps that get the search bar, tag pills and filter dropdown. the other steps show their full list
+const SEARCHABLE = {
+    flowers: { groups: FILTER_GROUPS,        tags: QUICK_TAGS,        filter: filterFlowers, one: "flower", many: "flowers" },
+    fillers: { groups: FILLER_FILTER_GROUPS, tags: FILLER_QUICK_TAGS, filter: filterFillers, one: "filler", many: "fillers" },
 };
 
 // draft to compute prices later
@@ -43,6 +50,7 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
     const [furthest, setFurthest]     = useState(0);    // highest step reached so far
     const [draft, setDraft]           = useState(EMPTY_DRAFT);
     const [activeItem, setActiveItem] = useState(null); // item whose drawer is open (null = closed)
+    const [searches, setSearches]   = useState({ flowers: EMPTY_SEARCH, fillers: EMPTY_SEARCH }); // search text + selected filters, one per searchable step
 
     // drawer rests just below the header so it needs the header's height
     const headRef = useRef(null);
@@ -79,6 +87,15 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
     // items already added for the current step
     const key = STEPS[step].key;
     const currentEntries = draft.items[key];
+
+    // flowers and fillers steps: apply the search + filters. the other steps show their full list as before
+    const searchable = SEARCHABLE[key];              // undefined on wrappers and add-ons
+    const search = searches[key];
+    const gridItems = useMemo(
+        () => (searchable ? searchable.filter(CATALOG[key], search) : CATALOG[key]),
+        [searchable, key, search]
+    );
+    const setSearch = (next) => setSearches((all) => ({ ...all, [key]: next }));
 
     // { [id]: qty } so each grid card can show its quantity badge
     const quantities = Object.fromEntries(
@@ -147,13 +164,40 @@ export default function ManualCustomization({ onFinish, isGuest = false }) {
                     collapsedTop={headH}
                     handle={<FloatingBlume currentStep={step + 1} draftBouquet={draft} />}
                 >
-                    <h2 className="mc__prompt">Step {step + 1}: {STEPS[step].prompt}</h2>
+                    <div className="mc__pick">
+                        <h2 className="mc__prompt">Step {step + 1}: {STEPS[step].prompt}</h2>
 
-                    <SelectionGrid
-                        items={CATALOG[key]}
-                        quantities={quantities}
-                        onItemClick={openItem}
-                    />
+                        {searchable && (
+                            <FlowerSearch
+                                key={key}
+                                search={search}
+                                onChange={setSearch}
+                                resultCount={gridItems.length}
+                                groups={searchable.groups}
+                                tags={searchable.tags}
+                                nounOne={searchable.one}
+                                nounMany={searchable.many}
+                            />
+                        )}
+
+                        <div className="mc__pick-scroll">
+                            {searchable && gridItems.length === 0 ? (
+                                <div className="fs-empty">
+                                    <p className="fs-empty__title">No {searchable.many} match</p>
+                                    <p>Try different words or fewer filters.</p>
+                                    <button type="button" className="link" onClick={() => setSearch(EMPTY_SEARCH)}>
+                                        Clear search and filters
+                                    </button>
+                                </div>
+                            ) : (
+                                <SelectionGrid
+                                    items={gridItems}
+                                    quantities={quantities}
+                                    onItemClick={openItem}
+                                />
+                            )}
+                        </div>
+                    </div>
                 </Drawer>
             </div>
 

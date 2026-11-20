@@ -1,0 +1,249 @@
+/* -------------------------------------------------------------------------
+    FlowerSearch.css
+    search bar, swipeable tag pills and the Filter dropdown (flowers step).
+    colors, fonts and sizes all come from variables.css.
+---------------------------------------------------------------------------*/
+
+.fs {
+    position: relative;          /* the dropdown is positioned against this */
+    z-index: 5;                  /* dropdown sits above the grid */
+    margin-bottom: var(--SPACE-3);
+    padding-bottom: var(--SPACE-1);
+    background: var(--COLOR-BG);
+}
+
+/* --------------- search bar --------------- */
+.fs__search {
+    display: flex;
+    align-items: center;
+    gap: var(--SPACE-2);
+    min-height: var(--TAP-TARGET);
+    padding-left: var(--SPACE-3);
+    background: var(--COLOR-BG);
+    border: 1.5px solid var(--COLOR-BROWN);
+    border-radius: var(--RADIUS-FULL);
+    overflow: hidden;
+}
+
+.fs__search:focus-within {
+    outline: 2px solid var(--COLOR-FOCUS);
+    outline-offset: 3px;
+}
+
+.fs__search > svg {
+    flex: none;
+    color: var(--COLOR-BROWN);
+}
+
+.fs__input {
+    flex: 1;
+    min-width: 0;
+    align-self: stretch;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--COLOR-TEXT);
+    font: inherit;
+    font-size: var(--FONT-SIZE-INPUT);   /* 16px so iPhones don't zoom in */
+    text-overflow: ellipsis;
+}
+
+.fs__input:focus-visible {
+    outline: none;               /* the ring is drawn on the whole bar instead */
+}
+
+.fs__input::placeholder {
+    color: var(--COLOR-TEXT-MUTED);
+    font-size: calc(var(--FONT-SIZE-BODY) * 0.85);    /* smaller so the full hint fits */
+    opacity: 1;
+}
+
+/* .btn.fs__search-btn beats appshared.css (which loads after this file) */
+.btn.fs__search-btn {
+    align-self: stretch;
+    padding: 0 var(--SPACE-4);
+    border-radius: var(--RADIUS-FULL);
+    font-size: var(--FONT-SIZE-BODY);    /* smaller label leaves room for the placeholder */
+}
+
+/* --------------- tags + filter button --------------- */
+.fs__row {
+    display: flex;
+    align-items: center;
+    gap: var(--SPACE-1);
+    margin-top: var(--SPACE-3);
+}
+
+/* the sideways-scrolling strip. swipe on a phone, chevron or shift+wheel on a laptop */
+.fs__tags {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: var(--SPACE-2);
+    padding: var(--SPACE-1);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.fs__tags::-webkit-scrollbar {
+    display: none;
+}
+
+/* soft fade on the right edge while there is more to swipe to */
+.fs__tags.has-more {
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
+}
+
+.fs-chip {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: calc(var(--TAP-TARGET) * 0.75);
+    padding: 0 var(--SPACE-3);
+    background: transparent;
+    color: var(--COLOR-TEXT);
+    border: 1px solid var(--COLOR-BROWN);
+    border-radius: var(--RADIUS-FULL);
+    font-size: var(--FONT-SIZE-BODY);
+    font-weight: var(--FONT-WEIGHT-REGULAR);
+    white-space: nowrap;
+    scroll-snap-align: start;
+}
+
+.fs-chip[aria-pressed="true"] {
+    background: var(--COLOR-GREEN);
+    border-color: var(--COLOR-GREEN);
+    color: var(--COLOR-TEXT-ON-DARK);
+}
+
+.fs-chip:focus-visible {
+    outline-offset: 1px;         /* tight, so the scroll strip doesn't clip the ring */
+}
+
+.fs__more {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: var(--SPACE-6);
+    height: calc(var(--TAP-TARGET) * 0.75);
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--COLOR-BROWN);
+}
+
+.fs__more[aria-hidden="true"] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* .btn.fs__filter beats appshared.css (which loads after this file) */
+.btn.fs__filter {
+    flex: none;
+    gap: var(--SPACE-1);
+    min-height: calc(var(--TAP-TARGET) * 0.75);
+    padding: 0 var(--SPACE-3);
+    font-size: var(--FONT-SIZE-BODY);
+    border-radius: var(--RADIUS-FULL);
+    background: #DE8B84;        
+}
+
+.btn.fs__filter svg {
+    color: currentColor;         /* .btn svg is green, which is hard to read on pink */
+}
+
+.fs__badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--SPACE-5);
+    height: var(--SPACE-5);
+    padding: 0 var(--SPACE-1);
+    background: var(--COLOR-BROWN);
+    color: var(--COLOR-TEXT-ON-DARK);
+    border-radius: var(--RADIUS-FULL);
+    font-size: var(--FONT-SIZE-CAPTION);
+    line-height: 1;
+}
+
+/* --------------- filter dropdown --------------- */
+.fs__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--SPACE-1);
+    display: flex;
+    flex-direction: column;
+    max-height: min(60vh, calc(var(--FRAME-HEIGHT) * 0.5));
+    background: var(--COLOR-BG);
+    border: 1px solid var(--COLOR-BORDER);
+    border-radius: calc(var(--RADIUS-SM) * 2);
+    box-shadow: 0 var(--SPACE-2) var(--SPACE-6) color-mix(in srgb, var(--COLOR-TEXT) 18%, transparent);
+    overflow: hidden;
+}
+
+.fs__panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--SPACE-4);
+    padding: var(--SPACE-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.fs__group-title {
+    margin: 0 0 var(--SPACE-2);
+    font-family: var(--FONT-HEADING);
+    font-size: var(--FONT-SIZE-BODY);
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    line-height: var(--LINE-HEIGHT-SNUG);
+    color: var(--COLOR-SUBHEADING);
+}
+
+.fs__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--SPACE-2);
+}
+
+.fs__panel-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--SPACE-3);
+    padding: var(--SPACE-3) var(--SPACE-4);
+    background: var(--COLOR-BG);
+    border-top: 1px solid var(--COLOR-BORDER);
+}
+
+.fs__panel-foot .link:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.fs__panel-foot .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --------------- nothing matched --------------- */
+.fs-empty {
+    padding: var(--SPACE-8) var(--SPACE-4);
+    text-align: center;
+    color: var(--COLOR-TEXT-MUTED);
+}
+
+.fs-empty__title {
+    margin: 0 0 var(--SPACE-1);
+    font-weight: var(--FONT-WEIGHT-BOLD);
+    color: var(--COLOR-SUBHEADING);
+}
+
+.fs-empty p {
+    margin: 0;
+}

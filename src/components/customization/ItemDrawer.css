@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--SPACE-3);
+    max-height: 85%;              /* taller content scrolls inside .item-drawer__scroll */
     padding: 0 var(--SPACE-4) var(--SPACE-4);
     background: var(--COLOR-BG);
     border-radius: var(--SPACE-4) var(--SPACE-4) 0 0;
@@ -40,13 +41,23 @@
     background: var(--COLOR-LINE);
 }
 
+/* the only part of the drawer that scrolls. the grip and the action buttons stay visible */
+.item-drawer__scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
 .item-drawer__top {
-    display: flex;
+    display: grid;
+    grid-template-columns: 40% minmax(0, 1fr);
     gap: var(--SPACE-4);
+    align-items: start;
 }
 
 .item-drawer__img {
-    flex: 0 0 42%;
+    width: 100%;
     aspect-ratio: 3 / 4;
     border-radius: var(--SPACE-4);
     background: #d3dbb8;     
@@ -60,13 +71,15 @@
 }
 
 .item-drawer__info {
-    flex: 1;
+    height: 0;
+    min-height: 100%;
     min-width: 0;
     display: flex;
     flex-direction: column;
 }
 
 .item-drawer__name {
+    flex-shrink: 0;
     margin: 0;
     font-family: var(--FONT-HEADING);
     font-size: calc(var(--FONT-SIZE-SUBHEADING) * 0.8);  
@@ -77,8 +90,16 @@
 }
 
 .item-drawer__desc {
-    margin: var(--SPACE-1) 0 var(--SPACE-3);
+    flex: 1;
+    min-height: 0;
+    margin: var(--SPACE-1) 0 var(--SPACE-2);
     font-size: var(--FONT-SIZE-BODY);
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.item-drawer__desc::-webkit-scrollbar {
+    display: none;
 }
 
 .item-drawer__tags-title {
@@ -87,23 +108,124 @@
 }
 
 .item-drawer__tags {
+    flex-shrink: 0;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
     gap: var(--SPACE-1);
-    margin: 0;
-    padding: 0;
+    margin: auto 0 0;            /* anchors tags flush with the bottom of the image column */
+    padding: 0 var(--SPACE-4) 0 0;
     list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
 }
 
+.item-drawer__tags::-webkit-scrollbar {
+    display: none;
+}
+
+/* display only: flat, filled, muted. no border, so they don't look like buttons */
 .item-drawer__tag {
+    flex-shrink: 0;
+    white-space: nowrap;
     padding: 0 var(--SPACE-2);
-    border: 1px solid var(--COLOR-BORDER);
+    background: var(--COLOR-LINE);
+    border: 0;
     border-radius: var(--RADIUS-FULL);
     font-size: var(--FONT-SIZE-BODY);
+    color: var(--COLOR-TEXT-MUTED);
+}
+
+/* colors section below the top block */
+.item-drawer__meta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--SPACE-3);
+    margin-top: var(--SPACE-4);
+}
+
+.item-drawer__meta-col {
+    min-width: 0;
+}
+
+.item-drawer__meta-left {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding-left: 5%;
+    gap: 2px;
+}
+
+.item-drawer__meta .item-drawer__tags-title {
+    white-space: nowrap;
+    margin: 0;
+    line-height: var(--LINE-HEIGHT-SNUG);
+    color: var(--COLOR-BROWN);
+}
+
+.item-drawer__stock {
+    font-size: var(--FONT-SIZE-CAPTION);
+    color: var(--COLOR-TEXT-MUTED);
+    white-space: nowrap;
+}
+
+/* --------------- colors (selectable) --------------- */
+.item-drawer__colors {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    min-width: 0;
+    margin-left: auto;
+    gap: var(--SPACE-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - var(--SPACE-6)), transparent);
+}
+
+.item-drawer__colors::-webkit-scrollbar {
+    display: none;
+}
+
+/* outlined, taller, with a swatch dot, so they read as buttons. selected = green, like the filter pills */
+.item-drawer__color {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--SPACE-1);
+    min-height: calc(var(--TAP-TARGET) * 0.75);
+    padding: 0 var(--SPACE-3) 0 var(--SPACE-2);
+    background: transparent;
+    color: var(--COLOR-TEXT);
+    border: 1px solid var(--COLOR-BROWN);
+    border-radius: var(--RADIUS-FULL);
+    font-size: var(--FONT-SIZE-BODY);
+    white-space: nowrap;
+}
+
+.item-drawer__color[aria-checked="true"] {
+    background: var(--COLOR-GREEN);
+    border-color: var(--COLOR-GREEN);
+    color: var(--COLOR-TEXT-ON-DARK);
+}
+
+.item-drawer__swatch {
+    width: var(--SPACE-4);
+    height: var(--SPACE-4);
+    border: 1px solid var(--COLOR-BROWN-SOFT);   /* keeps the white swatch visible */
+    border-radius: var(--RADIUS-FULL);
 }
 
 .item-drawer__buy {
-    margin-top: auto;
+    margin-top: var(--SPACE-4);
+    padding-top: var(--SPACE-3);
+    border-top: 1px solid var(--COLOR-LINE);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -112,7 +234,9 @@
 
 .item-drawer__price {
     font-weight: var(--FONT-WEIGHT-BOLD);
-    color: var(--COLOR-SUBHEADING);
+    font-size: 20px;
+    color: var(--COLOR-GREEN);
+    padding-left: 5%;
 }
 
 .item-drawer__qty {

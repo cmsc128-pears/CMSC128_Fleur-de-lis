@@ -31,6 +31,12 @@ export default function App() {
         setIsGuest(false);
         setView("landing");
     };
+    // one guest flow for every screen, sign in anonymously, mark as guest, go to the app
+    const startGuest = async () => {
+        await logInAsGuest();     
+        setIsGuest(true);
+        setView("feed");        
+    };
 
     // the finished bouquet; undefined means Preview/Template fall back to the demo data
     const [bouquet, setBouquet] = useState(undefined);
@@ -47,30 +53,17 @@ export default function App() {
                         onBack={() => setView("landing")}
                         onLogin={() => { setAuthMode("login"); setView("auth"); }}
                         onJoin={() => { setAuthMode("signup"); setView("auth"); }}
-                        onGuest={() => setView("preview")}   // TEMP
+                        onGuest={() => startGuest()}
                     />
                 )}
 
-                {view === "preview" && (
-                    <Preview bouquet={bouquet} onDownloadWithDetails={() => setView("details")} />
-                )}
-                {view === "details" && (
-                    <DetailsForm
-                        initial={orderDetails}
-                        onBack={() => setView("preview")}
-                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
-                    />
-                )}
-                {view === "template" && (
-                    <DownloadTemplate bouquet={bouquet} details={orderDetails} onBack={() => setView("details")} />
-                )}
 
                 {view === "auth" && (
                     <AuthPage
                         initialMode={authMode}
                         onLogin={async (...args) => { const res = await logIn(...args); setIsGuest(false); return res; }}
                         onSignup={async (...args) => { const res = await signUp(...args); setIsGuest(false); return res; }}
-                        onGuest={async (...args) => { const res = await logInAsGuest(...args); setIsGuest(true); return res; }}
+                        onGuest={startGuest}
                         onResetPassword={resetPassword}
                         onAuthSuccess={() => setView("profile")}
                         onBack={() => setView("onboarding")}
@@ -102,6 +95,26 @@ export default function App() {
                 {view === "create" && <ManualCustomization isGuest={isGuest} 
                     onFinish={(items) => { setBouquet(items); setView("preview"); }}
                 />}
+                
+                {view === "preview" && (
+                    <Preview 
+                    //bouquet={bouquet} ignore this, use hardcode data instead 
+                    onDownloadWithDetails={() => setView("details")} />
+                )}
+
+                {view === "details" && (
+                    <DetailsForm
+                        initial={orderDetails}
+                        onBack={() => setView("preview")}
+                        onSubmit={(d) => { setOrderDetails(d); setView("template"); }}
+                    />
+                )}
+                
+                {view === "template" && (
+                    <DownloadTemplate 
+                    //bouquet={bouquet} ignore this, use hardcode data instead
+                    details={orderDetails} onBack={() => setView("details")} />
+                )}
             </div>
 
             <BottomNav view={view} onNavigate={setView} />

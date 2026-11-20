@@ -7,13 +7,22 @@ const MOVE_THRESHOLD = 6;    // px before a press counts as a drag
 const CLOSE_DISTANCE = 80;   // px dragged down that closes the drawer
 const FLICK_SPEED    = 0.5;  // px/ms downward flick that closes it
 
-// item: { id, name, description, tags, price?, image }  (price is optional, e.g. wrappers have none)
+const titleCase = (v) => v.split(/[-\s]+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+
+// most color names work directly as CSS colors. add overrides here for any that don't (e.g. peach)
+const SWATCHES = { cream: "#FFFDD0", peach: "#FFDAB9" };
+
+// item: { id, name, description, tags, colors, stock, price, image }
+//   tags is display only. colors (array of lowercase names) is selectable; items without it get no Colors section
 // initialQty: quantity already in the bouquet (null = not added yet)
-// onSave(item, qty): add or update in the bouquet
+// initialColor: color already chosen for that bouquet entry (null = none yet)
+// onSave(item, qty, color): add or update in the bouquet
 // onRemove(item): called when an already-added item is saved with quantity 0
 // isGuest: guests cannot favorite, so the heart is hidden
-export default function ItemDrawer({ item, initialQty, onSave, onRemove, onClose, isGuest = false }) {
+export default function ItemDrawer({ item, initialQty, initialColor = null, onSave, onRemove, onClose, isGuest = false }) {
+    const colors = item.colors ?? [];
     const [qty, setQty]           = useState(initialQty ?? 1);
+    const [color, setColor]       = useState(colors.includes(initialColor) ? initialColor : null);
     const [favorite, setFavorite] = useState(false); // TEMP: local only, hook up to saved favorites later
     const isAdded = initialQty !== null;
 
@@ -62,11 +71,13 @@ export default function ItemDrawer({ item, initialQty, onSave, onRemove, onClose
 
     // quantity 0 on an added item removes it from the bouquet
     const isRemoving = isAdded && qty === 0;
-    const canSave    = qty > 0 || isAdded;
+    // items that have colors need one picked before they can be added
+    const needsColor = colors.length > 0 && !color && qty > 0;
+    const canSave    = !needsColor && (qty > 0 || isAdded);
 
     const handleSave = () => {
         if (qty === 0) onRemove(item);
-        else onSave(item, qty);
+        else onSave(item, qty, color);
         onClose();
     };
 
@@ -96,44 +107,84 @@ export default function ItemDrawer({ item, initialQty, onSave, onRemove, onClose
                     <span className="item-drawer__pill" aria-hidden="true" />
                 </button>
 
-                <div className="item-drawer__top">
-                    <div className="item-drawer__img">
-                        <img src={item.image} alt="" />
+                {/* only this part scrolls. the grip above and the actions below stay put */}
+                <div className="item-drawer__scroll">
+                    <div className="item-drawer__top">
+                        <div className="item-drawer__img">
+                            <img src={item.image} alt="" />
+                        </div>
+
+                        <div className="item-drawer__info">
+                            <h2 className="item-drawer__name">{item.name}</h2>
+                            <p className="item-drawer__desc">{item.description}</p>
+
+                            {/* Tag pills moved here, header removed */}
+                            {item.tags?.length > 0 && (
+                                <ul className="item-drawer__tags">
+                                    {item.tags.map((t) => (
+                                        <li key={t} className="item-drawer__tag">{t}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="item-drawer__info">
-                        <h2 className="item-drawer__name">{item.name}</h2>
-                        <p className="item-drawer__desc">{item.description}</p>
-
-                        <h3 className="item-drawer__tags-title">Tags</h3>
-                        <ul className="item-drawer__tags">
-                            {item.tags?.map((t) => (
-                                <li key={t} className="item-drawer__tag">{t}</li>
-                            ))}
-                        </ul>
-
-                        <div className="item-drawer__buy">
-                            {item.price != null && (
-                                <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
-                            )}
-                            <div className="item-drawer__qty">
-                                <button
-                                    type="button"
-                                    aria-label="Decrease quantity"
-                                    disabled={qty <= 0}
-                                    onClick={() => setQty((q) => q - 1)}
-                                >
-                                    −
-                                </button>
-                                <span aria-live="polite">{qty}</span>
-                                <button
-                                    type="button"
-                                    aria-label="Increase quantity"
-                                    onClick={() => setQty((q) => q + 1)}
-                                >
-                                    +
-                                </button>
+                    {(colors.length > 0 || item.stock != null) && (
+                        <section className="item-drawer__meta">
+                            <div className="item-drawer__meta-left">
+                                {colors.length > 0 && (
+                                    <h3 className="item-drawer__tags-title">
+                                        Pick a color:
+                                    </h3>
+                                )}
+                                {item.stock != null && (
+                                    <span className="item-drawer__stock">{item.stock} in stock</span>
+                                )}
                             </div>
+                            {colors.length > 0 && (
+                                <div className="item-drawer__colors" role="radiogroup" aria-label="Choose a color">
+                                    {colors.map((c) => (
+                                        <button
+                                            key={c}
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={color === c}
+                                            className="item-drawer__color"
+                                            onClick={() => setColor(c)}
+                                        >
+                                            <span
+                                                className="item-drawer__swatch"
+                                                style={{ background: SWATCHES[c] ?? c }}
+                                                aria-hidden="true"
+                                            />
+                                            {titleCase(c)}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
+                    )}
+
+                    {/* Price and quantity moved below colors */}
+                    <div className="item-drawer__buy">
+                        <span className="item-drawer__price">{peso.format(item.price * qty)}</span>
+                        <div className="item-drawer__qty">
+                            <button
+                                type="button"
+                                aria-label="Decrease quantity"
+                                disabled={qty <= 0}
+                                onClick={() => setQty((q) => q - 1)}
+                            >
+                                −
+                            </button>
+                            <span aria-live="polite">{qty}</span>
+                            <button
+                                type="button"
+                                aria-label="Increase quantity"
+                                onClick={() => setQty((q) => q + 1)}
+                            >
+                                +
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -165,7 +216,11 @@ export default function ItemDrawer({ item, initialQty, onSave, onRemove, onClose
                         disabled={!canSave}
                         onClick={handleSave}
                     >
-                        {isRemoving ? "Remove from Bouquet" : isAdded ? "Update Bouquet" : "Add to Bouquet"}
+                        {isRemoving
+                            ? "Remove from Bouquet"
+                            : needsColor
+                                ? "Choose a Color"
+                                : isAdded ? "Update Bouquet" : "Add to Bouquet"}
                     </button>
                 </div>
             </section>

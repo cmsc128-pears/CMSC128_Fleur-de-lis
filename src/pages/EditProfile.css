@@ -14,7 +14,7 @@
 .avatar--lg {
   width: 112px;
   height: 112px;
-  font-size: var(--FONT-SIZE-2XL);
+  font-size: var(--FONT-SIZE-SUBHEADING);
 }
 
 /* ---------- edit profile page ---------- */
@@ -43,8 +43,8 @@
   background: none;
   color: inherit;
   font: inherit;
-  font-size: var(--FONT-SIZE-SM);
-  font-weight: var(--FONT-WEIGHT-MEDIUM);
+  font-size: var(--FONT-SIZE-BODY);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
   cursor: pointer;
 }
 
@@ -96,8 +96,8 @@
   margin: 0;
   padding-bottom: var(--SPACE-2);
   border-bottom: 1px solid var(--COLOR-BORDER);
-  font-size: var(--FONT-SIZE-BASE);
-  font-weight: var(--FONT-WEIGHT-MEDIUM);
+  font-size: var(--FONT-SIZE-BUTTON);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
 }
 .form__row {
   display: grid;
@@ -111,8 +111,8 @@
   min-width: 0;
 }
 .field__label {
-  font-size: var(--FONT-SIZE-XS);
-  font-weight: var(--FONT-WEIGHT-MEDIUM);
+  font-size: var(--FONT-SIZE-BODY);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
 }
 .field__input {
   width: 100%;
@@ -124,7 +124,7 @@
   background: var(--COLOR-BG);
   color: var(--COLOR-TEXT);
   font: inherit;
-  font-size: var(--FONT-SIZE-BASE); /* inputs never smaller than 16px */
+  font-size: var(--FONT-SIZE-INPUT); /* inputs never smaller than 16px */
 }
 .field__input::placeholder {
   color: var(--COLOR-TEXT-MUTED);
@@ -144,11 +144,11 @@
   padding: var(--SPACE-2) var(--SPACE-4);
   border: 0;
   border-radius: var(--RADIUS-BUTTON);
-  background: var(--COLOR-ACCENTGREEN);
+  background: var(--COLOR-GREEN-SOFT);
   color: var(--COLOR-TEXT);
   font: inherit;
-  font-size: var(--FONT-SIZE-BASE);
-  font-weight: var(--FONT-WEIGHT-MEDIUM);
+  font-size: var(--FONT-SIZE-BUTTON);
+  font-weight: var(--FONT-WEIGHT-REGULAR);
   cursor: pointer;
 }
 .form__link-chevron {
@@ -163,8 +163,8 @@
 
 .form__error {
   margin: 0;
-  color: var(--COLOR-TERRACOTTA);
-  font-size: var(--FONT-SIZE-SM);
+  color: var(--COLOR-PINK);
+  font-size: var(--FONT-SIZE-BODY);
 }
 
 /* save button */
@@ -179,7 +179,7 @@
   background: var(--COLOR-BROWN);
   color: var(--COLOR-TEXT-ON-DARK);
   font: inherit;
-  font-size: var(--FONT-SIZE-BASE);
+  font-size: var(--FONT-SIZE-BUTTON);
   font-weight: var(--FONT-WEIGHT-REGULAR);
   cursor: pointer;
 }
